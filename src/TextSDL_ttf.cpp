@@ -54,29 +54,30 @@ TextSDL_ttf::~TextSDL_ttf()
 
 void TextSDL_ttf::Render(const char* str, const int len)
 {
+	SDL_Color color = {255,255,255,255};
 	char save;
-	if(len >= 0){ save = str[len]; str[len] = '\0'; }
-	TTF_RenderUTF8_Blended(font, str);
-	if(len >= 0) str[len] = save;
+	if(len >= 0){ save = str[len]; ((char*)str)[len] = '\0'; }
+	TTF_RenderUTF8_Blended(font, str, color);
+	if(len >= 0) ((char*)str)[len] = save;
 }
 
 float TextSDL_ttf::Advance(const char* str, const int len)
 {
 	int width = 0;
 	char save;
-	if(len >= 0){ save = str[len]; str[len] = '\0'; }
+	if(len >= 0){ save = str[len]; ((char*)str)[len] = '\0'; }
 	TTF_SizeUTF8(font, str, &width, NULL);
-	if(len >= 0) str[len] = save;
-	return (float)height;
+	if(len >= 0) ((char*)str)[len] = save;
+	return (float)width;
 }
 
 float TextSDL_ttf::LineHeight(const char* str, const int len)
 {
 	int height = 0;
 	char save;
-	if(len >= 0){ save = str[len]; str[len] = '\0'; }
+	if(len >= 0){ save = str[len]; ((char*)str)[len] = '\0'; }
 	TTF_SizeUTF8(font, str, NULL, &height);
-	if(len >= 0) str[len] = save;
+	if(len >= 0) ((char*)str)[len] = save;
 	return (float)height;
 }
 
