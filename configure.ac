@@ -50,6 +50,7 @@ AX_CHECK_GLU
 # Need a recent version of FTGL or GLC for text rendering
 AC_ARG_ENABLE(glc, AS_HELP_STRING([--disable-glc], [do not use GLC]))
 AC_ARG_ENABLE(ftgl, AS_HELP_STRING([--disable-ftgl], [do not use FTGL]))
+AC_ARG_ENABLE(sdlttf, AS_HELP_STRING([--disable-sdlttf], [do not use SDL_ttf]))
 
 if test "x$enable_glc" != xno ; then
 	AC_CHECK_HEADERS([GL/glc.h], [HAVE_GL_GLC_H=yes], [HAVE_GL_GLC_H=no])
@@ -62,17 +63,23 @@ if test "x$enable_ftgl" != xno ; then
 	PKG_CHECK_MODULES([FTGL], [ftgl >= 2.1.3], [HAVE_FTGL=yes], [HAVE_FTGL=no])
 fi
 
+if test "x$enable_sdlttf" != xno ; then
+	AC_CHECK_LIB([SDL_ttf], [TTF_RenderText_Solid], [HAVE_SDLTTF=yes], [HAVE_SDLTTF=no])
+fi
+
+AC_ARG_ENABLE(fontconfig, AS_HELP_STRING([--disable-fontconfig], [do not use fontconfig with FTGL/SDL_ttf]))
+
+if test  "x$enable_fontconfig" != xno ; then
+	# Need fontconfig for finding font files when using FTGL/SDL_ttf
+	PKG_CHECK_MODULES([FONTCONFIG], [fontconfig], [HAVE_FONTCONFIG=yes], [HAVE_FONTCONFIG=no])
+fi
+
 # Allow specifying a hard-coded font file at build time
 AC_ARG_WITH(font-path,
 	AS_HELP_STRING([--with-font-path=file.ttf],
 		[Path to the TTF font to use at runtime with FTGL (bold Gothic Uralic recommended)]),
 	[FONT_PATH="$withval"],
 	[FONT_PATH=""])
-
-if test "x$HAVE_FTGL" = xyes -a "x$enable_ftgl" != xno ; then
-	# Need fontconfig for finding font files when using FTGL
-	PKG_CHECK_MODULES([FONTCONFIG], [fontconfig], [HAVE_FONTCONFIG=yes], [HAVE_FONTCONFIG=no])
-fi
 
 # Allow specifying a hard-coded font name at build time
 AC_ARG_WITH(font-name,
@@ -150,11 +157,13 @@ if test \( "x$HAVE_GL_GLC_H" = xyes -o "x$HAVE_QUESOGLC_GLC_H" = xyes \) -a "x$H
 	TEXT_LIBS="-lGLC"
 	AC_SUBST(TEXT_LIBS)
 	TEXT_TYPE=GLC
+	TEXT_NEED_FONT_PATH_HELP=no
 elif test \( "x$HAVE_GL_GLC_H" = xyes -o "x$HAVE_QUESOGLC_GLC_H" = xyes \) -a "x$HAVE_GLC32_LIB" = xyes -a "x$enable_glc" != xno ; then
 	AC_DEFINE(TEXT_GLC, 1, [define to use GLC])
 	TEXT_LIBS="-lglc32"
 	AC_SUBST(TEXT_LIBS)
 	TEXT_TYPE=GLC
+	TEXT_NEED_FONT_PATH_HELP=no
 elif test "x$HAVE_FTGL" = xyes -a "x$enable_ftgl" != xno ; then
 	AC_DEFINE(TEXT_FTGL, 1, [define to use FTGL])
 	TEXT_CFLAGS="$FTGL_CFLAGS"
@@ -162,8 +171,17 @@ elif test "x$HAVE_FTGL" = xyes -a "x$enable_ftgl" != xno ; then
 	TEXT_LIBS="$FTGL_LIBS"
 	AC_SUBST(TEXT_LIBS)
 	TEXT_TYPE=FTGL
+	TEXT_NEED_FONT_PATH_HELP=yes
+elif test "x$HAVE_SDLTTF" = xyes -a "x$enable_sdlttf" != xno ; then
+	AC_DEFINE(TEXT_SDLTTF, 1, [define to use SDL_ttf])
+	TEXT_CFLAGS=""
+	AC_SUBST(TEXT_CFLAGS)
+	TEXT_LIBS="-lSDL_ttf"
+	AC_SUBST(TEXT_LIBS)
+	TEXT_TYPE=SDL_ttf
+	TEXT_NEED_FONT_PATH_HELP=yes
 else
-	AC_MSG_ERROR([cannot find GLC or FTGL >= 2.1.3 (text renderer)])
+	AC_MSG_ERROR([cannot find GLC, FTGL >= 2.1.3 or SDL_ttf (text renderer)])
 fi
 
 if test "x$TEXT_TYPE" = xGLC -a "x$FONT_NAME" != x ; then
@@ -174,13 +192,13 @@ elif test "x$TEXT_TYPE" = xGLC ; then
 	FONT="default (bold Gothic Uralic)"
 fi
 
-if test "x$TEXT_TYPE" = xFTGL -a "x$FONT_PATH" != x ; then
+if test "x$TEXT_NEED_FONT_PATH_HELP" = xyes -a "x$FONT_PATH" != x ; then
 	TEXT_CFLAGS="$TEXT_CFLAGS -DFONT_PATH=\"\\\"$FONT_PATH\\\"\""
 	AC_SUBST(TEXT_CFLAGS)
 	FONT="$FONT_PATH "
 fi
 
-if test "x$TEXT_TYPE" = xFTGL -a "x$HAVE_FONTCONFIG" = xyes ; then
+if test "x$TEXT_NEED_FONT_PATH_HELP" = xyes -a "x$HAVE_FONTCONFIG" = xyes ; then
 	AC_DEFINE(HAVE_FONTCONFIG, 1, [define to use fontconfig])
 	TEXT_CFLAGS="$TEXT_CFLAGS $FONTCONFIG_CFLAGS"
 	AC_SUBST(TEXT_CFLAGS)
@@ -189,7 +207,7 @@ if test "x$TEXT_TYPE" = xFTGL -a "x$HAVE_FONTCONFIG" = xyes ; then
 	FONT="$FONT fontconfig (bold Gothic Uralic) "
 fi
 
-if  test "x$TEXT_TYPE" = xFTGL -a "x$HAVE_FONTCONFIG" != xyes -a "x$FONT_PATH" = x ; then
+if  test "x$TEXT_NEED_FONT_PATH_HELP" = xyes -a "x$HAVE_FONTCONFIG" != xyes -a "x$FONT_PATH" = x ; then
 	AC_MSG_WARN([FTGL: no font path supplied and cannot find fontconfig, font searching will probably fail])
 fi
 

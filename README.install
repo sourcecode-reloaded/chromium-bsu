@@ -34,9 +34,9 @@ The GLC text rendering backend supports using a different default font:
 
 ./configure --with-font-name="Gothic Uralic"
 
-The FTGL text rendering backend is less flexible in its font searching.
+The FTGL/SDL_ttf text rendering backends have less flexible font searching.
 
-To make it more flexible you should either build with fontconfig support or
+To make them more flexible you should either build with fontconfig support or
 specify a path to the desired font, this is useful for distributions where
 the package system can then depend on the desired font:
 

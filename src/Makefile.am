@@ -109,5 +109,7 @@ chromium_bsu_SOURCES = \
 	TextGLC.h \
 	TextFTGL.cpp \
 	TextFTGL.h \
+	TextSDL_ttf.cpp \
+	TextSDL_ttf.h \
 	main.cpp \
 	main.h
