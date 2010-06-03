@@ -45,6 +45,9 @@
 #if defined(TEXT_FTGL)
 #include "TextFTGL.h"
 #endif
+#if defined(TEXT_SDLTTF)
+#include "TextSDL_ttf.h"
+#endif
 
 #include "Config.h"
 
@@ -139,8 +142,10 @@ void MainGL::loadTextures()
 		game->text = new TextGLC();
 #elif defined(TEXT_FTGL)
 		game->text = new TextFTGL();
+#elif defined(TEXT_SDLTTF)
+		game->text = new TextSDL_ttf();
 #else
-		#error "TEXT_GLC or TEXT_FTGL must be defined"
+		#error "TEXT_GLC, TEXT_FTGL or TEXT_SDLTTF must be defined"
 #endif
 	}
 	catch (char* str)
