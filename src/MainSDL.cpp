@@ -55,6 +55,8 @@ MainSDL::MainSDL(int argc, char **argv)
 	xjoy = yjoy = xjNow = yjNow = 0;
 	adjCount = 0;
 	key_speed_x = key_speed_y = 0;
+	last_resize_w = last_resize_h = 0;
+	initgl = true;
 
 	Uint32 initOpts;
 
@@ -331,6 +333,8 @@ bool MainSDL::setVideoMode()
 	video_flags = SDL_OPENGL;
 	if(config->fullScreen())
 		video_flags |= SDL_FULLSCREEN;
+	else
+		video_flags |= SDL_RESIZABLE;
 
 	w = config->screenW();
 	h = config->screenH();
@@ -398,8 +402,14 @@ bool MainSDL::setVideoMode()
 	if( config->debug() ) fprintf(stderr, _("(bpp=%d RGB=%d%d%d depth=%d)\n"), glSurface->format->BitsPerPixel, rs, gs, bs, ds);
 #endif
 
-	if(game->mainGL)
-		game->mainGL->initGL();
+	if(game->mainGL){
+		if( initgl ){
+			game->mainGL->initGL();
+			initgl = false;
+		} else {
+			game->mainGL->reshapeGL(w,h);
+		}
+	}
 
 	return true;
 }

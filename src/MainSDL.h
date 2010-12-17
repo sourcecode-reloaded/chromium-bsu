@@ -63,6 +63,10 @@ private:
 
 	int	adjCount;
 	float	key_speed_x, key_speed_y;
+
+	int	last_resize_w, last_resize_h;
+	bool	initgl;
+
 };
 
 #endif // USE_SDL

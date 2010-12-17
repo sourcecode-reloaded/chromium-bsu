@@ -45,6 +45,7 @@
 bool MainSDL::process(SDL_Event *event)
 {
 	Global	*game = Global::getInstance();
+	Config* config = Config::instance();
 #if 0
 	static int cnt = 0;
 	cnt++;
@@ -112,6 +113,20 @@ bool MainSDL::process(SDL_Event *event)
 			break;
 		case SDL_QUIT:
 			return true;
+		case SDL_VIDEORESIZE:
+			static int i; i++;
+			printf( "resize request %d: config: %dx%d last: %dx%d ask: %dx%d\n", i, config->screenW(), config->screenH(), last_resize_w, last_resize_h, event->resize.w, event->resize.h);
+			if( last_resize_w != event->resize.w || last_resize_h != event->resize.h ){
+				last_resize_w = event->resize.w;
+				last_resize_h = event->resize.h;
+				config->setScreenSize(event->resize.w, event->resize.h);
+				event->resize.w = config->screenW();
+				event->resize.h = config->screenH();
+				setVideoMode();
+				printf( "resized to %dx%d\n", event->resize.w, event->resize.h);
+			} else {
+				setVideoMode();
+			}
 		default:
 			break;
 	}

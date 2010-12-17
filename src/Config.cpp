@@ -364,6 +364,17 @@ void Config::setScreenSize(int m)
 	m_screenA = (float)m_screenW/(float)m_screenH;
 }
 
+void Config::setScreenSize(int w, int h){
+	if( (float)h/(float)w > 0.75){
+		h = 0.75 * w;
+	} else if( (float)h/(float)w < 0.75){
+		w = h / 0.75;
+	}
+	m_screenW = w;
+	m_screenH = h;
+	m_screenA = (float)m_screenW/(float)m_screenH;
+}
+
 int Config::approxScreenSize()
 {
 	if( m_screenW >= 1280 && m_screenH >= 960 )
