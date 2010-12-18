@@ -350,11 +350,17 @@ void MainSDL::keyDown(SDL_Event *event)
 		case SDLK_g:
 			grabMouse(!mouseToggle);
 			break;
-		case SDLK_0:
-			game->hero->useItem(0);
+		case SDLK_b:
+			game->hero->useBomb(0);
 			break;
-		case SDLK_9:
-			game->hero->useItem(1);
+		case SDLK_0:
+			game->hero->selfDestruct(0);
+			break;
+		case SDLK_l:
+			game->hero->giveAmmo(0);
+			break;
+		case SDLK_p:
+			game->hero->cheatFullHealth(0);
 			break;
 		case SDLK_ESCAPE:
 			if(game->gameMode == Global::Menu)
@@ -583,7 +589,7 @@ void MainSDL::mouseButtonDown(SDL_Event *ev)
 				game->hero->nextItem();
 				break;
 			case SDL_BUTTON_RIGHT:
-				game->hero->useItem();
+				game->hero->selfDestruct(0);
 				break;
 			default:
 				break;

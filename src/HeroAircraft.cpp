@@ -228,11 +228,36 @@ void HeroAircraft::setLives(int in)
 }
 
 //----------------------------------------------------------
-void HeroAircraft::useItem(int index)
+void HeroAircraft::useBomb(int index)
+{
+	ammstok1 = (ammoStock[0] > 5 && ammoStock[1] > 15 && ammoStock[2] > 50);
+	ammstok2 = (ammoStock[0] > 5 && ammoStock[1] > 15 && ammoStock[3] > 35);
+	if(currentItemIndex == index)
+	{
+		if(ammstok1 || ammstok2)
+		{
+			useBomb();
+		}
+	}
+	else
+	{
+		if(index < NUM_HERO_ITEMS && index >= 0)
+		{
+			if(ammoStock[0] > 5 && ammoStock[1] > 15 && ammoStock[2] > 50)
+			{
+				currentItemIndex = index;
+				useItemArmed = 0.0;
+				useBomb();
+			}
+		}
+	}
+}
+
+void HeroAircraft::selfDestruct(int index)
 {
 	if(currentItemIndex == index)
 	{
-		useItem();
+		selfDestruct();
 	}
 	else
 	{
@@ -240,13 +265,86 @@ void HeroAircraft::useItem(int index)
 		{
 			currentItemIndex = index;
 			useItemArmed = 0.0;
-			useItem();
+			selfDestruct();
+		}
+	}
+}
+
+void HeroAircraft::giveAmmo(int index)
+{
+	if(currentItemIndex == index)
+	{
+		giveAmmo();
+	}
+	else
+	{
+		if(index < NUM_HERO_ITEMS && index >= 0)
+		{
+			currentItemIndex = index;
+			useItemArmed = 0.0;
+			giveAmmo();
+		}
+	}
+}
+
+void HeroAircraft::cheatFullHealth(int index)
+{
+	if(currentItemIndex == index)
+	{
+		cheatFullHealth();
+	}
+	else
+	{
+		if(index < NUM_HERO_ITEMS && index >= 0)
+		{
+			currentItemIndex = index;
+			useItemArmed = 0.0;
+			cheatFullHealth();
 		}
 	}
 }
 
 //----------------------------------------------------------
-void HeroAircraft::useItem()
+void HeroAircraft::useBomb()
+{
+	if(game->gameMode == Global::Game && !superBomb && !game->game_pause)
+	{
+		if(!useItemArmed)
+		{
+			useItemArmed = 1.0;
+		}
+		else
+		{
+			useItemArmed = 0.0;
+			float v[3] = { 0.0, 0.7, 0.0 };
+			PowerUp *pwrUp;
+			int i;
+			switch(currentItemIndex)
+			{
+				case 0: // bomb
+					if(ammstok1)
+					{
+						ammoStock[0] -= 5; // Take ammo from gun type 0
+						ammoStock[1] -= 15; // Take ammo from gun type 1
+						ammoStock[2] -= 50; // Take ammo from gun type 2
+					}
+					else if(ammstok2)
+					{
+						ammoStock[0] -= 5; // Take ammo from gun type 0
+						ammoStock[1] -= 15; // Take ammo from gun type 1
+						ammoStock[3] -= 35; // Take ammo from gun type 3
+					}
+					superBomb = 1;
+					bombExplosions();
+					break;
+				default:
+					break;
+			}
+		}
+	}
+}
+
+void HeroAircraft::selfDestruct()
 {
 	if(game->gameMode == Global::Game && !superBomb && !game->game_pause)
 	{
@@ -281,6 +379,90 @@ void HeroAircraft::useItem()
 					startDeath();
 					break;
 				case 1:
+					break;
+				default:
+					break;
+			}
+		}
+	}
+}
+
+void HeroAircraft::giveAmmo()
+{
+	if(game->gameMode == Global::Game && !superBomb && !game->game_pause)
+	{
+		if(!useItemArmed)
+		{
+			useItemArmed = 1.0;
+		}
+		else
+		{
+			useItemArmed = 0.0;
+			float v[3] = { 0.0, 0.7, 0.0 };
+			PowerUp *pwrUp;
+			int i;
+			float urface[3] = { 0.0, 0.0, pos[2] };
+			switch(currentItemIndex)
+			{
+				case 0: // give ammo
+					if(gunActive[0]) { ammoStock[0] = 150; }
+					if(gunActive[1]) { ammoStock[1] = 150; }
+					if(gunActive[2]) { ammoStock[2] = 150; }
+					if(gunActive[3]) { ammoStock[3] = 150; }
+					game->audio->playSound(Audio::PowerUp, urface);
+					break;
+				default:
+					break;
+			}
+		}
+	}
+}
+
+void HeroAircraft::cheatFullHealth()
+{
+	if(game->gameMode == Global::Game && !superBomb && !game->game_pause)
+	{
+		if(!useItemArmed)
+		{
+			useItemArmed = 1.0;
+		}
+		else
+		{
+			useItemArmed = 0.0;
+			float v[3] = { 0.0, 0.7, 0.0 };
+			PowerUp *pwrUp;
+			int i;
+			float urface[3] = { 0.0, 0.0, pos[2] };
+
+			float p0[3] = {10.4,-8.30, 25.0 };
+			float v0[3] = { 0.0, 0.08, 0.0 };
+			float clr[4] = { 1.0, 1.0, 1.0, 1.0 };
+
+			switch(currentItemIndex)
+			{
+				case 0:
+					damage = HERO_DAMAGE;
+					shields = HERO_SHIELDS*5;
+
+					p0[0] = -10.4;
+					game->explosions->addElectric(p0, v0, clr,  0);
+					game->explosions->addElectric(p0, v0, clr,  0);
+					game->explosions->addElectric(p0, v0, clr, -1);
+					game->explosions->addElectric(p0, v0, clr, -3);
+					game->explosions->addElectric(p0, v0, clr, -4);
+					p0[0] = 10.4;
+					game->explosions->addElectric(p0, v0, clr,  0);
+					game->explosions->addElectric(p0, v0, clr,  0);
+					game->explosions->addElectric(p0, v0, clr, -1);
+					game->explosions->addElectric(p0, v0, clr, -3);
+					game->explosions->addElectric(p0, v0, clr, -4);
+
+					secondaryMove[0] = secondaryMove[1] = 0.0;
+
+					//gunTrigger = false;
+					//gunSwap = false;
+
+					game->audio->playSound(Audio::PowerUp, urface);
 					break;
 				default:
 					break;
@@ -400,7 +582,7 @@ void HeroAircraft::shootGun()
 			game->heroAmmo->addAmmo(0, p);
 			p[0] = pos[0]-0.45;
 			game->heroAmmo->addAmmo(0, p);
-			ammoStock[0] -= 0.5;
+			ammoStock[0] -= 0.5; // Take ammo from gun type 0
 		}
 
 		if(currentItemIndex == 1 && useItemArmed) // double fire
@@ -427,7 +609,7 @@ void HeroAircraft::shootGun()
 		p[0] = pos[0];
 		p[1] = pos[1] + 1.1;
 		game->heroAmmo->addAmmo(1, p);
-		ammoStock[1] -= 1.5;
+		ammoStock[1] -= 1.5; // Take ammo from gun type 1
 		if(currentItemIndex == 1 && useItemArmed) // double fire
 		{
 			p[1] -= 0.2;
@@ -453,7 +635,9 @@ void HeroAircraft::shootGun()
 			p[0] = pos[0]-0.7;
 			game->heroAmmo->addAmmo(2, p);
 		}
-		ammoStock[2] -= 1.5;
+		ammoStock[0] += 0.2; // Add ammo to gun type 0
+		ammoStock[1] += 0.2; // Add ammo to gun type 1
+		ammoStock[2] -= 0.5; // Take ammo from gun type 2
 
 		if(currentItemIndex == 1 && useItemArmed) // double fire
 		{
@@ -916,4 +1100,23 @@ void HeroAircraft::deathExplosions()
 
 
 
+void HeroAircraft::bombExplosions()
+{
+	int		i;
+	float	r;
+	float	p[3] = { 0.0, -0.5, pos[2] };
+	int		w, skip;
+
+	deathStereo = 5.0;
+	p[0] = -deathStereo;
+	game->audio->playSound(Audio::Explosion, p);
+	game->audio->playSound(Audio::Explosion, p, -45);
+	p[0] =  deathStereo;
+	game->audio->playSound(Audio::Explosion, p);
+	game->audio->playSound(Audio::Explosion, p, -20);
+	p[0] =  0.0;
+	game->audio->playSound(Audio::ExploBig, p);
+	game->audio->playSound(Audio::ExploPop, p);
+
+}
 

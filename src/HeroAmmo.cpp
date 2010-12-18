@@ -54,7 +54,7 @@ HeroAmmo::HeroAmmo()
 
 	ammoSize[0][0] = 0.05;	ammoSize[0][1] = 0.65;
 	ammoSize[1][0] = 0.11;	ammoSize[1][1] = 1.5;
-	ammoSize[2][0] = 0.3;	ammoSize[2][1] = 1.5;
+	ammoSize[2][0] = 0.5;	ammoSize[2][1] = 1.5;
 
 	ammoDamage[0] =  3.5;
 	ammoDamage[1] =  6.0;
@@ -158,7 +158,7 @@ void HeroAmmo::addAmmo(int type, float pos[3])
 	{
 		case 0:	vel[1] = 0.5*game->speedAdj;	break;
 		case 1:	vel[1] = 0.2*game->speedAdj;	break;
-		case 2:	vel[1] = 0.3*game->speedAdj;	break;
+		case 2:	vel[1] = 1.5*game->speedAdj;	break;
 		default:	break;
 	}
 	if(type >= 0 && type < NUM_HERO_AMMO_TYPES)
@@ -273,7 +273,8 @@ void HeroAmmo::checkForHits(EnemyFleet *fleet)
 					//add explosion
 					game->explosions->addExplo((Explosions::ExploType)(Explosions::HeroAmmo00+i), thisAmmo->pos);
 
-					if(i != 1) // ammo type 1 doesn't get killed
+					//if(i != 1) // ammo type 1 doesn't get killed
+					if(i == 0) // ammo types 1 and 2 don't get killed
 					{
 						backAmmo = thisAmmo->back;
 						nextAmmo = thisAmmo->next;

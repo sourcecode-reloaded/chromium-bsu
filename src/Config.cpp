@@ -67,7 +67,7 @@ Config::Config()
 	m_swap_stereo	= false;
 	m_show_fps		= true;
 	m_auto_speed	= false;
-	m_true_color	= false;
+	m_true_color	= true;
 	m_use_playList	= false;
 #ifdef USE_SDL_CDROM
 	m_use_cdrom		= false;

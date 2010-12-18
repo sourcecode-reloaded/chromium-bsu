@@ -67,7 +67,7 @@ MenuGL::MenuGL()
 	butWidth	= butHeight*4.0;
 	butOffset	= 3.05;
 
-	menuText[NewGame]	= _("n e w    g a m e");
+	menuText[NewGame]	= _("s t a r t    g a m e");
 	menuText[GameLevel]	= _("l e v e l");
 	menuText[SkillLevel]= _("s k i l l");
 	menuText[Graphics]	= _("g f x    d e t a i l");

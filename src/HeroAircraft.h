@@ -41,8 +41,14 @@ public:
 	void	moveEvent(int x, int y);
 	void	fireGun(bool);
 	void	shootGun();
-	void	useItem(int index);
-	void	useItem();
+	void	useBomb(int index);
+	void	useBomb();
+	void	selfDestruct(int index);
+	void	selfDestruct();
+	void	giveAmmo(int index);
+	void	giveAmmo();
+	void	cheatFullHealth(int index);
+	void	cheatFullHealth();
 	void	nextItem() { useItemArmed = 0.0; currentItemIndex = ++currentItemIndex%NUM_HERO_ITEMS; }
 	void	dropBomb();
 
@@ -87,12 +93,16 @@ public:
 protected:
 	void	setAmmoStock(int, float);
 	void	deathExplosions();
+	void	bombExplosions();
 
 	float	gunFlash0[NUM_HERO_AMMO_TYPES];
 	float	gunFlash1[NUM_HERO_AMMO_TYPES];
 	bool	gunActive[NUM_HERO_AMMO_TYPES];
 
 private:
+	GLuint	ammstok1;
+	GLuint	ammstok2;
+
 	float	epos[3];
 	float	size[2];
 	float	bound[2][2];
