@@ -17,3 +17,7 @@ EXTRA_DIST = $(menu_in_files)
 
 chromium-bsu.png: $(top_srcdir)/data/png/hero.png
 	cp -a $< $@
+
+reference.html:
+	FIXME: convert manual page to HTML, more info:
+	FIXME: http://www5.mplayerhq.hu/DOCS/tech/manpage.txt
