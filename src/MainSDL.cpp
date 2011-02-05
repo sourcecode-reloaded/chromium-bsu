@@ -58,11 +58,7 @@ MainSDL::MainSDL(int argc, char **argv)
 
 	Uint32 initOpts;
 
-	initOpts = SDL_INIT_VIDEO;
-
-#ifdef WITH_JOYSTICK
-	initOpts = initOpts|SDL_INIT_JOYSTICK;
-#endif
+	initOpts = SDL_INIT_VIDEO|SDL_INIT_JOYSTICK;
 #ifdef NO_PARACHUTE
 	initOpts = initOpts|SDL_INIT_NOPARACHUTE;
 #endif
@@ -78,13 +74,12 @@ MainSDL::MainSDL(int argc, char **argv)
 	}
 	if( config->debug() ) fprintf(stderr, _("SDL initialized.\n"));
 
-#ifdef WITH_JOYSTICK
 	int nj = SDL_NumJoysticks();
 	if(nj > 0)
 	{
 		if( config->debug() ) fprintf(stderr, _("num joysticks = %d\n"), nj);
 		joystick = SDL_JoystickOpen(0);
-		if( config->debug() ) fprintf(stderr, _("   joystick 0 = %p\n"), joystick);
+		if( config->debug() ) fprintf(stderr, _("   joystick 0 = %p %s\n"), joystick, SDL_JoystickName(0));
 		if(joystick)
 			SDL_JoystickEventState(SDL_ENABLE);
 	}
@@ -93,9 +88,6 @@ MainSDL::MainSDL(int argc, char **argv)
 		if( config->debug() ) fprintf(stderr, _("no joysticks found\n"));
 		joystick = 0;
 	}
-#else
-	joystick = 0;
-#endif
 
 	if( !setVideoMode() )
 	{

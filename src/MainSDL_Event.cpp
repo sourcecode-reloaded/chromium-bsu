@@ -101,9 +101,9 @@ bool MainSDL::process(SDL_Event *event)
 	    case SDL_MOUSEBUTTONUP:
 			mouseButtonUp(event);
 			break;
-//		case SDL_JOYAXISMOTION:
-//			joystickMotion(event);
-//			break;
+		case SDL_JOYAXISMOTION:
+			joystickMotion(event);
+			break;
 		case SDL_JOYBUTTONDOWN:
 			joystickButtonDown(event);
 			break;
@@ -658,35 +658,37 @@ void MainSDL::grabMouse(bool status, bool warpmouse)
 }
 
 //----------------------------------------------------------
-void MainSDL::joystickMotion(SDL_Event *)
+void MainSDL::joystickMotion(SDL_Event *event)
 {
-//	static int c = 0;
-//	if( config->debug() ) fprintf(stderr, _("joy %05d : axis(%d), value(%d)\n"), c++, event->jaxis.axis, event->jaxis.value);
-//	int xNow;
-//	int yNow;
-//	int xDiff;
-//	int yDiff;
-//	if(joystickToggle)
-//	{
-//		xNow = event->motion.x;
-//		yNow = event->motion.y;
-//		if(xNow == xMid && yNow == yMid)
-//		{
-//			// ignore
-//		}
-//		else
-//		{
-//			xDiff =  xNow - xLast;
-//			yDiff =  yNow - yLast;
-//			if(xDiff || yDiff)
-//			{
-//				game->hero->moveEvent(xDiff, yDiff);
-//				SDL_WarpMouse(xMid, yMid);
-//			}
-//		}
-//			xLast = xNow;
-//			yLast = yNow;
-//	}
+	Global	*game = Global::getInstance();
+	Config *config = Config::instance();
+	static int c = 0;
+	if( config->debug() ) fprintf(stderr, _("joy %05d : axis(%d), value(%d)\n"), c++, event->jaxis.axis, event->jaxis.value);
+	int xNow;
+	int yNow;
+	int xDiff;
+	int yDiff;
+	if(joystick)
+	{
+		xNow = event->motion.x;
+		yNow = event->motion.y;
+		if(xNow == xMid && yNow == yMid)
+		{
+			// ignore
+		}
+		else
+		{
+			xDiff =  xNow - xLast;
+			yDiff =  yNow - yLast;
+			if(xDiff || yDiff)
+			{
+				game->hero->moveEvent(xDiff, yDiff);
+				SDL_WarpMouse(xMid, yMid);
+			}
+		}
+			xLast = xNow;
+			yLast = yNow;
+	}
 }
 
 //----------------------------------------------------------
@@ -706,18 +708,17 @@ void MainSDL::joystickButtonUp(SDL_Event *)
 //----------------------------------------------------------
 void MainSDL::joystickMove()
 {
-#ifdef WITH_JOYSTICK
+	return;
 	Global	*game = Global::getInstance();
 	static int div = 32768/16;
 	if(joystick)
 	{
 		xjoy = SDL_JoystickGetAxis(joystick, 0)/div;
 		yjoy = SDL_JoystickGetAxis(joystick, 1)/div;
-		xjNow = 0.8*xjNow + 0.2*xjoy;
-		yjNow = 0.8*yjNow + 0.2*yjoy;
+		xjNow = 0.5*xjNow + 0.5*xjoy;
+		yjNow = 0.5*yjNow + 0.5*yjoy;
 		game->hero->moveEvent((int)xjNow, (int)yjNow);
 	}
-#endif
 }
 
 #endif // USE_SDL
