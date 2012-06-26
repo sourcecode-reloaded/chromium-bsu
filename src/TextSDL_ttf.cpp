@@ -19,11 +19,27 @@
 #include <sys/stat.h>
 #include <SDL/SDL_ttf.h>
 
+#if defined(HAVE_APPLE_OPENGL_FRAMEWORK) || (defined(HAVE_OPENGL_GL_H) && defined(HAVE_OPENGL_GLU_H))
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
 #ifdef HAVE_FONTCONFIG
 #include <fontconfig/fontconfig.h>
 #endif
 
 using namespace std;
+
+static int power_of_two(int input)
+{
+        int value = 1;
+
+        while ( value < input ) {
+                value <<= 1;
+        }
+        return value;
+}
 
 //====================================================================
 TextSDL_ttf::TextSDL_ttf()
@@ -54,21 +70,96 @@ TextSDL_ttf::~TextSDL_ttf()
 
 void TextSDL_ttf::Render(const char* str, const int len)
 {
+	SDL_Surface *image;
+	GLuint texture;
+	SDL_Rect area;
+        Uint32 saved_flags;
+        Uint8  saved_alpha;
 	SDL_Color color = {255,255,255,255};
 	SDL_Surface *screen = SDL_GetVideoSurface();
 	SDL_Surface *text;
 	SDL_Rect dstrect;
+	int w, h;
+	GLfloat texcoord[4];
+	        GLfloat texMinX, texMinY;
+        GLfloat texMaxX, texMaxY;
+
 	//char save;
 	//if(len >= 0){ save = str[len]; ((char*)str)[len] = '\0'; }
 	text = TTF_RenderUTF8_Blended(font, str, color);
-	if ( text != NULL ) {
-		dstrect.x = 4;
-		dstrect.y = 4;
-		dstrect.w = text->w;
-		dstrect.h = text->h;
-		SDL_BlitSurface(text, NULL, screen, &dstrect);
+	w = power_of_two(text->w);
+	h = power_of_two(text->h);
+	texcoord[0] = 0.0f;                     /* Min X */
+	texcoord[3] = 0.0f;                     /* Min Y */
+	texcoord[2] = (GLfloat)text->w / w;  /* Max X */
+	texcoord[1] = (GLfloat)text->h / h;  /* Max Y */
+	image = SDL_CreateRGBSurface(
+				SDL_SWSURFACE,
+				w, h,
+				32,
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN /* OpenGL RGBA masks */
+				0x000000FF, 
+				0x0000FF00, 
+				0x00FF0000, 
+				0xFF000000
+#else
+				0xFF000000,
+				0x00FF0000, 
+				0x0000FF00, 
+				0x000000FF
+#endif
+			   );
+        saved_flags = text->flags&(SDL_SRCALPHA|SDL_RLEACCELOK);
+#if SDL_VERSION_ATLEAST(1, 3, 0)
+        SDL_GetSurfaceAlphaMod(text, &saved_alpha);
+        SDL_SetSurfaceAlphaMod(text, 0xFF);
+#else
+        saved_alpha = text->format->alpha;
+        if ( (saved_flags & SDL_SRCALPHA) == SDL_SRCALPHA ) {
+                SDL_SetAlpha(text, 0, 0);
+        }
+#endif
+        area.x = 0;
+        area.y = 0;
+        area.w = text->w;
+        area.h = text->h;
+        SDL_BlitSurface(text, &area, image, &area);
+#if SDL_VERSION_ATLEAST(1, 3, 0)
+        SDL_SetSurfaceAlphaMod(text, saved_alpha);
+#else
+        if ( (saved_flags & SDL_SRCALPHA) == SDL_SRCALPHA ) {
+                SDL_SetAlpha(text, saved_flags, saved_alpha);
+        }
+#endif
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D,
+                     0,
+                     GL_RGBA,
+                     w, h,
+                     0,
+                     GL_RGBA,
+                     GL_UNSIGNED_BYTE,
+                     image->pixels);
+        SDL_FreeSurface(image); /* No longer needed */
 		SDL_FreeSurface(text);
-	}
+		
+		        texMinX = texcoord[0];
+        texMinY = texcoord[1];
+        texMaxX = texcoord[2];
+        texMaxY = texcoord[3];
+
+		                glBindTexture(GL_TEXTURE_2D, texture);
+                glBegin(GL_TRIANGLE_STRIP);
+                glTexCoord2f(texMinX, texMinY); glVertex2i(0,   0  );
+                glTexCoord2f(texMaxX, texMinY); glVertex2i(w, 0  );
+                glTexCoord2f(texMinX, texMaxY); glVertex2i(0,   h);
+                glTexCoord2f(texMaxX, texMaxY); glVertex2i(w, h);
+                glEnd();
+
+
 	//if(len >= 0) ((char*)str)[len] = save;
 }
 
