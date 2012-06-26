@@ -87,8 +87,8 @@ void TextSDL_ttf::Render(const char* str, const int len)
 	//char save;
 	//if(len >= 0){ save = str[len]; ((char*)str)[len] = '\0'; }
 	text = TTF_RenderUTF8_Blended(font, str, color);
-	w = power_of_two(text->w);
-	h = power_of_two(text->h);
+	w = (text->w);
+	h = (text->h);
 	texcoord[0] = 0.0f;                     /* Min X */
 	texcoord[3] = 0.0f;                     /* Min Y */
 	texcoord[2] = (GLfloat)text->w / w;  /* Max X */
