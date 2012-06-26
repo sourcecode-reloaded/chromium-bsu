@@ -55,12 +55,20 @@ TextSDL_ttf::~TextSDL_ttf()
 void TextSDL_ttf::Render(const char* str, const int len)
 {
 	SDL_Color color = {255,255,255,255};
+	SDL_Surface *screen = SDL_GetVideoSurface();
 	SDL_Surface *text;
+	SDL_Rect dstrect;
 	//char save;
 	//if(len >= 0){ save = str[len]; ((char*)str)[len] = '\0'; }
 	text = TTF_RenderUTF8_Blended(font, str, color);
-	SDL_BlitSurface(text, NULL, screen, &dstrect);
-	SDL_FreeSurface(text);
+	if ( text != NULL ) {
+		dstrect.x = 4;
+		dstrect.y = 4;
+		dstrect.w = text->w;
+		dstrect.h = text->h;
+		SDL_BlitSurface(text, NULL, screen, &dstrect);
+		SDL_FreeSurface(text);
+	}
 	//if(len >= 0) ((char*)str)[len] = save;
 }
 
