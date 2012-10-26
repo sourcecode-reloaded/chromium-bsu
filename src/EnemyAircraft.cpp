@@ -153,17 +153,20 @@ EnemyAircraft* EnemyAircraft::makeNewEnemy(EnemyType et, float p[3], float randF
 //	float *p = pos;
 //	float szx = size[0];
 //	float szy = size[1];
+//	GLfloat texcoords[] = {1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0};
+//	GLfloat vertices[] = {szx, szy, 0.0, -szx, szy, 0.0, szx, -szy, 0.0, -szx, -szy, 0.0};
 //	glBindTexture(GL_TEXTURE_2D, tex);
 //	glColor4f(1.0, 1.0, 1.0, 1.0);
 //
 //	glPushMatrix();
 //	glTranslatef( p[0],  p[1],  p[2] );
-//	glBegin(GL_TRIANGLE_STRIP);
-//		glTexCoord2f(1.0, 0.0); glVertex3f( szx,  szy, 0.0);
-//		glTexCoord2f(0.0, 0.0); glVertex3f(-szx,  szy, 0.0);
-//		glTexCoord2f(1.0, 1.0); glVertex3f( szx, -szy, 0.0);
-//		glTexCoord2f(0.0, 1.0); glVertex3f(-szx, -szy, 0.0);
-//	glEnd();
+//	glEnableClientState(GL_VERTEX_ARRAY);
+//	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+//	glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+//	glVertexPointer(3, GL_FLOAT, 0, vertices);
+//	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//	glDisableClientState(GL_VERTEX_ARRAY);
+//	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 //	glPopMatrix();
 //
 //	switch(type)

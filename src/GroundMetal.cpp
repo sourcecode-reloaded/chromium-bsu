@@ -82,8 +82,10 @@ void GroundMetal::loadTextures()
 			tex[Base] = Image::load(dataLoc("png/gndMetalBase00.png"), IMG_NOMIPMAPS, IMG_ALPHA, clamp, GL_LINEAR, GL_LINEAR);
 			break;
 	}
+#ifdef GL_TEXTURE_BORDER_COLOR
 	if(config->texBorder())
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, tbc);
+#endif
 	tex[Blip] = Image::load(dataLoc("png/gndMetalBlip.png"), IMG_NOMIPMAPS, IMG_ALPHA, GL_REPEAT, GL_LINEAR, GL_LINEAR);
 }
 

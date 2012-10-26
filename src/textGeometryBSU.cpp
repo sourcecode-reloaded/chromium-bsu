@@ -16,7 +16,7 @@
 #if defined(HAVE_APPLE_OPENGL_FRAMEWORK) || defined(HAVE_OPENGL_GL_H)
 #include <OpenGL/gl.h>
 #else
-#include <GL/gl.h>
+#include <GLES/gl.h>
 #endif
 
 // one of these days I'll get around to stripifying this data...

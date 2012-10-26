@@ -23,7 +23,7 @@
 #if defined(HAVE_APPLE_OPENGL_FRAMEWORK) || defined(HAVE_OPENGL_GL_H)
 #include <OpenGL/gl.h>
 #else
-#include <GL/gl.h>
+#include <GLES/gl.h>
 #endif
 
 #include "Config.h"
@@ -258,6 +258,11 @@ void PowerUps::drawGL()
 {
 	float	*pos, *sz, szp;
 	PowerUp	*pwrUp;
+	GLfloat texcoords[] = {
+		0.0, 0.0,
+		0.0, 1.0,
+		1.0, 1.0,
+		1.0, 0.0};
 
 	pwrUp = pwrUpRoot->next;
 	while(pwrUp)
@@ -273,12 +278,18 @@ void PowerUps::drawGL()
 						pos[1]+wobble_1[pwrUp->age%WOBBLE_1],
 						pos[2]);
 		glRotatef(IRAND, 0.0, 0.0, 1.0);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0.0, 0.0); glVertex3f(-szp,  szp, 0.0 );
-		glTexCoord2f(0.0, 1.0); glVertex3f(-szp, -szp, 0.0 );
-		glTexCoord2f(1.0, 1.0); glVertex3f( szp, -szp, 0.0 );
-		glTexCoord2f(1.0, 0.0); glVertex3f( szp,  szp, 0.0 );
-		glEnd();
+		GLfloat vertices[] = {
+			-szp, szp, 0.0,
+			-szp, -szp, 0.0,
+			szp, -szp, 0.0,
+			szp, szp, 0.0};
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, vertices);
+		glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+		glDrawArrays(GL_QUADS, 0, 4);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glPopMatrix();
 
 		pwrUp = pwrUp->next; //ADVANCE
@@ -298,12 +309,19 @@ void PowerUps::drawGL()
 		glTranslatef(	pos[0]+wobble_0[pwrUp->age%WOBBLE_0],
 						pos[1]+wobble_1[pwrUp->age%WOBBLE_1],
 						pos[2]);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0.0, 0.0); glVertex3f(-sz[0],  sz[1], 0.0);
-		glTexCoord2f(0.0, 1.0); glVertex3f(-sz[0], -sz[1], 0.0);
-		glTexCoord2f(1.0, 1.0); glVertex3f( sz[0], -sz[1], 0.0);
-		glTexCoord2f(1.0, 0.0); glVertex3f( sz[0],  sz[1], 0.0);
-		glEnd();
+
+		GLfloat vertices[] = {
+			-sz[0],  sz[1], 0.0,
+			-sz[0], -sz[1], 0.0,
+			 sz[0], -sz[1], 0.0,
+			 sz[0],  sz[1], 0.0};
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, vertices);
+		glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+		glDrawArrays(GL_QUADS, 0, 4);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glPopMatrix();
 
 		pwrUp = pwrUp->next; //ADVANCE

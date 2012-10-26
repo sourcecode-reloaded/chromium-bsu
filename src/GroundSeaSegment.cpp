@@ -19,7 +19,7 @@
 #if defined(HAVE_APPLE_OPENGL_FRAMEWORK) || defined(HAVE_OPENGL_GL_H)
 #include <OpenGL/gl.h>
 #else
-#include <GL/gl.h>
+#include <GLES/gl.h>
 #endif
 //#define GL_EXT_
 //#include <GL/glext.h>
@@ -56,14 +56,21 @@ GroundSeaSegment::~GroundSeaSegment()
 //----------------------------------------------------------
 void GroundSeaSegment::drawGL()
 {
+	GLfloat texcoords[] = {
+		1.0, 0.0,
+		0.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0
+	};
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
 		glBindTexture(GL_TEXTURE_2D, parent->tex[Ground::Base]);
-		glBegin(GL_TRIANGLE_STRIP);
-			glTexCoord2f( 1.0, 0.0); glVertex3fv(vert[0]);
-			glTexCoord2f( 0.0, 0.0); glVertex3fv(vert[1]);
-			glTexCoord2f( 1.0, 1.0); glVertex3fv(vert[2]);
-			glTexCoord2f( 0.0, 1.0); glVertex3fv(vert[3]);
-		glEnd();
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, vert);
+		glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glPopMatrix();
 }

@@ -22,7 +22,7 @@
 #if defined(HAVE_APPLE_OPENGL_FRAMEWORK) || defined(HAVE_OPENGL_GL_H)
 #include <OpenGL/gl.h>
 #else
-#include <GL/gl.h>
+#include <GLES/gl.h>
 #endif
 
 #include "Config.h"
@@ -301,23 +301,36 @@ void HeroAmmo::drawGL()
 	int i;
 	float	*pos;
 	ActiveAmmo 	*thisAmmo;
+	GLfloat texcoords[] = {
+		0.0, 0.0,
+		0.0, 1.0,
+		1.0, 1.0,
+		1.0, 0.0
+	};
 
 	for(i = 0; i < NUM_HERO_AMMO_TYPES; i++)
 	{
 		glColor4f(1.0, 1.0, 1.0, 1.0);
 		glBindTexture(GL_TEXTURE_2D, ammoTex[i]);
 		thisAmmo = ammoRoot[i]->next;
-		glBegin(GL_QUADS);
 		while(thisAmmo)
 		{
 			pos = thisAmmo->pos;
-			glTexCoord2f(0.0, 0.0); glVertex3f(pos[0]-ammoSize[i][0], pos[1],     pos[2]);
-			glTexCoord2f(0.0, 1.0); glVertex3f(pos[0]-ammoSize[i][0], pos[1]-ammoSize[i][1], pos[2]);
-			glTexCoord2f(1.0, 1.0); glVertex3f(pos[0]+ammoSize[i][0], pos[1]-ammoSize[i][1], pos[2]);
-			glTexCoord2f(1.0, 0.0); glVertex3f(pos[0]+ammoSize[i][0], pos[1],     pos[2]);
+			GLfloat vertices[] = {
+				pos[0]-ammoSize[i][0], pos[1], pos[2],
+				pos[0]-ammoSize[i][0], pos[1]-ammoSize[i][1], pos[2],
+				pos[0]+ammoSize[i][0], pos[1]-ammoSize[i][1], pos[2],
+				pos[0]+ammoSize[i][0], pos[1], pos[2]
+			};
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glVertexPointer(3, GL_FLOAT, 0, vertices);
+			glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+			glDrawArrays(GL_QUADS, 0, 3);
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			thisAmmo = thisAmmo->next; //ADVANCE
 		}
-		glEnd();
 	}
 }
 

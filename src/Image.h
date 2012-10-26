@@ -26,6 +26,10 @@
 enum ImageMipMap { IMG_NOMIPMAPS, IMG_SIMPLEMIPMAPS, IMG_BUILDMIPMAPS };
 enum ImageBlend { IMG_SOLID, IMG_ALPHA, IMG_BLEND1, IMG_BLEND2, IMG_BLEND3 };
 
+#ifndef GL_CLAMP
+#define GL_CLAMP GL_CLAMP_TO_EDGE
+#endif
+
 class Image
 {
 public:

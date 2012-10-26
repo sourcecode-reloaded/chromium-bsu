@@ -24,4 +24,8 @@
 	#pragma warning (disable:4800)
 #endif
 
+#ifndef GL_QUADS
+#define GL_QUADS GL_TRIANGLE_STRIP
+#endif
+
 #endif // compatibility_h

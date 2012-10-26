@@ -19,7 +19,7 @@
 #if defined(HAVE_APPLE_OPENGL_FRAMEWORK) || defined(HAVE_OPENGL_GL_H)
 #include <OpenGL/gl.h>
 #else
-#include <GL/gl.h>
+#include <GLES/gl.h>
 #endif
 
 #include "gettext.h"
@@ -107,6 +107,12 @@ void	EnemyFleet::drawGL()
 	float szx, szy;
 	float *p;
 	EnemyAircraft	*thisEnemy;
+	GLfloat texcoords[] = {
+		1.0, 0.0,
+		0.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0
+	};
 
 	glColor4f(1.0, 1.0, 1.0, 1.0);
 
@@ -118,17 +124,25 @@ void	EnemyFleet::drawGL()
 		p = thisEnemy->pos;
 		szx = thisEnemy->size[0];
 		szy = thisEnemy->size[1];
+		GLfloat vertices[] = {
+			 szx,  szy, 0.0,
+			-szx, szy, 0.0,
+			 szx, -szy, 0.0,
+			-szx, -szy, 0.0
+		};
+
 		glBindTexture(GL_TEXTURE_2D, shipTex[(int)thisEnemy->type]);
 		glColor4f(1.0, 1.0, 1.0, 1.0);
 
 		glPushMatrix();
 		glTranslatef( p[0],  p[1],  p[2] );
-		glBegin(GL_TRIANGLE_STRIP);
-			glTexCoord2f(1.0, 0.0); glVertex3f( szx,  szy, 0.0);
-			glTexCoord2f(0.0, 0.0); glVertex3f(-szx,  szy, 0.0);
-			glTexCoord2f(1.0, 1.0); glVertex3f( szx, -szy, 0.0);
-			glTexCoord2f(0.0, 1.0); glVertex3f(-szx, -szy, 0.0);
-		glEnd();
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, vertices);
+		glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glPopMatrix();
 
 		switch(thisEnemy->type)

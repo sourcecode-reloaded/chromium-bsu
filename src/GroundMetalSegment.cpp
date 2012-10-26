@@ -19,7 +19,7 @@
 #if defined(HAVE_APPLE_OPENGL_FRAMEWORK) || defined(HAVE_OPENGL_GL_H)
 #include <OpenGL/gl.h>
 #else
-#include <GL/gl.h>
+#include <GLES/gl.h>
 #endif
 //#define GL_EXT_
 //#include <GL/glext.h>
@@ -123,42 +123,71 @@ void GroundMetalSegment::drawBlip(float rep, float S, float tilt, bool blipMirro
 	float repB = rep;
 	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glBindTexture(GL_TEXTURE_2D, parent->tex[Ground::Blip]);
-//	glBegin(GL_QUADS);
-	glBegin(GL_TRIANGLES);
-		glTexCoord2f( rep,  repA+S+tilt); glVertex3f(         pos[0],	       pos[1], pos[2]);
-		glTexCoord2f( 0.0,  repA+S);      glVertex3f(-size[0]+pos[0],	       pos[1], pos[2]);
-		glTexCoord2f( 0.0,  repB+S);      glVertex3f(-size[0]+pos[0], -size[1]+pos[1], pos[2]);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		glTexCoord2f( rep,  repA+S+tilt); glVertex3f(         pos[0],	       pos[1], pos[2]);
-		glTexCoord2f( 0.0,  repB+S);      glVertex3f(-size[0]+pos[0], -size[1]+pos[1], pos[2]);
-		glTexCoord2f( rep,  repB+S+tilt); glVertex3f(         pos[0], -size[1]+pos[1], pos[2]);
-		//--
-		glTexCoord2f( 0.0,  repA+S);      glVertex3f( size[0]+pos[0],	       pos[1], pos[2]);
-		glTexCoord2f( rep,  repA+S+tilt); glVertex3f(         pos[0],	       pos[1], pos[2]);
-		glTexCoord2f( rep,  repB+S+tilt); glVertex3f(         pos[0], -size[1]+pos[1], pos[2]);
+	#define N 4
+	GLfloat texcoords[N][6] = {
+		{rep, repA+S+tilt, 0.0, repA+S,      0.0, repB+S     },
+		{rep, repA+S+tilt, 0.0, repB+S,      rep, repB+S+tilt},
+		{0.0, repA+S,      rep, repA+S+tilt, rep, repB+S+tilt},
+		{0.0, repA+S,      rep, repB+S+tilt, 0.0, repB+S     }};
+	GLfloat vertices[N][9] = {
+		{
+			         pos[0],          pos[1], pos[2],
+			-size[0]+pos[0],          pos[1], pos[2],
+			-size[0]+pos[0], -size[1]+pos[1], pos[2]
+		},{
+			         pos[0],          pos[1], pos[2],
+			-size[0]+pos[0], -size[1]+pos[1], pos[2],
+			         pos[0], -size[1]+pos[1], pos[2]
+		},{
+			size[0]+pos[0],          pos[1], pos[2],
+			        pos[0],          pos[1], pos[2],
+			        pos[0], -size[1]+pos[1], pos[2]
+		},{
+			size[0]+pos[0],          pos[1], pos[2],
+			        pos[0], -size[1]+pos[1], pos[2],
+			size[0]+pos[0], -size[1]+pos[1], pos[2]
+		}};
+	for(int i = 0; i < N; i++){
+		glVertexPointer(3, GL_FLOAT, 0, &(vertices[i]));
+		glTexCoordPointer(2, GL_FLOAT, 0, &(texcoords[i]));
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
 
-		glTexCoord2f( 0.0,  repA+S);      glVertex3f( size[0]+pos[0],	       pos[1], pos[2]);
-		glTexCoord2f( rep,  repB+S+tilt); glVertex3f(         pos[0], -size[1]+pos[1], pos[2]);
-		glTexCoord2f( 0.0,  repB+S);      glVertex3f( size[0]+pos[0], -size[1]+pos[1], pos[2]);
+	if(blipMirrorT) { repA = rep; repB = 0.0; }
 
-		if(blipMirrorT) { repA = rep; repB = 0.0; }
-
-		glTexCoord2f( 0.0,  repA+S);      glVertex3f( size[0]+pos[0],  size[1]+pos[1], pos[2]);
-		glTexCoord2f( rep,  repA+S+tilt); glVertex3f(	      pos[0],  size[1]+pos[1], pos[2]);
-		glTexCoord2f( rep,  repB+S+tilt); glVertex3f(	      pos[0],	       pos[1], pos[2]);
-
-		glTexCoord2f( 0.0,  repA+S);      glVertex3f( size[0]+pos[0],  size[1]+pos[1], pos[2]);
-		glTexCoord2f( rep,  repB+S+tilt); glVertex3f(	      pos[0],	       pos[1], pos[2]);
-		glTexCoord2f( 0.0,  repB+S);      glVertex3f( size[0]+pos[0],	       pos[1], pos[2]);
-		//--
-		glTexCoord2f( rep,  repA+S+tilt); glVertex3f(	      pos[0],  size[1]+pos[1], pos[2]);
-		glTexCoord2f( 0.0,  repA+S);      glVertex3f(-size[0]+pos[0],  size[1]+pos[1], pos[2]);
-		glTexCoord2f( 0.0,  repB+S);      glVertex3f(-size[0]+pos[0],	       pos[1], pos[2]);
-
-		glTexCoord2f( rep,  repA+S+tilt); glVertex3f(	      pos[0],  size[1]+pos[1], pos[2]);
-		glTexCoord2f( 0.0,  repB+S);      glVertex3f(-size[0]+pos[0],	       pos[1], pos[2]);
-		glTexCoord2f( rep,  repB+S+tilt); glVertex3f(         pos[0],	       pos[1], pos[2]);
-	glEnd();
+	GLfloat texcoords2[N][6] = {
+		{0.0, repA+S,      rep, repA+S+tilt, rep, repB+S+tilt},
+		{0.0, repA+S,      rep, repB+S+tilt, 0.0, repB+S     },
+		{rep, repA+S+tilt, 0.0, repA+S,      0.0, repB+S     },
+		{rep, repA+S+tilt, 0.0, repB+S,      rep, repB+S+tilt}};
+	GLfloat vertices2[N][9] = {
+		{
+			size[0]+pos[0], size[1]+pos[1], pos[2],
+			        pos[0], size[1]+pos[1], pos[2],
+			        pos[0],         pos[1], pos[2]
+		},{
+			size[0]+pos[0], size[1]+pos[1], pos[2],
+			        pos[0],         pos[1], pos[2],
+			size[0]+pos[0],         pos[1], pos[2]
+		},{
+			         pos[0],  size[1]+pos[1], pos[2],
+			-size[0]+pos[0],  size[1]+pos[1], pos[2],
+			-size[0]+pos[0],          pos[1], pos[2]
+		},{
+			         pos[0],  size[1]+pos[1], pos[2],
+			-size[0]+pos[0],          pos[1], pos[2],
+			         pos[0],          pos[1], pos[2]
+		}};
+	for(int i = 0; i < N; i++){
+		glVertexPointer(3, GL_FLOAT, 0, &(vertices2[i]));
+		glTexCoordPointer(2, GL_FLOAT, 0, &(texcoords2[i]));
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 //----------------------------------------------------------
@@ -168,78 +197,130 @@ void GroundMetalSegment::drawSurface(float *c0_clr, float *c1_clr,
 	Config *config = Config::instance();
 	float rep = 1.0;
 	glBindTexture(GL_TEXTURE_2D, parent->tex[Ground::Base]);
-	glBegin(GL_TRIANGLES); //-- use triangles to prevent color popping on Utah
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	#undef N
+	#define N 8
+
 	if(config->gfxLevel() > 0)
 	{
-		glColor4fv(c0_clr); glTexCoord2f( rep,  rep); glVertex3f(         pos[0], -size[1]+pos[1], pos[2]);
-		glColor4fv(c1_clr); glTexCoord2f( rep,  0.0); glVertex3f(         pos[0],          pos[1], pos[2]);
-		glColor4fv(r2_clr); glTexCoord2f( 0.0,  0.0); glVertex3f(-size[0]+pos[0],          pos[1], pos[2]);
-
-		glColor4fv(c0_clr); glTexCoord2f( rep,  rep); glVertex3f(         pos[0], -size[1]+pos[1], pos[2]);
-		glColor4fv(r2_clr); glTexCoord2f( 0.0,  0.0); glVertex3f(-size[0]+pos[0],          pos[1], pos[2]);
-		glColor4fv(r0_clr); glTexCoord2f( 0.0,  rep); glVertex3f(-size[0]+pos[0], -size[1]+pos[1], pos[2]);
-
-		glColor4fv(r1_clr); glTexCoord2f( 0.0,  rep); glVertex3f( size[0]+pos[0], -size[1]+pos[1], pos[2]);
-		glColor4fv(r0_clr); glTexCoord2f( 0.0,  0.0); glVertex3f( size[0]+pos[0],          pos[1], pos[2]);
-		glColor4fv(c1_clr); glTexCoord2f( rep,  0.0); glVertex3f(         pos[0],          pos[1], pos[2]);
-
-		glColor4fv(r1_clr); glTexCoord2f( 0.0,  rep); glVertex3f( size[0]+pos[0], -size[1]+pos[1], pos[2]);
-		glColor4fv(c1_clr); glTexCoord2f( rep,  0.0); glVertex3f(         pos[0],          pos[1], pos[2]);
-		glColor4fv(c0_clr); glTexCoord2f( rep,  rep); glVertex3f(         pos[0], -size[1]+pos[1], pos[2]);
-
-		glColor4fv(r0_clr); glTexCoord2f( 0.0,  0.0); glVertex3f( size[0]+pos[0],          pos[1], pos[2]);
-		glColor4fv(r1_clr); glTexCoord2f( 0.0,  rep); glVertex3f( size[0]+pos[0],  size[1]+pos[1]+0.1, pos[2]);
-		glColor4fv(c0_clr); glTexCoord2f( rep,  rep); glVertex3f(         pos[0],  size[1]+pos[1]+0.1, pos[2]);
-
-		glColor4fv(r0_clr); glTexCoord2f( 0.0,  0.0); glVertex3f( size[0]+pos[0],          pos[1], pos[2]);
-		glColor4fv(c0_clr); glTexCoord2f( rep,  rep); glVertex3f(         pos[0],  size[1]+pos[1]+0.1, pos[2]);
-		glColor4fv(c1_clr); glTexCoord2f( rep,  0.0); glVertex3f(         pos[0],          pos[1], pos[2]);
-
-		glColor4fv(c1_clr); glTexCoord2f( rep,  0.0); glVertex3f(         pos[0],          pos[1], pos[2]);
-		glColor4fv(c0_clr); glTexCoord2f( rep,  rep); glVertex3f(         pos[0],  size[1]+pos[1]+0.1, pos[2]);
-		glColor4fv(r0_clr); glTexCoord2f( 0.0,  rep); glVertex3f(-size[0]+pos[0],  size[1]+pos[1]+0.1, pos[2]);
-
-		glColor4fv(c1_clr); glTexCoord2f( rep,  0.0); glVertex3f(         pos[0],          pos[1], pos[2]);
-		glColor4fv(r0_clr); glTexCoord2f( 0.0,  rep); glVertex3f(-size[0]+pos[0],  size[1]+pos[1]+0.1, pos[2]);
-		glColor4fv(r2_clr); glTexCoord2f( 0.0,  0.0); glVertex3f(-size[0]+pos[0],          pos[1], pos[2]);
+		GLfloat texcoords[N][6] = {
+			{rep, rep, rep, 0.0, 0.0, 0.0},
+			{rep, rep, 0.0, 0.0, 0.0, rep},
+			{0.0, rep, 0.0, 0.0, rep, 0.0},
+			{0.0, rep, rep, 0.0, rep, rep},
+			{0.0, 0.0, 0.0, rep, rep, rep},
+			{0.0, 0.0, rep, rep, rep, 0.0},
+			{rep, 0.0, rep, rep, 0.0, rep},
+			{rep, 0.0, 0.0, rep, 0.0, 0.0}};
+		GLfloat vertices[N][9] = {
+			{
+				         pos[0],    -size[1]+pos[1], pos[2],
+				         pos[0],             pos[1], pos[2],
+				-size[0]+pos[0],             pos[1], pos[2]
+			},{
+				         pos[0],    -size[1]+pos[1], pos[2],
+				-size[0]+pos[0],             pos[1], pos[2],
+				-size[0]+pos[0],    -size[1]+pos[1], pos[2]
+			},{
+				 size[0]+pos[0],    -size[1]+pos[1], pos[2],
+				 size[0]+pos[0],             pos[1], pos[2],
+				         pos[0],             pos[1], pos[2]
+			},{
+				 size[0]+pos[0],    -size[1]+pos[1], pos[2],
+				         pos[0],             pos[1], pos[2],
+				         pos[0],    -size[1]+pos[1], pos[2]
+			},{
+				 size[0]+pos[0],             pos[1], pos[2],
+				 size[0]+pos[0], size[1]+pos[1]+0.1, pos[2],
+				         pos[0], size[1]+pos[1]+0.1, pos[2]
+			},{
+				 size[0]+pos[0],             pos[1], pos[2],
+				         pos[0], size[1]+pos[1]+0.1, pos[2],
+				         pos[0],             pos[1], pos[2]
+			},{
+				         pos[0],             pos[1], pos[2],
+				         pos[0], size[1]+pos[1]+0.1, pos[2],
+				-size[0]+pos[0], size[1]+pos[1]+0.1, pos[2]
+			},{
+				         pos[0],             pos[1], pos[2],
+				-size[0]+pos[0], size[1]+pos[1]+0.1, pos[2],
+				-size[0]+pos[0],             pos[1], pos[2],
+				}};
+		#define c(a) a[0], a[1], a[2], a[3]
+		GLfloat colors[N][12] = {
+			{ c(c0_clr), c(c1_clr), c(r2_clr) },
+			{ c(c0_clr), c(r2_clr), c(r0_clr) },
+			{ c(r1_clr), c(r0_clr), c(c1_clr) },
+			{ c(r1_clr), c(c1_clr), c(c0_clr) },
+			{ c(r0_clr), c(r1_clr), c(c0_clr) },
+			{ c(r0_clr), c(c0_clr), c(c1_clr) },
+			{ c(c1_clr), c(c0_clr), c(r0_clr) },
+			{ c(c1_clr), c(r0_clr), c(r2_clr) }};
+		glEnableClientState(GL_COLOR_ARRAY);
+		for(int i = 0; i < N; i++){
+			glColorPointer(4, GL_FLOAT, 0, &(colors[i]));
+			glVertexPointer(3, GL_FLOAT, 0, &(vertices[i]));
+			glTexCoordPointer(2, GL_FLOAT, 0, &(texcoords[i]));
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
+		glDisableClientState(GL_COLOR_ARRAY);
 	}
 	else
 	{
 		float b = -0.1;
 		glColor4f(c0_clr[0]-b, c0_clr[1]-b, c0_clr[2]-b, c0_clr[3] );
-		glTexCoord2f( rep,  rep); glVertex3f(         pos[0], -size[1]+pos[1], pos[2]);
-		glTexCoord2f( rep,  0.0); glVertex3f(         pos[0], 		   pos[1], pos[2]);
-		glTexCoord2f( 0.0,  0.0); glVertex3f(-size[0]+pos[0],  	       pos[1], pos[2]);
-
-		glTexCoord2f( rep,  rep); glVertex3f(         pos[0], -size[1]+pos[1], pos[2]);
-		glTexCoord2f( 0.0,  0.0); glVertex3f(-size[0]+pos[0],          pos[1], pos[2]);
-		glTexCoord2f( 0.0,  rep); glVertex3f(-size[0]+pos[0], -size[1]+pos[1], pos[2]);
-
-		glTexCoord2f( 0.0,  rep); glVertex3f( size[0]+pos[0], -size[1]+pos[1], pos[2]);
-		glTexCoord2f( 0.0,  0.0); glVertex3f( size[0]+pos[0],  	       pos[1], pos[2]);
-		glTexCoord2f( rep,  0.0); glVertex3f(         pos[0],  	       pos[1], pos[2]);
-
-		glTexCoord2f( 0.0,  rep); glVertex3f( size[0]+pos[0], -size[1]+pos[1], pos[2]);
-		glTexCoord2f( rep,  0.0); glVertex3f(         pos[0],  	       pos[1], pos[2]);
-		glTexCoord2f( rep,  rep); glVertex3f(         pos[0], -size[1]+pos[1], pos[2]);
-
-		glTexCoord2f( 0.0,  0.0); glVertex3f( size[0]+pos[0],          pos[1], pos[2]);
-		glTexCoord2f( 0.0,  rep); glVertex3f( size[0]+pos[0],  size[1]+pos[1], pos[2]);
-		glTexCoord2f( rep,  rep); glVertex3f(         pos[0],  size[1]+pos[1], pos[2]);
-
-		glTexCoord2f( 0.0,  0.0); glVertex3f( size[0]+pos[0],  	       pos[1], pos[2]);
-		glTexCoord2f( rep,  rep); glVertex3f(         pos[0],  size[1]+pos[1], pos[2]);
-		glTexCoord2f( rep,  0.0); glVertex3f(         pos[0],  	       pos[1], pos[2]);
-
-		glTexCoord2f( rep,  0.0); glVertex3f(         pos[0],  	       pos[1], pos[2]);
-		glTexCoord2f( rep,  rep); glVertex3f(         pos[0],  size[1]+pos[1], pos[2]);
-		glTexCoord2f( 0.0,  rep); glVertex3f(-size[0]+pos[0],  size[1]+pos[1], pos[2]);
-
-		glTexCoord2f( rep,  0.0); glVertex3f(         pos[0],  	       pos[1], pos[2]);
-		glTexCoord2f( 0.0,  rep); glVertex3f(-size[0]+pos[0],  size[1]+pos[1], pos[2]);
-		glTexCoord2f( 0.0,  0.0); glVertex3f(-size[0]+pos[0],  	       pos[1], pos[2]);
+		GLfloat texcoords[N][6] = {
+			{rep, rep, rep, 0.0, 0.0, 0.0},
+			{rep, rep, 0.0, 0.0, 0.0, rep},
+			{0.0, rep, 0.0, 0.0, rep, 0.0},
+			{0.0, rep, rep, 0.0, rep, rep},
+			{0.0, 0.0, 0.0, rep, rep, rep},
+			{0.0, 0.0, rep, rep, rep, 0.0},
+			{rep, 0.0, rep, rep, 0.0, rep},
+			{rep, 0.0, 0.0, rep, 0.0, 0.0}};
+		GLfloat vertices[N][9] = {
+			{
+				         pos[0], -size[1]+pos[1], pos[2],
+				         pos[0],          pos[1], pos[2],
+				-size[0]+pos[0],          pos[1], pos[2]
+			},{
+				         pos[0], -size[1]+pos[1], pos[2],
+				-size[0]+pos[0],          pos[1], pos[2],
+				-size[0]+pos[0], -size[1]+pos[1], pos[2]
+			},{
+				 size[0]+pos[0], -size[1]+pos[1], pos[2],
+				 size[0]+pos[0],          pos[1], pos[2],
+				         pos[0],          pos[1], pos[2]
+			},{
+				 size[0]+pos[0], -size[1]+pos[1], pos[2],
+				         pos[0],          pos[1], pos[2],
+				         pos[0], -size[1]+pos[1], pos[2]
+			},{
+				 size[0]+pos[0],          pos[1], pos[2],
+				 size[0]+pos[0],  size[1]+pos[1], pos[2],
+				         pos[0],  size[1]+pos[1], pos[2]
+			},{
+				 size[0]+pos[0],          pos[1], pos[2],
+				         pos[0],  size[1]+pos[1], pos[2],
+				         pos[0],          pos[1], pos[2]
+			},{
+				         pos[0],          pos[1], pos[2],
+				         pos[0],  size[1]+pos[1], pos[2],
+				-size[0]+pos[0],  size[1]+pos[1], pos[2]
+			},{
+				         pos[0],          pos[1], pos[2],
+				-size[0]+pos[0],  size[1]+pos[1], pos[2],
+				-size[0]+pos[0],          pos[1], pos[2],
+			}};
+		for(int i = 0; i < N; i++){
+			glVertexPointer(3, GL_FLOAT, 0, &(vertices[i]));
+			glTexCoordPointer(2, GL_FLOAT, 0, &(texcoords[i]));
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
 	}
-	glEnd();
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 #ifdef EXPERIMENTAL
