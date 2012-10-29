@@ -28,4 +28,12 @@
 #define GL_QUADS GL_TRIANGLE_STRIP
 #endif
 
+#ifndef HAVE_GLUPERSPECTIVE
+mat4 frustum(float left, float right, float bottom,
+             float top, float near, float far);
+
+mat4 perspective(float fov_y, float width,
+                 float height, float near, float far);
+#endif
+
 #endif // compatibility_h
