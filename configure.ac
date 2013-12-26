@@ -60,7 +60,7 @@ if test "x$enable_ftgl" != xno ; then
 	PKG_CHECK_MODULES([FTGL], [ftgl >= 2.1.3], [HAVE_FTGL=yes], [HAVE_FTGL=no])
 fi
 
-# Allow specifiying a hard-coded font file at build time
+# Allow specifying a hard-coded font file at build time
 AC_ARG_WITH(font-path,
 	AS_HELP_STRING([--with-font-path=file.ttf],
 		[Path to the TTF font to use at runtime with FTGL (bold Gothic Uralic recommended)]),
@@ -72,7 +72,7 @@ if test "x$HAVE_FTGL" = xyes -a "x$enable_ftgl" != xno ; then
 	PKG_CHECK_MODULES([FONTCONFIG], [fontconfig], [HAVE_FONTCONFIG=yes], [HAVE_FONTCONFIG=no])
 fi
 
-# Allow specifiying a hard-coded font name at build time
+# Allow specifying a hard-coded font name at build time
 AC_ARG_WITH(font-name,
 	AS_HELP_STRING([--with-font-name="Gothic Uralic"],
 		[Name of the font to default to at runtime with GLC (bold Gothic Uralic is default)]),
