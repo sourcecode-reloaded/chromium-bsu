@@ -10,6 +10,18 @@
 #ifndef Image_h
 #define Image_h
 
+#ifdef HAVE_CONFIG_H
+#include <chromium-bsu-config.h>
+#endif
+
+#include "compatibility.h"
+
+#if defined(HAVE_APPLE_OPENGL_FRAMEWORK) || defined(HAVE_OPENGL_GL_H)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
 //====================================================================
 enum ImageMipMap { IMG_NOMIPMAPS, IMG_SIMPLEMIPMAPS, IMG_BUILDMIPMAPS };
 enum ImageBlend { IMG_SOLID, IMG_ALPHA, IMG_BLEND1, IMG_BLEND2, IMG_BLEND3 };
