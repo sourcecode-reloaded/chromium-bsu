@@ -1,3 +1,9 @@
+Chromium B.S.U. 0.9.16
+ - Add SDL2 support
+ - Add version option
+ - Use different font for French
+ - Compile fixes
+
 Chromium B.S.U. 0.9.15.1
  - Fix diagonal keypad keys
  - Add Russian, Simplified Chinese translations
