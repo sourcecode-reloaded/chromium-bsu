@@ -72,6 +72,7 @@ MAINTAINERCLEANFILES = \
 	m4/pkg.m4
 
 EXTRA_DIST = \
+	autogen.sh \
 	config.rpath \
 	README.install
 
