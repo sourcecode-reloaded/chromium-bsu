@@ -12,6 +12,7 @@ chromium-bsu
 chromium-bsu-config.h*
 chromium-bsu-*/
 chromium-bsu-*.tar.gz
+chromium-bsu-*.tar.gz.asc
 Makefile
 Makefile.in*
 missing
