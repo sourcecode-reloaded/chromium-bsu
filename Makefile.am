@@ -8,6 +8,7 @@ MAINTAINERCLEANFILES = \
 	config.sub \
 	config.guess \
 	aclocal.m4 \
+	compile \
 	depcomp \
 	install-sh \
 	missing \
