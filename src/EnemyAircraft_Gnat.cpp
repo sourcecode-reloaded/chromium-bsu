@@ -176,7 +176,7 @@ void EnemyAircraft_Gnat::move()
 	pos[0] += game->speedAdj*vel[0];
 	pos[1] += game->speedAdj*vel[1];
 
-	//-- don't allow to kill hero life...
+	//-- don't allow killing hero life...
 	if(pos[1] < -10.0)
 		pos[1] = -10.0;
 

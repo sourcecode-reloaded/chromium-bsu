@@ -140,7 +140,7 @@ void Audio::initCDROM()
 						if( config->debug() ) fprintf(stderr, _("track %2d: %s\n"), i, trackType(cdrom->track[i].type));
 						// SDL BUG? 'type' should only be SDL_DATA_TRACK(0x04)or SDL_AUDIO_TRACK(0x00), but 
 						// this is returning SDL_AUDIO_TRACK=0x02 and SDL_DATA_TRACK=0x06 on some copied CDRs!
-						// Orignal CDs return correct values, but CDR duplications are off by 2!
+						// Original CDs return correct values, but CDR duplications are off by 2!
 						if(cdrom->track[i].type < SDL_DATA_TRACK)
 							music++;
 					}

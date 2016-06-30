@@ -61,7 +61,7 @@
 
 #ifdef USE_SDL
 #ifdef USE_SDL_CDROM
-//try to use OpenAL alc[GS]etAudioChannel extensions in linux...
+//try to use OpenAL alc[GS]etAudioChannel extensions in Linux...
 #ifdef __linux__
 #define CD_VOLUME 1
 #ifdef OLD_OPENAL
