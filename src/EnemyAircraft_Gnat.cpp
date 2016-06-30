@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #include "EnemyAircraft_Gnat.h"
@@ -34,7 +34,7 @@ EnemyAircraft_Gnat::~EnemyAircraft_Gnat()
 
 //----------------------------------------------------------
 // this is only here to get rid of the IRIX compiler warning...
-void EnemyAircraft_Gnat::init() 
+void EnemyAircraft_Gnat::init()
 {
 	EnemyAircraft::init();
 }
@@ -64,24 +64,24 @@ void EnemyAircraft_Gnat::update()
 	float	*hpos = game->hero->getPos();
 	float	a = hpos[0]-pos[0];
 	float	b = hpos[1]-pos[1];
-	
+
 	//-- update age
 	age++;
 	shootInterval--;
-	
+
 	pos[0] += secondaryMove[0]*game->speedAdj;
 	pos[1] += secondaryMove[1]*game->speedAdj;
 	float s = (1.0-game->speedAdj)+(game->speedAdj*0.7);
 	secondaryMove[0] *= s;
 	secondaryMove[1] *= s;
 	move();
-	
+
 	float	p[3] = { pos[0], pos[1], pos[2] };
 
 	if(!shootInterval)
 	{
 		calcShootInterval();
-		if(fabs(a) < 2.0 && b < 0.0) //-- 
+		if(fabs(a) < 2.0 && b < 0.0) //--
 		{
 			v[1] = -0.39;
 			p[1] = pos[1]-0.5;
@@ -94,8 +94,8 @@ void EnemyAircraft_Gnat::update()
 void EnemyAircraft_Gnat::calcShootInterval()
 {
 	shootInterval = (int)((1.0 + FRAND*5.0)/game->speedAdj);
-}	
-	
+}
+
 //----------------------------------------------------------
 void EnemyAircraft_Gnat::move()
 {
@@ -119,7 +119,7 @@ void EnemyAircraft_Gnat::move()
 	else
 		randX = 0.75+FRAND*0.15;
 	tmps = 3.8;
-	dist = sqrt(diff[0]*diff[0]+diff[1]*diff[1])*randX; 
+	dist = sqrt(diff[0]*diff[0]+diff[1]*diff[1])*randX;
 //			dist = fabs(diff[0])+fabs(diff[1])*randX;
 	tmpd = 0.4+0.6*((dist+0.2*sin(age*0.001))/tmps);
 	speed = tmpd*0.25*randX;

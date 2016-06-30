@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -42,19 +42,19 @@ EnemyAircraft::EnemyAircraft(EnemyType et, float p[3], float randFact)
 	: ScreenItem(ScreenItem::ItemEnemy)
 {
 	type = et;
-	
+
 	game = Global::getInstance();
-	
+
 	Config *config = Config::instance();
-	
+
 	EnemyAircraft::init(p, randFact);
-	
+
 	float xBound = config->screenBoundX()-2.0;
 	if(pos[0] < -xBound)
 		pos[0] = -xBound;
 	if(pos[0] > xBound)
 		pos[0] = xBound;
-	
+
 	allocated++;
 }
 
@@ -66,7 +66,7 @@ EnemyAircraft::~EnemyAircraft()
 
 //----------------------------------------------------------
 // this is only here to get rid of the IRIX compiler warning...
-void EnemyAircraft::init() 
+void EnemyAircraft::init()
 {
 	ScreenItem::init();
 }
@@ -77,11 +77,11 @@ void EnemyAircraft::init(float *p, float randFact)
 	ScreenItem::init();
 	over = 0;	//-- if this points to another aircraft, this aircraft will be inserted after that
 				//   aircraft in the fleet list
-	
+
 	pos[0] = p[0];
 	pos[1] = p[1];
 	pos[2] = p[2];
-	
+
 	shootInterval = 1;
 	shootSwap	= 0;
 	randMoveX	= randFact*FRAND;
@@ -89,16 +89,16 @@ void EnemyAircraft::init(float *p, float randFact)
 	lastMoveY	= 0.0;
 	preFire		= 0.0;
 	target = game->hero;
-	
+
 	next = 0;
 	back = 0;
-	
+
 	secondaryMove[0] = secondaryMove[1] = 0.0;
-	
+
 	shootVec[0] =  0.0;
 	shootVec[1] = -0.2;
 	shootVec[2] =  0.0;
-	
+
 	vel[0] = 0.0;
 	vel[1] = 0.0;
 	vel[2] = 0.0;
@@ -115,7 +115,7 @@ void EnemyAircraft::printNumAllocated(void)
 EnemyAircraft* EnemyAircraft::makeNewEnemy(EnemyType et, float p[3], float randFact)
 {
 	EnemyAircraft *enemy = 0;
-	
+
 	switch(et)
 	{
 		case EnemyStraight:
@@ -269,7 +269,7 @@ EnemyAircraft* EnemyAircraft::makeNewEnemy(EnemyType et, float p[3], float randF
 bool EnemyAircraft::checkHit(ActiveAmmo *ammo)
 {
 	bool retVal = false;
-	if( ammo->pos[1] > pos[1]-size[1] ) 
+	if( ammo->pos[1] > pos[1]-size[1] )
 	{
 		if( (ammo->pos[1] < pos[1]+size[1]) &&
 			(ammo->pos[0] > pos[0]-size[0]) &&
@@ -285,19 +285,19 @@ bool EnemyAircraft::checkHit(ActiveAmmo *ammo)
 void EnemyAircraft::calcShootInterval()
 {
 	shootInterval = 1;
-}	
-	
+}
+
 //----------------------------------------------------------
 //void EnemyAircraft::init(float *p, float randFact)
 //{
 //	ScreenItem::init();
 //	over = 0;	//-- if this points to another aircraft, this aircraft will be inserted after that
 //				//   aircraft in the fleet list
-//	
+//
 //	pos[0] = p[0];
 //	pos[1] = p[1];
 //	pos[2] = p[2];
-//	
+//
 //	shootInterval = 1;
 //	shootSwap	= 0;
 //	randMoveX	= randFact*FRAND;
@@ -305,16 +305,16 @@ void EnemyAircraft::calcShootInterval()
 //	lastMoveY	= 0.0;
 //	preFire		= 0.0;
 //	target = game->hero;
-//	
+//
 //	next = 0;
 //	back = 0;
-//	
+//
 //	secondaryMove[0] = secondaryMove[1] = 0.0;
-//	
+//
 //	shootVec[0] =  0.0;
 //	shootVec[1] = -0.2;
 //	shootVec[2] =  0.0;
-//	
+//
 //	vel[0] = 0.0;
 //	vel[1] = 0.0;
 //	vel[2] = 0.0;
@@ -397,25 +397,25 @@ void EnemyAircraft::calcShootInterval()
 //	float	b = hpos[1]-pos[1];
 //	float	dist;
 //	float	ammoSpeed = 0.35*game->speedAdj;
-//	
+//
 //	int 	omniSwap = 108;
 //	int		tmpInt;
 //	//-- update age
 //	age++;
 //	shootInterval--;
-//	
+//
 //	pos[0] += secondaryMove[0]*game->speedAdj;
 //	pos[1] += secondaryMove[1]*game->speedAdj;
 //	float s = (1.0-game->speedAdj)+(game->speedAdj*0.7);
 //	secondaryMove[0] *= s;
 //	secondaryMove[1] *= s;
 //	move();
-//	
+//
 //	float	p[3] = { pos[0], pos[1], pos[2] };
 //	switch(type)
 //	{
 //		//------------------------------- Straight
-//		case EnemyStraight:	
+//		case EnemyStraight:
 //			if(shootInterval < 10)
 //				preFire = (10-shootInterval)/10.0;
 //			else
@@ -440,7 +440,7 @@ void EnemyAircraft::calcShootInterval()
 //					//dist = sqrt(a*a+b*b);
 //					v[0] = a/dist;
 //					v[1] = b/dist;
-//					
+//
 //					shootVec[0] = ammoSpeed*v[0];
 //					shootVec[1] = ammoSpeed*v[1]/*+vel[1]*/;
 //				}
@@ -450,7 +450,7 @@ void EnemyAircraft::calcShootInterval()
 //				shootSwap++;
 //			break;
 //		//------------------------------- Ray Gun
-//		case EnemyRayGun:	
+//		case EnemyRayGun:
 //			if(fabs(a) < 1.5) //-- big center gun
 //			{
 //				v[1] = -0.6;
@@ -459,7 +459,7 @@ void EnemyAircraft::calcShootInterval()
 //			}
 //			break;
 //		//------------------------------- Tank
-//		case EnemyTank:		
+//		case EnemyTank:
 //			p[1] = pos[1] - 1.7;
 //			if(fabs(a) < 4.0)
 //			{
@@ -500,7 +500,7 @@ void EnemyAircraft::calcShootInterval()
 //						game->enemyAmmo->addAmmo(2, p, shootVec);
 //						preFire -= 0.4;
 //						if(preFire < 0.0)
-//							preFire = 0.0;	
+//							preFire = 0.0;
 //					}
 //					else
 //						preFire += 0.035;
@@ -510,11 +510,11 @@ void EnemyAircraft::calcShootInterval()
 //			}
 //			break;
 //		//------------------------------- Gnat
-//		case EnemyGnat:	
+//		case EnemyGnat:
 //			if(!shootInterval)
 //			{
 //				calcShootInterval();
-//				if(fabs(a) < 2.0 && b < 0.0) //-- 
+//				if(fabs(a) < 2.0 && b < 0.0) //--
 //				{
 //					v[1] = -0.39;
 //					p[1] = pos[1]-0.5;
@@ -523,7 +523,7 @@ void EnemyAircraft::calcShootInterval()
 //			}
 //			break;
 //		//------------------------------- Boss 0
-//		case EnemyBoss00:	
+//		case EnemyBoss00:
 //			if(fabs(a) < 1.6) //-- big center gun
 //			{
 //				v[1] = -0.6;
@@ -585,7 +585,7 @@ void EnemyAircraft::calcShootInterval()
 //						preFire = 0.0;
 //				}
 //				else
-//					preFire += 0.035;	
+//					preFire += 0.035;
 //			}
 //			else
 //				preFire = 0.0;
@@ -593,7 +593,7 @@ void EnemyAircraft::calcShootInterval()
 //		//------------------------------- Boss 1
 //		case EnemyBoss01:
 //			if(fabs(a) < 5.0)
-//			{	
+//			{
 //				shootVec[1] = -0.65;
 //				preFire = (age%6)/6.0;
 //				if( !(age%6) )
@@ -669,8 +669,8 @@ void EnemyAircraft::calcShootInterval()
 //		case NumEnemyTypes:
 //			break;
 //	}
-//}	
-//	
+//}
+//
 ////----------------------------------------------------------
 //void EnemyAircraft::move()
 //{
@@ -714,15 +714,15 @@ void EnemyAircraft::calcShootInterval()
 //				v1 = 0.04;
 //			else
 //			{
-//				v1 = 0.04*(fabs(diff[0])/8.0); 
+//				v1 = 0.04*(fabs(diff[0])/8.0);
 //			}
 //			vel[1] = 0.99*vel[1] + 0.01*v1;
-//			
+//
 //			if(pos[1] < -3.0)
 //				vel[1] = -0.1;
 //			else if(pos[1] < 0.0)
 //				vel[1] *= 0.99;
-//				
+//
 //			if(pos[0] < 0.0)
 //				pos[0] = game->speedAdj*(0.998*pos[0] + 0.002*(-config->screenBoundX()+2.85));
 //			else
@@ -743,7 +743,7 @@ void EnemyAircraft::calcShootInterval()
 //			else
 //				randX = 0.75+FRAND*0.15;
 //			tmps = 3.8;
-//			dist = sqrt(diff[0]*diff[0]+diff[1]*diff[1])*randX; 
+//			dist = sqrt(diff[0]*diff[0]+diff[1]*diff[1])*randX;
 ////			dist = fabs(diff[0])+fabs(diff[1])*randX;
 //			tmpd = 0.4+0.6*((dist+0.2*sin(age*0.001))/tmps);
 //			speed = tmpd*0.25*randX;
@@ -775,14 +775,14 @@ void EnemyAircraft::calcShootInterval()
 //					y = tmpd*tmpY +  (1.0-tmpd)*diff[0]/tmpd;
 //				}
 //			}
-//			
+//
 //			tmp = randX*0.2;
 //			if( (age/8)%2 )
 //				v0 = vel[0]*(0.85-tmp) + (0.2+tmp)*(randX-0.2)*x;
 //			else
 //				v0 = vel[0];
 //			v1 = vel[1]*(0.85-tmp) + (0.2+tmp)*(randX-0.2)*y;
-//			
+//
 //			if(age < 50)
 //			{
 //				float amt;
@@ -796,10 +796,10 @@ void EnemyAircraft::calcShootInterval()
 //				vel[0] = v0;
 //				vel[1] = v1;
 //			}
-//			
+//
 //			pos[0] += game->speedAdj*vel[0];
 //			pos[1] += game->speedAdj*vel[1];
-//			
+//
 //			if(pos[1] < -10.0)
 //				pos[1] = -10.0;
 //			break;
@@ -820,11 +820,11 @@ void EnemyAircraft::calcShootInterval()
 //				approachDist = 9.0*(2.0-game->gameSkill);
 //			else
 //				approachDist = 12.0*(2.0-game->gameSkill);
-//				
+//
 //			if(fabs(diff[1]) < (approachDist+2.0*sin(game->frame*0.05)) )
 //				diff[1] = diff[1] * diff[1]/approachDist;
 //			diff[0] += 5.0*sin(age*0.1);
-//			
+//
 //			if( ((age/512)%2) )
 //			{
 //				lastMoveX = (0.98*lastMoveX)+(0.0010*game->gameSkill*diff[0]);

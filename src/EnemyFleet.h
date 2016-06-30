@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #ifndef EnemyFleet_h
@@ -33,21 +33,21 @@ public:
 
 	void	drawGL();
 	void	clear();
-	
+
 	void	addEnemy(EnemyAircraft *);
 	void	killEnemy(EnemyAircraft *);
-	
+
 	void	destroyAll();
 	void	retarget(EnemyType et, ScreenItem *newTarget);
-	
+
 	void			toFirst();
 	EnemyAircraft	*getShip();
-	
+
 	void	update();
-	
+
 	void	loadTextures();
 	void	deleteTextures();
-	
+
 private:
 	inline void drawQuad(float szx, float szy)
 	{
@@ -58,13 +58,13 @@ private:
 			glTexCoord2f(0.0, 1.0); glVertex3f(-szx, -szy, 0.0);
 		glEnd();
 	}
-	
+
 	void	bossExplosion(EnemyAircraft *);
 
 private:
 	GLuint			shipTex[NumEnemyTypes];
 	GLuint			extraTex[NumEnemyTypes];
-	
+
 	EnemyAircraft	*squadRoot;
 	EnemyAircraft	*currentShip;
 

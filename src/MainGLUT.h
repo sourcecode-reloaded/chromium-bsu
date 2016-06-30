@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #ifndef MainGLUT_h
@@ -22,9 +22,9 @@ public:
 
 	bool run();
 	bool checkErrors();
-	
+
 	bool setVideoMode();
-	
+
 	void grabMouse(bool,bool=true);
 
 private:
@@ -34,18 +34,18 @@ private:
 	static void reshape(int w, int h);
 	static void keyboardASCII(unsigned char key, int x, int y);
 	static void keyboardSpecial(int key, int x, int y);
-	static void mouseEvent(int button, int state, int x, int y);	
-	static void mouseMotion(int x, int y);	
+	static void mouseEvent(int button, int state, int x, int y);
+	static void mouseMotion(int x, int y);
 
 private:
 	static int		fire;
 	static int		xLast, yLast;
 	static int		xMid, yMid;
 	static bool		mouseToggle;
-	
+
 	static int last_time;
 	static int now_time;
-	
+
 };
 
 

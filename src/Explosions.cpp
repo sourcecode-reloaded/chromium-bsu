@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #include "Explosions.h"
@@ -30,8 +30,8 @@
 Explosions::Explosions()
 {
 	game = Global::getInstance();
-	
-	int		i;	
+
+	int		i;
 	for(i = 0; i < (int)NumExploTypes; i++)
 	{
 		tex[i]  = 0;
@@ -44,9 +44,9 @@ Explosions::Explosions()
 		exploPause[i][2] = 0;
 	}
 	exploPool = new Explo();
-	
+
 	loadTextures();
-	
+
 	exploSize[EnemyDestroyed][0] = 1.35;
 	exploSize[EnemyDestroyed][1] = 1.35;
 	exploStay[EnemyDestroyed]	= 30.0;
@@ -60,27 +60,27 @@ Explosions::Explosions()
 	exploSize[EnemyAmmo00][1]	= 1.5;
 	exploStay[EnemyAmmo00]		= 15.0;
 	exploPause[EnemyAmmo00][1]	= 1;
-	
+
 	exploSize[EnemyAmmo01][0]	= 0.5;
 	exploSize[EnemyAmmo01][1]	= 0.5;
 	exploStay[EnemyAmmo01]		= 10.0;
 	exploPause[EnemyAmmo01][1]	= 3;
-	
+
 	exploSize[EnemyAmmo02][0]	= 1.7;
 	exploSize[EnemyAmmo02][1]	= 1.7;
 	exploStay[EnemyAmmo02]		= 10.0;
 	exploPause[EnemyAmmo02][1]	= 2;
-	
+
 	exploSize[EnemyAmmo03][0]	= 1.7;
 	exploSize[EnemyAmmo03][1]	= 1.7;
 	exploStay[EnemyAmmo03]		= 10.0;
 	exploPause[EnemyAmmo03][1]	= 2;
-	
+
 	exploSize[EnemyAmmo04][0]	= 2.0;
 	exploSize[EnemyAmmo04][1]	= 1.5;
 	exploStay[EnemyAmmo04]		= 10.0;
 	exploPause[EnemyAmmo04][1]	= 5;
-	
+
 	exploSize[HeroDestroyed][0] = 1.5;
 	exploSize[HeroDestroyed][1] = 1.5;
 	exploStay[HeroDestroyed]	= 25.0;
@@ -93,56 +93,56 @@ Explosions::Explosions()
 	exploSize[HeroAmmo00][0]	= 0.25;
 	exploSize[HeroAmmo00][1]	= 0.25;
 	exploStay[HeroAmmo00]		= 10.0;
-	
+
 	exploSize[HeroAmmo01][0]	= 0.5;
 	exploSize[HeroAmmo01][1]	= 1.0;
 	exploStay[HeroAmmo01]		= 15.0;
 	exploPause[HeroAmmo01][1]	= 1;
-	
+
 	exploSize[HeroAmmo02][0]	= 0.9;
 	exploSize[HeroAmmo02][1]	= 1.0;
 	exploStay[HeroAmmo02]		= 23.0;
-	
+
 	exploSize[HeroShields][0]	= 1.6;
 	exploSize[HeroShields][1]	= 1.6;
 	exploStay[HeroShields]		= 25.0;
 	exploPause[HeroShields][1]	= 5;
-	
+
 	exploSize[PowerBurst][0]	= 1.8;
 	exploSize[PowerBurst][1]	= 1.8;
 	exploStay[PowerBurst]		= 35.0;
-	
+
 	exploSize[AddLife][0]		= 2.5;
 	exploSize[AddLife][1]		= 2.5;
 	exploStay[AddLife]			= 25.0;
-	
+
 	exploSize[LoseLife][0]		= 3.5;
 	exploSize[LoseLife][1]		= 3.5;
 	exploStay[LoseLife]			= 35.0;
-	
+
 	exploSize[ScoreLife][0]		= 3.5;
 	exploSize[ScoreLife][1]		= 3.5;
 	exploStay[ScoreLife]		= 35.0;
-	
+
 	exploSize[Electric][0]		= 1.7;
 	exploSize[Electric][1]		= 0.5;
 	exploStay[Electric]			= 43.0;
 	exploPause[Electric][1]		= 0;
-	
+
 	exploSize[Glitter][0]		= 0.8;
 	exploSize[Glitter][1]		= 1.0;
 	exploStay[Glitter]			= 20.0;
 	exploPause[Glitter][1]		= 0;
-	
+
 }
 
 Explosions::~Explosions()
 {
 	Explo *cur;
 	Explo *del;
-	
+
 	clear();	//-- move all explosions into the pool
-	
+
 	cur = exploPool->next;
 	while(cur)
 	{
@@ -154,7 +154,7 @@ Explosions::~Explosions()
 	for(int i = 0; i < (int)NumExploTypes; i++)
 		delete exploRoot[i];
 	delete exploPool;
-	
+
 	deleteTextures();
 }
 
@@ -199,7 +199,7 @@ void	Explosions::clear()
 	int i;
 	Explo *cur;
 	Explo *del;
-	
+
 	for(i = 0; i < NumExploTypes; i++)
 	{
 		cur = exploRoot[i]->next;
@@ -242,7 +242,7 @@ Explo *Explosions::addExplo(ExploType t, float p[3], int a, float s)
 {
 	Explo *newExplo	= 0;
 	Explo *first	= 0;
-	
+
 	if((exploPause[t][0]) <= 0)
 	{
 		exploPause[t][2] = 1; //-- set flag to init explo pause count
@@ -263,7 +263,7 @@ Explo *Explosions::addElectric(float p[3], float v[3], float clr[4], int age, fl
 {
 	Explo *newExplo	= 0;
 	Explo *first	= 0;
-		
+
 	exploPause[Electric][2] = 1; //-- set flag to init explo pause count
 	newExplo = getNewExplo();
 	newExplo->init(p, v, clr, age, size);
@@ -281,7 +281,7 @@ Explo *Explosions::addGlitter(float p[3], float v[3], float clr[4], int age, flo
 {
 	Explo *newExplo	= 0;
 	Explo *first	= 0;
-		
+
 	exploPause[Glitter][2] = 1; //-- set flag to init explo pause count
 	newExplo = getNewExplo();
 	newExplo->init(p, v, clr, age, size);
@@ -311,7 +311,7 @@ void	Explosions::update()
 			exploPause[i][0] = exploPause[i][1];
 			exploPause[i][2] = 0.0;
 		}
-		
+
 		explo = exploRoot[i]->next;
 		while(explo)
 		{
@@ -330,7 +330,7 @@ void	Explosions::update()
 				if(nextExplo)
 					nextExplo->back = backExplo;
 				killExplo(explo);
-				explo = nextExplo;	
+				explo = nextExplo;
 			}
 			else
 				explo = explo->next;
@@ -349,20 +349,20 @@ void	Explosions::drawGL()
 	if(exploRoot[EnemyAmmo02]->next)	drawAmmo(EnemyAmmo02);
 	if(exploRoot[EnemyAmmo03]->next)	drawAmmo(EnemyAmmo03);
 	if(exploRoot[EnemyAmmo04]->next)	drawAmmo(EnemyAmmo04);
-	
+
 	if(exploRoot[HeroDestroyed]->next)	drawExplo(HeroDestroyed);
 	if(exploRoot[HeroDamage]->next)		drawExplo(HeroDamage);
 	if(exploRoot[HeroAmmo00]->next)		drawAmmo(HeroAmmo00);
 	if(exploRoot[HeroAmmo01]->next)		drawAmmo(HeroAmmo01);
-	if(exploRoot[HeroAmmo02]->next)		drawAmmo(HeroAmmo02);  
-	
+	if(exploRoot[HeroAmmo02]->next)		drawAmmo(HeroAmmo02);
+
 	if(exploRoot[HeroShields]->next)	drawShields(HeroShields);
 	if(exploRoot[PowerBurst]->next)		drawBurst(PowerBurst);
-	
+
 	if(exploRoot[AddLife]->next)		drawLife(AddLife);
 	if(exploRoot[LoseLife]->next)		drawLife(LoseLife);
 	if(exploRoot[ScoreLife]->next)		drawLife(ScoreLife);
-	
+
 	if(exploRoot[Electric]->next)		drawElectric(Electric);
 	if(exploRoot[Glitter]->next)		drawGlitter(Glitter);
 }
@@ -377,9 +377,9 @@ void	Explosions::drawExplo(ExploType type)
 	float	clr, tmp;
 	float	xoff,yoff;
 	Explo	*thisExplo;
-	
+
 	glColor4f(1.0, 1.0, 1.0, 1.0);
-		
+
 	glBindTexture(GL_TEXTURE_2D, tex[type]);
 	thisExplo = exploRoot[type]->next;
 	glBegin(GL_QUADS);
@@ -428,7 +428,7 @@ void	Explosions::drawExplo(ExploType type)
 			glTexCoord2f(1.0, 0.0); glVertex3f(p[0]+ex+xoff, p[1]-ey+yoff, p[2]);
 			glTexCoord2f(1.0, 1.0); glVertex3f(p[0]+ex+xoff, p[1]+ey+yoff, p[2]);
 		}
-		
+
 		thisExplo = thisExplo->next; //ADVANCE
 	}
 	glEnd();
@@ -443,7 +443,7 @@ void	Explosions::drawAmmo(ExploType type)
 	float	clr;//,tmp;
 	float	*pos;
 	Explo	*thisExplo;
-	
+
 	glBindTexture(GL_TEXTURE_2D, tex[type]);
 	thisExplo = exploRoot[type]->next;
 	glBegin(GL_QUADS);
@@ -475,7 +475,7 @@ void	Explosions::drawBurst(ExploType type)
 	float	clr,tmp;
 	float	*pos;
 	Explo	*thisExplo;
-	
+
 	glBindTexture(GL_TEXTURE_2D, tex[type]);
 	thisExplo = exploRoot[type]->next;
 	while(thisExplo)
@@ -517,7 +517,7 @@ void	Explosions::drawShields(ExploType type)
 	float	clr,tmp;
 	float	*pos;
 	Explo	*thisExplo;
-	
+
 	if(!game->hero->isVisible())
 		return;
 	glBindTexture(GL_TEXTURE_2D, tex[type]);
@@ -555,7 +555,7 @@ void	Explosions::drawLife(ExploType type)
 	float	clr[4] = { 1.0, 1.0, 1.0, 1.0 };
 	float	tmp;
 	Explo	*thisExplo;
-			
+
 	glBindTexture(GL_TEXTURE_2D, tex[type]);
 	thisExplo = exploRoot[type]->next;
 	glBegin(GL_QUADS);
@@ -592,7 +592,7 @@ void	Explosions::drawLife(ExploType type)
 			glTexCoord2f(1.0, 0.0); glVertex3f(p[0]+ex, p[1]-ey, p[2]);
 			glTexCoord2f(1.0, 1.0); glVertex3f(p[0]+ex, p[1]+ey, p[2]);
 		}
-		
+
 		thisExplo = thisExplo->next; //ADVANCE
 	}
 	glEnd();
@@ -609,7 +609,7 @@ void	Explosions::drawElectric(ExploType type)
 	float	*pos;
 	Explo	*thisExplo;
 	float	tOff;
-	
+
 	glBindTexture(GL_TEXTURE_2D, tex[type]);
 	thisExplo = exploRoot[type]->next;
 	while(thisExplo)
@@ -653,7 +653,7 @@ void	Explosions::drawGlitter(ExploType type)
 	float	*clr;
 	float	*pos;
 	Explo	*thisExplo;
-	
+
 	glBindTexture(GL_TEXTURE_2D, tex[type]);
 	thisExplo = exploRoot[type]->next;
 	while(thisExplo)
@@ -679,7 +679,7 @@ void	Explosions::drawGlitter(ExploType type)
 				glTexCoord2f(1.0, 0.0); glVertex3f(  ex,  ey, 0.0);
 				glEnd();
 			glPopMatrix();
-			
+
 		}
 		thisExplo = thisExplo->next; //ADVANCE
 	}

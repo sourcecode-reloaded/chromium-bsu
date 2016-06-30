@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -11,7 +11,7 @@
 #endif
 
 #ifdef AUDIO_SDLMIXER
- 
+
 #include "gettext.h"
 
 #include "AudioSDLMixer.h"
@@ -36,7 +36,7 @@
 //====================================================================
 AudioSDLMixer::AudioSDLMixer()
 	: Audio()
-{    
+{
 	Config	*config = Config::instance();
 	//UNCLEAN - if initSound fails, config->audioEnabled() will be set to false
 	if(config->audioEnabled() == true)
@@ -46,14 +46,14 @@ AudioSDLMixer::AudioSDLMixer()
 AudioSDLMixer::~AudioSDLMixer()
 {
 	Config	*config = Config::instance();
-	if(config->audioEnabled()) 
+	if(config->audioEnabled())
 	{
     	for (int i = 0; i < NumSoundTypes; i++)
         	Mix_FreeChunk (sounds[i]);
 	}
 }
 
-/** 
+/**
  * open audio device and load sounds
  */
 //----------------------------------------------------------
@@ -79,14 +79,14 @@ void	AudioSDLMixer::initSound()
 	}
 }
 
-/** 
+/**
  * play sound
  */
 //----------------------------------------------------------
 void	AudioSDLMixer::playSound(SoundType type, float[3], int)
 {
 	Config	*config = Config::instance();
-	if (config->audioEnabled()) 
+	if (config->audioEnabled())
 	{
 		Mix_PlayChannel (-1, sounds[type], 0);
     }
@@ -99,7 +99,7 @@ void	AudioSDLMixer::playSound(SoundType type, float[3], int)
 void AudioSDLMixer::pauseGameMusic(bool status)
 {
 	Config	*config = Config::instance();
-	if (config->audioEnabled()) 
+	if (config->audioEnabled())
 	{
 		if(cdrom)
 		{
@@ -122,7 +122,7 @@ void AudioSDLMixer::pauseGameMusic(bool status)
 void	AudioSDLMixer::stopMusic()
 {
 	Config	*config = Config::instance();
-    if (config->audioEnabled()) 
+    if (config->audioEnabled())
 	{
 		Audio::stopMusic();
 		Mix_HaltChannel (0);
@@ -153,7 +153,7 @@ void	AudioSDLMixer::setMusicMode(SoundType mode)
 }
 
 /**
- * set volume for music channel 
+ * set volume for music channel
  */
 //----------------------------------------------------------
 void	AudioSDLMixer::setMusicVolume(float value)

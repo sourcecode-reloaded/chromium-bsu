@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -65,5 +65,5 @@ void GroundSeaSegment::drawGL()
 			glTexCoord2f( 1.0, 1.0); glVertex3fv(vert[2]);
 			glTexCoord2f( 0.0, 1.0); glVertex3fv(vert[3]);
 		glEnd();
-	glPopMatrix();	
+	glPopMatrix();
 }

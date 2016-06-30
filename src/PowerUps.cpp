@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -43,61 +43,61 @@ PowerUps::PowerUps()
 {
 	game = Global::getInstance();
 	int i;
-	
+
 	activeCount = 0;
 	currentPwrUp = 0;
-	
+
 	for(i = 0; i < NumPowerUps; i++)
-	{		
+	{
 		pwrUpSize[i][0] = 0.6;
 		pwrUpSize[i][1] = 0.6;
 		tex[i] = 0;
 	}
-	
+
 	speed = game->scrollSpeed * 0.8;
-	
+
 	loadTextures();
-	
+
 	pwrUpColor[Shields][0] = 0.5;
 	pwrUpColor[Shields][1] = 0.7;
 	pwrUpColor[Shields][2] = 1.0;
 	pwrUpColor[Shields][3] = 1.0;
-	
+
 	pwrUpColor[SuperShields][0] = 1.0;
 	pwrUpColor[SuperShields][1] = 0.6;
 	pwrUpColor[SuperShields][2] = 0.0;
 	pwrUpColor[SuperShields][3] = 1.0;
-	
+
 	pwrUpColor[Repair][0] = 1.0;
 	pwrUpColor[Repair][1] = 0.1;
 	pwrUpColor[Repair][2] = 0.0;
 	pwrUpColor[Repair][3] = 1.0;
-	
+
 	pwrUpColor[HeroAmmo00][0] = 1.0;
 	pwrUpColor[HeroAmmo00][1] = 0.8;
 	pwrUpColor[HeroAmmo00][2] = 0.5;
 	pwrUpColor[HeroAmmo00][3] = 0.8;
-	
+
 	pwrUpColor[HeroAmmo01][0] = 0.0;
 	pwrUpColor[HeroAmmo01][1] = 1.0;
 	pwrUpColor[HeroAmmo01][2] = 0.5;
 	pwrUpColor[HeroAmmo01][3] = 0.8;
-	
+
 	pwrUpColor[HeroAmmo02][0] = 0.4;
 	pwrUpColor[HeroAmmo02][1] = 0.2;
 	pwrUpColor[HeroAmmo02][2] = 1.0;
 	pwrUpColor[HeroAmmo02][3] = 1.0;
-	
+
 	float p[3] = { 0.0, 0.0, 0.0 };
 	pwrUpRoot = new PowerUp((PowerUps::Type)-1, p);
-	
+
 	double twoPi = 2.0*M_PI;
 	for(i = 0; i < WOBBLE_0; i++)
 		wobble_0[i] = 0.1*sin(twoPi * ((double)i/(double)WOBBLE_0) );
 	for(i = 0; i < WOBBLE_1; i++)
 		wobble_1[i] = 0.3*sin(twoPi * ((double)i/(double)WOBBLE_1) );
-	
-}	
+
+}
 
 PowerUps::~PowerUps()
 {
@@ -123,9 +123,9 @@ void	PowerUps::deleteTextures()
 {
 	for(int i = 0; i < NumPowerUps; i++)
 	{
-		glDeleteTextures(1, &tex[i]);	
+		glDeleteTextures(1, &tex[i]);
 	}
-	glDeleteTextures(1, &pwrTex);	
+	glDeleteTextures(1, &pwrTex);
 }
 
 //----------------------------------------------------------
@@ -133,8 +133,8 @@ void	PowerUps::clear()
 {
 	PowerUp	*cur;
 	PowerUp *del;
-	
-	currentPwrUp = 0;	
+
+	currentPwrUp = 0;
 	cur = pwrUpRoot->next;
 	while(cur)
 	{
@@ -148,14 +148,14 @@ void	PowerUps::clear()
 
 //----------------------------------------------------------
 PowerUp	*PowerUps::getFirst()
-{	
+{
 	currentPwrUp = pwrUpRoot->next;
 	return 	currentPwrUp;
 }
 
 //----------------------------------------------------------
-PowerUp	*PowerUps::getNext()	
-{	
+PowerUp	*PowerUps::getNext()
+{
 	PowerUp *retVal = 0;
 	if(currentPwrUp)
 	{
@@ -185,7 +185,7 @@ void	PowerUps::remove(PowerUp *pwr)
 void PowerUps::addPowerUp(PowerUp *pwrUp)
 {
 	PowerUp *first = 0;
-	
+
 	activeCount++;
 	pwrUp->back = pwrUpRoot;
 	pwrUp->next = pwrUpRoot->next;
@@ -224,7 +224,7 @@ void PowerUps::update()
 			pwrUp->pos[0] = -b;
 		if(pwrUp->pos[0] >  b)
 			pwrUp->pos[0] =  b;
-			
+
 		if(pwrUp->pos[1] < -12)
 		{
 			if(game->gameMode == Global::Game)
@@ -258,19 +258,19 @@ void PowerUps::drawGL()
 {
 	float	*pos, *sz, szp;
 	PowerUp	*pwrUp;
-	
+
 	pwrUp = pwrUpRoot->next;
 	while(pwrUp)
 	{
 		pos	= pwrUp->pos;
 		sz	= pwrUpSize[pwrUp->type];
 		szp = sz[0]*2.5;
-		
+
 		glColor4fv(pwrUpColor[pwrUp->type]);
 		glBindTexture(GL_TEXTURE_2D, pwrTex);
 		glPushMatrix();
-		glTranslatef(	pos[0]+wobble_0[pwrUp->age%WOBBLE_0], 
-						pos[1]+wobble_1[pwrUp->age%WOBBLE_1], 
+		glTranslatef(	pos[0]+wobble_0[pwrUp->age%WOBBLE_0],
+						pos[1]+wobble_1[pwrUp->age%WOBBLE_1],
 						pos[2]);
 		glRotatef(IRAND, 0.0, 0.0, 1.0);
 		glBegin(GL_QUADS);
@@ -283,20 +283,20 @@ void PowerUps::drawGL()
 
 		pwrUp = pwrUp->next; //ADVANCE
 	}
-		
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
+
 	pwrUp = pwrUpRoot->next;
 	while(pwrUp)
 	{
 		pos	= pwrUp->pos;
 		sz	= pwrUpSize[pwrUp->type];
-		
+
 		glColor4f(1.0, 1.0, 1.0, 1.0);
 		glBindTexture(GL_TEXTURE_2D, tex[pwrUp->type]);
 		glPushMatrix();
-		glTranslatef(	pos[0]+wobble_0[pwrUp->age%WOBBLE_0], 
-						pos[1]+wobble_1[pwrUp->age%WOBBLE_1], 
+		glTranslatef(	pos[0]+wobble_0[pwrUp->age%WOBBLE_0],
+						pos[1]+wobble_1[pwrUp->age%WOBBLE_1],
 						pos[2]);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0, 0.0); glVertex3f(-sz[0],  sz[1], 0.0);
@@ -305,10 +305,10 @@ void PowerUps::drawGL()
 		glTexCoord2f(1.0, 0.0); glVertex3f( sz[0],  sz[1], 0.0);
 		glEnd();
 		glPopMatrix();
-		
+
 		pwrUp = pwrUp->next; //ADVANCE
 	}
-	
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 }
 
@@ -321,7 +321,7 @@ PowerUp::PowerUp(PowerUps::Type t, float p[3], float pwr, float *v)
 	count_this++;
 	type = t;
 	power	= pwr;
-	age		= 0;	
+	age		= 0;
 
 	pos[0] = p[0];
 	pos[1] = p[1];
@@ -338,7 +338,7 @@ PowerUp::PowerUp(PowerUps::Type t, float p[3], float pwr, float *v)
 		vel[1] = 0.0;
 		vel[2] = 0.0;
 	}
-	
+
 	back = 0;
 	next = 0;
 }
@@ -368,5 +368,5 @@ void PowerUp::seal()
 		fprintf(stderr, _("?? PowerUp::seal()"));
 	}
 }
-	
-	
+
+

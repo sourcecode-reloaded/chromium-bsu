@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -193,7 +193,7 @@ const char *HiScore::getOldFileName()
 }
 
 /**
- * Save high score file. 
+ * Save high score file.
  * @returns success
  */
 //----------------------------------------------------------
@@ -217,9 +217,9 @@ bool HiScore::saveFile()
 			{
 				time = gmtime(&hiScoreDate[i][j]);
 				if( time != NULL ){
-					fprintf(file, 
+					fprintf(file,
 					        "%d %d %f %04d-%02d-%02d %02d:%02d:%02d %s\n",
-					        i, j, 
+					        i, j,
 					        hiScore[i][j],
 					        1900+time->tm_year,
 					        1+time->tm_mon,
@@ -326,7 +326,7 @@ bool HiScore::readFile()
 				saveFile();
 			}
 		}
-		else 
+		else
 		{
 			Config* config = Config::instance();
 			if( config->debug() ) fprintf(stderr, _("WARNING: empty score file (%s)\n"), getFileName());
@@ -351,14 +351,14 @@ bool HiScore::readFile()
 			if( saveFile() )
 				remove(fileName);
 		}
-		else 
+		else
 		{
 			Config* config = Config::instance();
 			if( config->debug() ) fprintf(stderr, _("WARNING: could not read score file (%s)\n"), getFileName());
 			retVal = false;
 		}
 	}
-		
+
 	return retVal;
 }
 
@@ -385,8 +385,8 @@ void HiScore::insertScore(int skill, int rank, float score)
 }
 
 /**
- * reads high score file, inserts current score (if appropriate), then saves 
- * high score file. If multiple users are sharing a common high score file, 
+ * reads high score file, inserts current score (if appropriate), then saves
+ * high score file. If multiple users are sharing a common high score file,
  * we want to keep it as current as possible.
  */
 //----------------------------------------------------------
@@ -410,7 +410,7 @@ int HiScore::set(int skill, float score)
 			retVal = rank+1;
 		}
 	}
-			
+
 	return retVal;
 }
 
@@ -445,7 +445,7 @@ int HiScore::check(int skill, float score)
 //----------------------------------------------------------
 void HiScore::print(int skill)
 {
-	struct tm *tmptr; 
+	struct tm *tmptr;
 	fprintf(stderr, _("high scores:\n"));
 	for(int j = 0; j < HI_SCORE_HIST; j++)
 	{

@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -53,7 +53,7 @@ N_("  d o w n l o a d   C h r o m i u m   B. S. U.   a t   http://chromium-bsu.s
 MenuGL::MenuGL()
 {
 	game = Global::getInstance();
-	
+
 	curSel = NewGame;
 
 	elecStretch = 10.0;
@@ -62,7 +62,7 @@ MenuGL::MenuGL()
 	textAngle = 0.0;
 	txtHeight = 0.5;
 	titleTilt = -10.0;
-	
+
 	butHeight	= 0.5;
 	butWidth	= butHeight*4.0;
 	butOffset	= 3.05;
@@ -77,9 +77,9 @@ MenuGL::MenuGL()
 	menuText[Music]		= _("m u s i c    v o l u m e");
 	menuText[MovementSpeed]= _("m o v e m e n t   s p e e d");
 	menuText[Quit]		= _("q u i t");
-	
+
 	loadTextures();
-	
+
 	thickText = true;
 
 	mssgAlpha = 0.0;
@@ -87,7 +87,7 @@ MenuGL::MenuGL()
 	mssgIndex = 0;
 	mssgCount = 0;
 	mssgHelpOverride = false;
-	
+
 	startMenu();
 }
 
@@ -128,7 +128,7 @@ void MenuGL::deleteTextures()
 	envTex	= 0;
 	csrTex	= 0;
 	updwnTex = 0;
-	
+
 	glDeleteLists(listChrom, 1);
 	glDeleteLists(listBSU, 1);
 }
@@ -143,13 +143,13 @@ void MenuGL::createLists(bool thick)
 		if( config->debug() ) fprintf(stderr, _("ATTENTION: Using 'thin' text to improve framerate...\n"));
 	}
 	titleTilt	= -10.0;
-	
+
 	if( config->debug() ) fprintf(stderr, _("MenuGL::createLists\n"));
 
 	glNewList(listChrom, GL_COMPILE);
 	textGeometryChromium(thick);
 	glEndList();
-	
+
 	glNewList(listBSU, GL_COMPILE);
 	textGeometryBSU(thick);
 	glEndList();
@@ -181,7 +181,7 @@ void MenuGL::startMenu()
 	createLists( (thickText = true) );
 	Global::cursorPos[0] = 0.0;
 	Global::cursorPos[1] = 0.0;
-	
+
 }
 
 //----------------------------------------------------------
@@ -191,17 +191,17 @@ void MenuGL::drawGL()
 	Global	*game = Global::getInstance();
 	HiScore	*hiScore = HiScore::getInstance();
 	int		i;
-		
+
 	if(--textCount < 0)
 	{
 		textCount = 500;
 //		textAngle = 360.0;
 	}
-	if(textAngle > 0.0) 
+	if(textAngle > 0.0)
 		textAngle -=  5.0;
-	else		
+	else
 		textAngle  =  0.0;
-	
+
 //	glClearColor(0.27451, 0.235294, 0.392157, 1.0);
 	//-- Clear buffers
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -209,30 +209,30 @@ void MenuGL::drawGL()
 	//-- Place camera
 	glLoadIdentity();
 	glTranslatef(0.0, 0.0, config->zTrans());
-	
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
+
 	glColor4f(1.0, 1.0, 1.0, 1.0);
-	
+
 	//-- Draw background
 	game->ground->drawGL();
-	
+
 	//-- Update audio
 	game->audio->update();
-	
+
 	float	szx		=   9.0;
 	float	szy		=   4.5;
 	float	top		=   1.0;
 	float	left	=  -8.0;
 	float	inc		=  -txtHeight*2.5;
-	
+
 	//----- Draw credits texture --------------------------------
 	glPushMatrix();
 		// NOTE: corners of back tex is white, alpha 1 and
 		// we are in modulate blend...
 		glBindTexture(GL_TEXTURE_2D, backTex);
-		glTexCoord2f(1.0, 0.0); 
-		
+		glTexCoord2f(1.0, 0.0);
+
 		//-- darken
 		glBegin(GL_QUADS);
 		glColor4f(0.0, 0.0, 0.0, 0.8);
@@ -265,7 +265,7 @@ void MenuGL::drawGL()
 			glVertex3f( szx,  szy*3.0, 0.0);
 		glEnd();
 		drawIndicator();
-		
+
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		drawElectric();
 		glPopMatrix();
@@ -280,7 +280,7 @@ void MenuGL::drawGL()
 			game->text->Render(menuText[i]);
 			glPopMatrix();
 		}
-		
+
 		{
 			float f = (float)-game->frame;
 			float r = cos(f*0.02);
@@ -324,7 +324,7 @@ void MenuGL::drawGL()
 			}
 			glPopMatrix();
 		}
-		
+
 		//---- credits
 		if(true)
 		{
@@ -362,14 +362,14 @@ void MenuGL::drawGL()
 			// font height is 23
 			glPopMatrix();
 		}
-		
+
 		//-------- draw help message
 		if(mssgAlpha > 0.0)
 		{
 			if(mssgHelpOverride)
 				glColor4f(1.3, mssgAlpha, mssgAlpha, mssgAlpha);
 			else
-				glColor4f(0.5, 0.5, 0.9, (0.2+mssgAlpha));		
+				glColor4f(0.5, 0.5, 0.9, (0.2+mssgAlpha));
 			sc = 0.042;
 			glTranslatef(-19.5, -14.0, 0.0);
 			glScalef(sc, sc*0.75, 1.0);
@@ -380,11 +380,11 @@ void MenuGL::drawGL()
 			mssgAlpha -= 0.004;
 			glColor4f(1.0, 1.0, 1.0, 1.0);
 		}
-		
-		
-		
+
+
+
 	glPopMatrix();
-	
+
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	glPushMatrix();
@@ -395,7 +395,7 @@ void MenuGL::drawGL()
 	glDepthMask(GL_TRUE);	//XXX Hack to make Voodoo3 XF4 work
 	drawTitle();
 	glPopMatrix();
-	
+
 //	//-- draw cursor...
 //	{
 //		float x = Global::cursorPos[0]*16.60;
@@ -411,18 +411,18 @@ void MenuGL::drawGL()
 //		glTexCoord2f(1.0, 0.0); glVertex3f( x+sz, y-sz, z);
 //		glEnd();
 //	}
-	
+
 	if(thickText && game->fps < 30)
 	{
 		if( config->debug() ) fprintf(stderr, _("ATTENTION: Using 'thin' text to improve framerate...\n"));
-		createLists( (thickText = false) );	
+		createLists( (thickText = false) );
 	}
 	if(!thickText && game->fps > 40)
 	{
 		if( config->debug() ) fprintf(stderr, _("ATTENTION: Reverting to 'thick' text...\n"));
-		createLists( (thickText = true) );	
+		createLists( (thickText = true) );
 	}
-	
+
 	//---------- Help messages
 	if(mssgHelpOverride && mssgAlpha < 0.05)
 	{
@@ -457,16 +457,16 @@ void MenuGL::drawIndicator()
 	int		tmp;
 	switch(curSel)
 	{
-		case GameLevel: 
+		case GameLevel:
 			level = game->gameLevel/9.0;
-			sprintf(buf, "%d", game->gameLevel);	 
+			sprintf(buf, "%d", game->gameLevel);
 			break;
-		case SkillLevel: 
+		case SkillLevel:
 			level = config->gameSkillBase();
 			tmp = (int)((level+0.05)*10.0);
 			sprintf(buf, "%s", skillString(tmp));
 			break;
-		case Graphics: 
+		case Graphics:
 			level = config->gfxLevel()/2.0;
 			switch(config->gfxLevel())
 			{
@@ -475,28 +475,28 @@ void MenuGL::drawIndicator()
 				case 2: sprintf(buf, _("high")); break;
 			}
 			break;
-		case ScreenSize: 
+		case ScreenSize:
 			level = (float)config->approxScreenSize()/(float)MAX_SCREEN_SIZE;
 			sprintf(buf, _("%dx%d"), config->screenW(), config->screenH());
 			break;
-		case FullScreen: 
-			level = (float)config->fullScreen(); 
+		case FullScreen:
+			level = (float)config->fullScreen();
 			if(config->fullScreen()) sprintf(buf, _("true"));
 			else sprintf(buf, _("false"));
 			break;
-		case Sound: 
-			level = config->volSound(); 
-			sprintf(buf, "%d", (int)((level+0.05)*10.0));	 
+		case Sound:
+			level = config->volSound();
+			sprintf(buf, "%d", (int)((level+0.05)*10.0));
 			break;
-		case Music: 
-			level = config->volMusic(); 
-			sprintf(buf, "%d", (int)((level+0.05)*10.0));	 
+		case Music:
+			level = config->volMusic();
+			sprintf(buf, "%d", (int)((level+0.05)*10.0));
 			break;
 		case MovementSpeed:
 			level = config->movementSpeed()*10.0;
-			sprintf(buf, "%d", (int)((level+0.005)*100.0));	 
+			sprintf(buf, "%d", (int)((level+0.005)*100.0));
 			break;
-		default: 
+		default:
 			level = -5.0;
 			break;
 	}
@@ -510,7 +510,7 @@ void MenuGL::drawIndicator()
 			glVertex3f(   -szx, 0.0, 0.0);
 			glVertex3f(    szx, 0.0, 0.0);
 		glEnd();
-		
+
 		//-- draw level indicator and/or text
 		glPushMatrix();
 		if(level > -1.0)
@@ -523,7 +523,7 @@ void MenuGL::drawIndicator()
 				glVertex3f(          0.0, 0.0, 0.0);
 				glVertex3f(    szx*level, 0.0, 0.0);
 			glEnd();
-			
+
 			//-- draw +/- buttons ---
 			float	bx = butWidth;
 			float	by = butHeight;
@@ -536,18 +536,18 @@ void MenuGL::drawIndicator()
 				glTexCoord2f(0.0, 1.0);	glVertex3f(	0.0-bo, 0.0, 0.0);
 				glTexCoord2f(1.0, 1.0);	glVertex3f(  bx-bo, 0.0, 0.0);
 			glEnd();
-			
+
 			glColor4f(1.0, 1.0, 1.0, 0.5);
 			glTranslatef(11.0, 0.0, 0.0);
 			glScalef(sc, sc, 1.0);
 			game->text->Render(buf);
 		}
 		glPopMatrix();
-		
+
 	glPopMatrix();
-	
+
 }
-	
+
 //----------------------------------------------------------
 void MenuGL::drawElectric()
 {
@@ -570,7 +570,7 @@ void MenuGL::drawElectric()
 	glEnd();
 	glPopMatrix();
 }
-	
+
 //----------------------------------------------------------
 void MenuGL::drawTitleBack()
 {
@@ -580,10 +580,10 @@ void MenuGL::drawTitleBack()
 	float	a = 2.0;
 	float	h = 1.4;
 	float	z = 0.5;
-		
+
 	float	as = a/(w+a);
 	float	at = a/(h+a);
-	
+
 	glBindTexture(GL_TEXTURE_2D, backTex);
 	glMatrixMode(GL_TEXTURE);
 	glPushMatrix();
@@ -616,7 +616,7 @@ void MenuGL::drawTitleBack()
 		glTexCoord2f(1.0-as, 1.0   ); glColor4fv(clr_c);	glVertex3f( -w  ,  h+a, 0.0);
 		glTexCoord2f(1.0   , 1.0-at); glColor4fv(clr_c);	glVertex3f( -w-a,  h  , 0.0);
 		glTexCoord2f(1.0   , 1.0   ); glColor4fv(clr_c);	glVertex3f( -w-a,  h+a, 0.0);
-	glEnd();		
+	glEnd();
 	glBegin(GL_TRIANGLE_STRIP);
 		glTexCoord2f(0.0   , 0.0   ); glColor4fv(clr_w);	glVertex3f(  0.0, 0.0, z);
 		glTexCoord2f(0.0   , 1.0-at); glColor4fv(clr_w);	glVertex3f(  0.0,	h, 0.0);
@@ -659,10 +659,10 @@ void MenuGL::drawTitleBack()
 		glTexCoord2f(1.0   , 1.0   ); glColor4fv(clr_c);	glVertex3f( -w-a, -h-a, 0.0);
 		glTexCoord2f(1.0   , 1.0-at); glColor4fv(clr_c);	glVertex3f( -w-a, -h  , 0.0);
 	glEnd();
-	
+
 	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);	
-	
+	glMatrixMode(GL_MODELVIEW);
+
 }
 
 //----------------------------------------------------------
@@ -676,12 +676,12 @@ void MenuGL::drawTitle()
 	else if(!thickText) ta0 += 180.0;
 	else ta0 += 5.0;
 	if(ta0 > 270.0)	ta0 = ta0-360.0;
-		
+
 	if(ta1 < 90.0)	ta1 += 0.55;
 	else if(!thickText) ta1 += 180.0;
 	else ta1 += 8.0;
 	if(ta1 > 270.0)	ta1 = ta1-360.0;
-	
+
 	if(thickText)
 	{
 		tiltCount--;
@@ -827,7 +827,7 @@ void MenuGL::incItem()
 			break;
 		case GameLevel:
 			game->gameLevel++;
-			if(game->gameLevel > config->maxLevel()) 
+			if(game->gameLevel > config->maxLevel())
 			{
 				mssgHelpOverride = true;
 				mssgAlpha = 1.1;
@@ -904,7 +904,7 @@ void MenuGL::decItem()
 			break;
 		case GameLevel:
 			game->gameLevel -= 1;
-			if(game->gameLevel < 1) 
+			if(game->gameLevel < 1)
 				game->gameLevel = 1;
 			game->newGame();
 			break;
@@ -975,7 +975,7 @@ void MenuGL::mousePress(MainToolkit::Button but, int xi, int yi)
 		int		mSel = -1;
 		if(p > 0.0)
 		{
-			// reset electric 
+			// reset electric
 			elecOffX = 0.0;
 
 			p = p/s;

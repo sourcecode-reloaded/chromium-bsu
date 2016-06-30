@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #include "EnemyAircraft_Boss00.h"
@@ -34,7 +34,7 @@ EnemyAircraft_Boss00::~EnemyAircraft_Boss00()
 
 //----------------------------------------------------------
 // this is only here to get rid of the IRIX compiler warning...
-void EnemyAircraft_Boss00::init() 
+void EnemyAircraft_Boss00::init()
 {
 	EnemyAircraft::init();
 }
@@ -63,18 +63,18 @@ void EnemyAircraft_Boss00::update()
 	float	b = hpos[1]-pos[1];
 	float	dist;
 	float	ammoSpeed = 0.35*game->speedAdj;
-	
+
 	//-- update age
 	age++;
 	shootInterval--;
-	
+
 	pos[0] += secondaryMove[0]*game->speedAdj;
 	pos[1] += secondaryMove[1]*game->speedAdj;
 	float s = (1.0-game->speedAdj)+(game->speedAdj*0.7);
 	secondaryMove[0] *= s;
 	secondaryMove[1] *= s;
 	move();
-	
+
 	float	p[3] = { pos[0], pos[1], pos[2] };
 
 	if(fabs(a) < 1.6) //-- big center gun
@@ -139,7 +139,7 @@ void EnemyAircraft_Boss00::update()
 				preFire = 0.0;
 		}
 		else
-			preFire += 0.035;	
+			preFire += 0.035;
 	}
 	else
 		preFire = 0.0;

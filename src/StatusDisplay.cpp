@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -38,9 +38,9 @@
 
 static float statPosAmmo[3] =	{-10.5,  8.00, 25.0 };
 static float statPosShld[3] =	{-10.4, -7.80, 25.0 };
-static float statClrWarn[4] = 	{ 1.1, 0.6, 0.1, 1.1 }; 
-static float statClrZero[4] = 	{ 0.0, 0.0, 0.0, 0.0 }; 
-static float statClrAmmo[NUM_HERO_AMMO_TYPES][4] = {	 
+static float statClrWarn[4] = 	{ 1.1, 0.6, 0.1, 1.1 };
+static float statClrZero[4] = 	{ 0.0, 0.0, 0.0, 0.0 };
+static float statClrAmmo[NUM_HERO_AMMO_TYPES][4] = {
 										{ 1.0, 0.7, 0.5, 0.6 },
 										{ 0.0, 1.0, 0.5, 0.7 },
 										{ 0.3, 0.0, 1.0, 0.7 } };
@@ -49,18 +49,18 @@ static float statClrAmmo[NUM_HERO_AMMO_TYPES][4] = {
 StatusDisplay::StatusDisplay()
 {
 	game = Global::getInstance();
-	
+
 	ammoAlpha = 0.0;
 	damageAlpha = 0.0;
     shieldAlpha = 0.0;
 
 	enemyWarn = 0.0;
-		
+
 	tipShipShow  = 0;
 	tipSuperShow = 0;
-	
+
 	loadTextures();
-	
+
 	blink	= true;
 }
 
@@ -102,10 +102,10 @@ void StatusDisplay::loadTextures()
 void StatusDisplay::deleteTextures()
 {
 	int i;
-	glDeleteTextures(1, &statTex);	
-	glDeleteTextures(1, &shldTex);	
-	glDeleteTextures(1, &heroSuperTex);	
-	glDeleteTextures(1, &heroShieldTex);	
+	glDeleteTextures(1, &statTex);
+	glDeleteTextures(1, &shldTex);
+	glDeleteTextures(1, &heroSuperTex);
+	glDeleteTextures(1, &heroShieldTex);
 	for(i = 0; i < NUM_HERO_AMMO_TYPES; i++)
 	{
 		glDeleteTextures(1, &heroAmmoFlash[i]);
@@ -135,7 +135,7 @@ void StatusDisplay::darkenGL()
 	glColor4f(0.25, 0.25, 0.35, 0.6);
 		glTexCoord2f(0.0, 1.7); glVertex3f(  9.2, -8.5, 25.0);
 		glTexCoord2f(1.0, 1.7); glVertex3f( 11.5, -8.5, 25.0);
-		
+
 	glEnd();
 }
 
@@ -150,14 +150,14 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 	float	x = 0.0,y,y3;
 	float	size[2];
 	float	ammoStock;
-	
+
 	if(!hero)
 		return;
 	if(!(game->frame%15) )
 		blink = !blink;
-		
+
 	ammoAlpha *= 0.96;
-		
+
 	float	shields = hero->getShields();
 	float	superShields = 0.0;
 	float	damage	= hero->getDamage();
@@ -167,7 +167,7 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 //		superShields = (shields-HERO_SHIELDS);
 		shields = HERO_SHIELDS;
 	}
-	
+
 	//-- draw score
 	glColor4f(1.0, 1.0, 1.0, 0.4);
 	glPushMatrix();
@@ -186,7 +186,7 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 			game->text->Render(scoreBuf);
 		glPopMatrix();
 	}
-	
+
 	//-- draw ship lives
 	glPushMatrix();
 	glColor4f(0.6, 0.6, 0.7, 1.0);
@@ -199,8 +199,8 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 		drawQuad(size[0], size[1]);
 		glTranslatef(0.0, -size[1]*2.0, 0.0);
 	}
-	glPopMatrix();	
-		
+	glPopMatrix();
+
 	//-- draw usable items
 	if(config->gfxLevel() > 1)
 	{
@@ -223,9 +223,9 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 			drawQuad(size[0], size[0]);
 			glTranslatef(-size[1]*2.0, 0.0, 0.0);
 		}
-		glPopMatrix();	
+		glPopMatrix();
 	}
-	
+
 	//-- draw 'enemy-got-past' Warning
 	if(enemyWarn && game->hero->getLives() >= 0)
 	{
@@ -234,15 +234,15 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 		glTranslatef(0.0, -8.75, 25.0);
 		glBindTexture(GL_TEXTURE_2D, heroAmmoFlash[0]);
 		drawQuad(12.0, 3.0);
-		glPopMatrix();	
+		glPopMatrix();
 		enemyWarn = 0.0;
 	}
-	
+
 	//-- draw AMMO
 	glPushMatrix();
 	glTranslatef(statPosAmmo[0], statPosAmmo[1], statPosAmmo[2]);
-	
-	
+
+
 	//--draw ammo reserves
 	glBindTexture(GL_TEXTURE_2D, statTex);
 	glBegin(GL_QUADS);
@@ -262,15 +262,15 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 				statClrWarnAmmo = true;
 				glColor4fv(statClrWarn);
 			}
-			
+
 			glTexCoord2f(1.0, 0.00); glVertex3f( x+w, -y3, 0.0 );
 			glTexCoord2f(1.0,    y); glVertex3f( x+w, 0.0, 0.0 );
-			glTexCoord2f(0.0,    y); glVertex3f( x-w, 0.0, 0.0 );			
+			glTexCoord2f(0.0,    y); glVertex3f( x-w, 0.0, 0.0 );
 			glTexCoord2f(0.0, 0.00); glVertex3f( x-w, -y3, 0.0 );
 		}
 	}
 	glEnd();
-	
+
 	glBindTexture(GL_TEXTURE_2D, topTex);
 	if(statClrWarnAmmo)
 		glColor4f(statClrWarn[0], statClrWarn[1], statClrWarn[2], 0.5+ammoAlpha);
@@ -283,7 +283,7 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 		glTexCoord2f(0.0,  1.0); glVertex3f( -0.75, -2.85, 0.0 );
 	glEnd();
 	x += w*1.5;
-	
+
 	glPopMatrix();
 
 	//--draw Shields
@@ -298,12 +298,12 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 	rot+=2.0*game->speedAdj;
 	float	rot2;
 	rot2 = 2*((int)rot%180);
-	
+
 	sl  = sls = (shields/HERO_SHIELDS)-1.0;
 	dl  = dls = ( damage/HERO_DAMAGE)-1.0;
 	if(superShields)
 		sls = dls = ((shields+superShields)/HERO_SHIELDS)-1.0;
-	
+
 	//------ draw Engine
 	if(hero->isVisible() && config->gfxLevel() >= 1)
 	{
@@ -326,7 +326,7 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 		drawQuad(0.85*esz, 0.6*esz);
 		glPopMatrix();
 	}
-	
+
 //	if(shields > 0)
 //	{
 //		glPushMatrix();
@@ -338,7 +338,7 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 //		drawQuad(sz, sz);
 //		glPopMatrix();
 //	}
-	
+
 	//------ draw Super Shields
 	if(superShields)
 	{
@@ -350,7 +350,7 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 		glRotatef(IRAND, 0.0, 0.0, 1.0);
 		drawQuad(sz, sz);
 		glPopMatrix();
-		
+
 		//------ add a bit of Glitter...
 		if(config->gfxLevel() > 1 && (!game->game_pause) )
 		{
@@ -386,7 +386,7 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 			}
 		}
 	}
-	
+
 	//---------- Draw ammo flash
 	if(config->gfxLevel() > 1)
 	{
@@ -455,16 +455,16 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 		glTexCoord2f(-2.5, 1.0); glVertex3f(  statPosShld[0]-2.0,  statPosShld[1]+szy, statPosShld[2] );
 		glTexCoord2f(-2.5, 0.0); glVertex3f(  statPosShld[0]-2.0,  statPosShld[1]+0.0, statPosShld[2] );
 		glTexCoord2f( 1.0, 0.0); glVertex3f(  statPosShld[0]+szx,  statPosShld[1]+0.0, statPosShld[2] );
-	
+
 		glTexCoord2f( 3.5, 1.0); glVertex3f( -statPosShld[0]+2.0,  statPosShld[1]+szy, statPosShld[2] );
 		glTexCoord2f( 0.0, 1.0); glVertex3f( -statPosShld[0]-szx,  statPosShld[1]+szy, statPosShld[2] );
 		glTexCoord2f( 0.0, 0.0); glVertex3f( -statPosShld[0]-szx,  statPosShld[1]+0.0, statPosShld[2] );
 		glTexCoord2f( 3.5, 0.0); glVertex3f( -statPosShld[0]+2.0,  statPosShld[1]+0.0, statPosShld[2] );
 	glEnd();
-		
+
 	if(config->gfxLevel() > 0)
 	{
-		//-- Shields 
+		//-- Shields
 		if( (sl < -0.7 && blink && shields > 0.0) || superShields )
 			glColor4fv(statClrWarn);
 		else
@@ -480,33 +480,33 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 		glTexCoord2f( 0.0,     sls); glVertex3f( -szx,  szy,  szx );
 		glTexCoord2f( 0.0, 1.0+sls); glVertex3f( -szx,  0.0,  szx );
 		glTexCoord2f( 1.0, 1.0+sls); glVertex3f(  szx,  0.0,  szx );
-		
+
 		glTexCoord2f( 0.0,     sls); glVertex3f(  szx,  szy, -szx );
 		glTexCoord2f( 0.0, 1.0+sls); glVertex3f(  szx,  0.0, -szx );
 		glTexCoord2f( 1.0, 1.0+sls); glVertex3f( -szx,  0.0, -szx );
 		glTexCoord2f( 1.0,     sls); glVertex3f( -szx,  szy, -szx );
-		
+
 		glTexCoord2f( 1.0,     sls); glVertex3f(  szx,  szy,  szx );
 		glTexCoord2f( 1.0, 1.0+sls); glVertex3f(  szx,  0.0,  szx );
 		glTexCoord2f( 0.0, 1.0+sls); glVertex3f(  szx,  0.0, -szx );
 		glTexCoord2f( 0.0,     sls); glVertex3f(  szx,  szy, -szx );
-		
+
 		glTexCoord2f( 1.0,     sls); glVertex3f( -szx,  szy, -szx );
 		glTexCoord2f( 1.0, 1.0+sls); glVertex3f( -szx,  0.0, -szx );
 		glTexCoord2f( 0.0, 1.0+sls); glVertex3f( -szx,  0.0,  szx );
 		glTexCoord2f( 0.0,     sls); glVertex3f( -szx,  szy,  szx );
-		
+
 		if(shields)
 		{
-			glTexCoord2f( 1.0, 1.0); 
+			glTexCoord2f( 1.0, 1.0);
 			glColor4f(0.3+sc, 0.4+sc, 1.0+sc, 0.5);
 			glVertex3f(  szx,  0.0,  szx );
 			glVertex3f(  szx,  0.0, -szx );
 			glVertex3f( -szx,  0.0, -szx );
 			glVertex3f( -szx,  0.0,  szx );
-		}	
+		}
 		glEnd();
-		
+
 		glRotatef( rot2, 0.0, 1.0, 0.0);
 //		glColor4f(0.4+sc, 0.5+sc, 1.0+sc, 0.6+shieldAlpha);
 		glColor4f(0.1+sc, 0.15+sc, 0.9+sc, 0.6+shieldAlpha);
@@ -516,17 +516,17 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 		glTexCoord2f( 0.0,     sl); glVertex3f( -szx,  szy,  szx );
 		glTexCoord2f( 0.0, 1.0+sl); glVertex3f( -szx,  0.0,  szx );
 		glTexCoord2f( 1.0, 1.0+sl); glVertex3f(  szx,  0.0,  szx );
-		
+
 		glTexCoord2f( 0.0,     sl); glVertex3f(  szx,  szy, -szx );
 		glTexCoord2f( 0.0, 1.0+sl); glVertex3f(  szx,  0.0, -szx );
 		glTexCoord2f( 1.0, 1.0+sl); glVertex3f( -szx,  0.0, -szx );
 		glTexCoord2f( 1.0,     sl); glVertex3f( -szx,  szy, -szx );
-		
+
 		glTexCoord2f( 1.0,     sl); glVertex3f(  szx,  szy,  szx );
 		glTexCoord2f( 1.0, 1.0+sl); glVertex3f(  szx,  0.0,  szx );
 		glTexCoord2f( 0.0, 1.0+sl); glVertex3f(  szx,  0.0, -szx );
 		glTexCoord2f( 0.0,     sl); glVertex3f(  szx,  szy, -szx );
-		
+
 		glTexCoord2f( 0.0,     sl); glVertex3f( -szx,  szy,  szx );
 		glTexCoord2f( 1.0,     sl); glVertex3f( -szx,  szy, -szx );
 		glTexCoord2f( 1.0, 1.0+sl); glVertex3f( -szx,  0.0, -szx );
@@ -552,32 +552,32 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 		glPushMatrix();
 		glTranslatef(-statPosShld[0], statPosShld[1], statPosShld[2]);
 		glRotatef( rot, 0.0, 1.0, 0.0);
-		
+
 		glBegin(GL_QUADS);
 		szx = 0.5;
 		glTexCoord2f( 1.0,     dls); glVertex3f(  szx,  szy,  szx );
 		glTexCoord2f( 0.0,     dls); glVertex3f( -szx,  szy,  szx );
 		glTexCoord2f( 0.0, 1.0+dls); glVertex3f( -szx,  0.0,  szx );
 		glTexCoord2f( 1.0, 1.0+dls); glVertex3f(  szx,  0.0,  szx );
-		
+
 		glTexCoord2f( 0.0,     dls); glVertex3f(  szx,  szy, -szx );
 		glTexCoord2f( 0.0, 1.0+dls); glVertex3f(  szx,  0.0, -szx );
 		glTexCoord2f( 1.0, 1.0+dls); glVertex3f( -szx,  0.0, -szx );
 		glTexCoord2f( 1.0,     dls); glVertex3f( -szx,  szy, -szx );
-		
+
 		glTexCoord2f( 1.0,     dls); glVertex3f(  szx,  szy,  szx );
 		glTexCoord2f( 1.0, 1.0+dls); glVertex3f(  szx,  0.0,  szx );
 		glTexCoord2f( 0.0, 1.0+dls); glVertex3f(  szx,  0.0, -szx );
 		glTexCoord2f( 0.0,     dls); glVertex3f(  szx,  szy, -szx );
-		
+
 		glTexCoord2f( 0.0,     dls); glVertex3f( -szx,  szy,  szx );
 		glTexCoord2f( 1.0,     dls); glVertex3f( -szx,  szy, -szx );
 		glTexCoord2f( 1.0, 1.0+dls); glVertex3f( -szx,  0.0, -szx );
 		glTexCoord2f( 0.0, 1.0+dls); glVertex3f( -szx,  0.0,  szx );
-		
+
 		if(damage)
 		{
-			glTexCoord2f( 1.0, 1.0); 
+			glTexCoord2f( 1.0, 1.0);
 			glColor4f(1.0+dc, 0.0+dc, 0.0+dc, 0.5);
 			glVertex3f(  szx,  0.0,  szx );
 			glVertex3f(  szx,  0.0, -szx );
@@ -585,7 +585,7 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 			glVertex3f( -szx,  0.0,  szx );
 		}
 		glEnd();
-		
+
 		glRotatef(-rot2, 0.0, 1.0, 0.0);
 		glColor4f(1.0+dc, 0.0+dc, 0.0+dc, 0.6+damageAlpha);
 		glBegin(GL_QUADS);
@@ -594,17 +594,17 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 		glTexCoord2f( 0.0,     dl); glVertex3f( -szx,  szy,  szx );
 		glTexCoord2f( 0.0, 1.0+dl); glVertex3f( -szx,  0.0,  szx );
 		glTexCoord2f( 1.0, 1.0+dl); glVertex3f(  szx,  0.0,  szx );
-		
+
 		glTexCoord2f( 0.0,     dl); glVertex3f(  szx,  szy, -szx );
 		glTexCoord2f( 0.0, 1.0+dl); glVertex3f(  szx,  0.0, -szx );
 		glTexCoord2f( 1.0, 1.0+dl); glVertex3f( -szx,  0.0, -szx );
 		glTexCoord2f( 1.0,     dl); glVertex3f( -szx,  szy, -szx );
-		
+
 		glTexCoord2f( 1.0,     dl); glVertex3f(  szx,  szy,  szx );
 		glTexCoord2f( 1.0, 1.0+dl); glVertex3f(  szx,  0.0,  szx );
 		glTexCoord2f( 0.0, 1.0+dl); glVertex3f(  szx,  0.0, -szx );
 		glTexCoord2f( 0.0,     dl); glVertex3f(  szx,  szy, -szx );
-		
+
 		glTexCoord2f( 0.0,     dl); glVertex3f( -szx,  szy,  szx );
 		glTexCoord2f( 1.0,     dl); glVertex3f( -szx,  szy, -szx );
 		glTexCoord2f( 1.0, 1.0+dl); glVertex3f( -szx,  0.0, -szx );
@@ -638,7 +638,7 @@ void StatusDisplay::drawGL(HeroAircraft	*hero)
 		glTexCoord2f( 0.0,     dl); glVertex3f( -statPosShld[0]+szx, statPosShld[1]+szy, statPosShld[2] );
 		glEnd();
 	}
-	
+
 	//-- print message if we're paused...
 	if(game->game_pause)
 	{

@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 	// set however, use default value.
 	setenv("SDL_VIDEO_X11_DGAMOUSE", "0", false);
 #endif
-	
+
 	Config	*config	= Config::init();
 	Global	*game	= Global::init();
 	HiScore	*hiScore = HiScore::init();
@@ -140,13 +140,13 @@ int main(int argc, char **argv)
 			exit(0);
 		}
 	}
-	
+
 	if( config->debug() ) atexit(EnemyAircraft::printNumAllocated);
 
 	srand(time(NULL));
-	
+
 	game->generateRandom();
-	
+
 #ifdef USE_SDL
 	game->toolkit = new MainSDL(argc, argv);
 #elif USE_GLUT
@@ -154,7 +154,7 @@ int main(int argc, char **argv)
 #else
 #error "USE_SDL or USE_GLUT must be defined"
 #endif
-		
+
 	if( config->debug() ) hiScore->print(config->intSkill());
 	game->toolkit->run();
 
@@ -232,7 +232,7 @@ const char* dataLoc(const char* filename, bool doCheck)
 #ifndef _WIN32 // WIN32 users don't get error checks...
 	if(doCheck)
 	{
-		if(stat(buffer, &sbuf) == -1) 
+		if(stat(buffer, &sbuf) == -1)
 		{
 			fprintf(stderr, _("!! ERROR !! - "));
 			perror(buffer);
@@ -257,7 +257,7 @@ void printExtensions(FILE *fstream, const char* extstr_in)
 	extstr = new char[len+1];
 	strcpy(extstr, extstr_in);
 	walker = extstr;
-	
+
 	fprintf(fstream, _("Extensions :"));
 	while( (walker-extstr) < len )
 	{
@@ -275,6 +275,6 @@ void printExtensions(FILE *fstream, const char* extstr_in)
 			break;
 	}
 	fprintf(fstream, "\n");
-	
+
 	delete [] extstr;
 }

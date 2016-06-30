@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #ifndef define_h
@@ -30,7 +30,7 @@
 #define NUM_HERO_ITEMS 1
 
 #define HERO_DAMAGE -500.0
-#define HERO_SHIELDS 500.0 
+#define HERO_SHIELDS 500.0
 
 #ifdef macintosh
 #define CONFIG_EXT			".cfg"

@@ -46,7 +46,7 @@ Install
 ---------------------
 
 ./configure <options> && make && sudo make install
- 
+
 You may also want to check the FAQ:
 
 http://chromium-bsu.sf.net/faq.htm

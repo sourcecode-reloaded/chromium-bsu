@@ -2,8 +2,8 @@
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  * Copyright 2008 Paul Wise
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -88,13 +88,13 @@ int MainGL::initGL()
 
 	glDisable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-		
+
 	glEnable(GL_TEXTURE_2D);
-	
+
 	glEnable(GL_BLEND);
 //	glDisable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
+
 	if(config->blend())
 	{
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -109,19 +109,19 @@ int MainGL::initGL()
 		glDisable(GL_BLEND);
 		glEnable(GL_ALPHA_TEST);
 	}
-	
+
 //	glDisable(GL_CULL_FACE);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_NORMALIZE);
-	
+
 	glPointSize(1.0);
 	glLineWidth(1.0);
 	glClearColor( 0.0, 0.0, 0.0, 1.0 );
-	
+
 #ifdef IMAGE_GLPNG
 	pngSetViewingGamma(config->viewGamma());
 #endif
-	
+
 	return 0;
 }
 
@@ -197,13 +197,13 @@ void MainGL::drawGameGL()
 	glLoadIdentity();
 	glTranslatef(0.0, 0.0, config->zTrans());
 //	glTranslatef(0.0, 5.0, -12.0);
-	
+
 	if(!game->game_pause)
 	{
 		//-- Add items to scene
 		game->itemAdd->putScreenItems();
 		//addItems();
-	
+
 		//-- Update scene
 		game->enemyFleet->update();
 		game->powerUps->update();
@@ -218,37 +218,37 @@ void MainGL::drawGameGL()
 		}
 		game->explosions->update();
 		game->audio->update();
-		
+
 		game->hero->update();
 		game->gameFrame++;
 	}
-	
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
+
 	//-- Draw background
 	game->ground->drawGL();
-	
+
 	//-- Draw actors
 	game->enemyFleet->drawGL();
 	game->hero->drawGL();
-	
+
 	if(config->gfxLevel() > 0)
 		game->statusDisplay->darkenGL();
-	
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	
+
 	game->powerUps->drawGL();
-	
+
 	//-- Draw ammo
 	game->heroAmmo->drawGL();
 	game->enemyAmmo->drawGL();
-	
+
 	//-- Draw explosions
 	game->explosions->drawGL();
-	
+
 	//-- Draw stats
 	game->statusDisplay->drawGL(game->hero);
-	
+
 }
 
 //----------------------------------------------------------
@@ -256,7 +256,7 @@ void MainGL::drawDeadGL()
 {
 	Config *config = Config::instance();
 	game->heroDeath--;
-	
+
 	//-- Clear buffers
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -269,7 +269,7 @@ void MainGL::drawDeadGL()
 	}
 	else
 		glTranslatef(0.0, 0.0, config->zTrans());
-	
+
 	//-- Add items to scene
 	game->itemAdd->putScreenItems();
 	//-- Update scene
@@ -282,16 +282,16 @@ void MainGL::drawDeadGL()
 	game->audio->update();
 	game->hero->update();
 	game->gameFrame++;
-	
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//-- Draw background
 	game->ground->drawGL();
 	//-- Draw actors
 	game->enemyFleet->drawGL();
-	
+
 	if(config->gfxLevel() > 0)
 		game->statusDisplay->darkenGL();
-	
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	game->powerUps->drawGL();
 	//-- Draw ammo
@@ -301,7 +301,7 @@ void MainGL::drawDeadGL()
 	game->explosions->drawGL();
 	//-- Draw stats
 	game->statusDisplay->drawGL(game->hero);
-	
+
 	int		skill = config->intSkill();
 	float	heroScore = game->hero->getScore();
 	HiScore *hiScore = HiScore::getInstance();
@@ -314,7 +314,7 @@ void MainGL::drawDeadGL()
 	else if(hiScore->check(skill, heroScore) > 1)
 	{
 		sprintf(buffer, _("n o t   b a d !\nrank : %d\n\n%d"), hiScore->check(skill, heroScore), (int)heroScore);
-		drawTextGL(buffer, game->heroDeath, 0.15);	
+		drawTextGL(buffer, game->heroDeath, 0.15);
 	}
 	else
 	{
@@ -327,7 +327,7 @@ void MainGL::drawSuccessGL()
 {
 	Config *config = Config::instance();
 	game->heroSuccess--;
-	
+
 	if(game->heroSuccess < -500)
 	{
 		game->gotoNextLevel();
@@ -336,37 +336,37 @@ void MainGL::drawSuccessGL()
 		game->audio->setMusicVolume(config->volMusic());
 		return;
 	}
-	
+
 	float f	= -game->heroSuccess/450.0;
 	if(game->heroSuccess < 0)
 	{
 		float vol = config->volMusic() - (config->volMusic()*f);
 		game->audio->setMusicVolume(vol);
 	}
-	
+
 	//-- Clear buffers
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//-- Place camera
 	glLoadIdentity();
 	glTranslatef(0.0, 0.0, config->zTrans());
-	
+
 	//-- Update scene
 	game->enemyFleet->update();
 	game->explosions->update();
 	game->heroAmmo->updateAmmo();
 	game->hero->update();
 	game->audio->update();
-	
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//-- Draw background
 	game->ground->drawGL();
 	//-- Draw actors
 	game->hero->drawGL();
-	
+
 	if(config->gfxLevel() > 0)
 		game->statusDisplay->darkenGL();
-	
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	//-- Draw ammo
 	game->heroAmmo->drawGL();
@@ -374,7 +374,7 @@ void MainGL::drawSuccessGL()
 	game->explosions->drawGL();
 	//-- Draw stats
 	game->statusDisplay->drawGL(game->hero);
-		
+
 	char	buffer[512];
 	sprintf(buffer, _("congratulations!\n \nl e v e l\n %d \nc o m p l e t e\n \n"), game->gameLevel);
 //	if(game->hero->getScore() > game->hiScore[config->intSkill()][0])
@@ -385,7 +385,7 @@ void MainGL::drawSuccessGL()
 //	{
 //		sprintf(buffer, _("congratulations!\n \nl e v e l\n %d \nc o m p l e t e\n \nn e w   h i g h   s c o r e : \n %g \n"), game->gameLevel, game->hero->getScore());
 //	}
-	
+
 	drawTextGL(buffer, game->heroSuccess, 0.15);
 }
 
@@ -408,7 +408,7 @@ void MainGL::drawTextGL(const char *string, float pulse, float scale)
 	ca = 1.0-tmp;
 
 	height = 1.5 * game->text->LineHeight();
-	
+
 	strncpy(buffer, string, 128);
 	index[0] = buffer;
 	walker   = buffer;
@@ -419,7 +419,7 @@ void MainGL::drawTextGL(const char *string, float pulse, float scale)
 		*newline = '\0';
 		lines++;
 	}
-	
+
 	min_y = 0.5*height*lines;
 	for(l = 0; l< lines; l++)
 	{
@@ -441,7 +441,7 @@ void MainGL::drawTextGL(const char *string, float pulse, float scale)
 
 			}
 		}
-	}	
+	}
 }
 
 /**
@@ -450,12 +450,12 @@ void MainGL::drawTextGL(const char *string, float pulse, float scale)
 //----------------------------------------------------------
 void MainGL::reshapeGL(int , int )
 {
-	Config *config = Config::instance();	
+	Config *config = Config::instance();
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective( config->screenFOV(), 
-					config->screenA(), 
-					config->screenNear(), 
+	gluPerspective( config->screenFOV(),
+					config->screenA(),
+					config->screenNear(),
 					config->screenFar());
 	glMatrixMode(GL_MODELVIEW);
 	glViewport(0, 0, config->screenW(), config->screenH());

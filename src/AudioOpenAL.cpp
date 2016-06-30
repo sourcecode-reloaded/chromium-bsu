@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -100,9 +100,9 @@ AudioOpenAL::AudioOpenAL()
 	alcGetAudioChannel	= 0;
 	alutLoadMP3			= 0;
 	alutLoadVorbis		= 0;
-	
+
 	soundQueue = new SoundInfo;
-	
+
 	for(i = 0; i < NumSoundTypes; i++)
 	{
 		buffer[i]	= 0;
@@ -113,7 +113,7 @@ AudioOpenAL::AudioOpenAL()
 		sourcePos[i][2] = 0.0;
 		numReqThisFrame[i] = 0;
 	}
-	
+
 	for(i = 0; i < NUM_EXPLO; i++)
 	{
 		sourceExplosion[i]	= 0;
@@ -122,12 +122,12 @@ AudioOpenAL::AudioOpenAL()
 	{
 		sourceExploPop[i]	= 0;
 	}
-	
+
 	// NOTE: If we can't create a valid context, config->audioEnabled() will
 	//       be set to false.
-	if(config->audioEnabled() == true) 
+	if(config->audioEnabled() == true)
 		config->setAudio(createContext());
-	
+
 	if(config->audioEnabled() == true)
 	{
 		initSound();
@@ -149,7 +149,7 @@ AudioOpenAL::AudioOpenAL()
 
 		if(config->swapStereo())
 			audioScale[0] = -audioScale[0];
-		
+
 #ifdef USE_SDL_CDROM
 		if(config->usePlayList() && !cdrom)
 #else // !USE_SDL_CDROM
@@ -166,11 +166,11 @@ AudioOpenAL::~AudioOpenAL()
 	{
 		Config	*config = Config::instance();
 		if( config->debug() ) fprintf(stderr, _("stopping OpenAL..."));
-	
+
 #ifdef USE_SDL_CDROM
 		#ifdef CD_VOLUME
 		if(cdrom && alcSetAudioChannel)
-		{ 
+		{
 			alcSetAudioChannel(ALC_CHAN_CD_LOKI, origCDvolume);
 		}
 		#endif //CD_VOLUME
@@ -197,7 +197,7 @@ AudioOpenAL::~AudioOpenAL()
 		#endif
 
 		alcCloseDevice(dev);
-		
+
 		alutExit();
 
 		if( config->debug() ) fprintf(stderr, _("done.\n"));
@@ -223,7 +223,7 @@ static void warning(const char *, ...)
 #endif
 
 /**
- * create OpenAL context. 
+ * create OpenAL context.
  * @returns success
  */
 //----------------------------------------------------------
@@ -265,9 +265,9 @@ void AudioOpenAL::initSound()
 	Config	*config = Config::instance();
 	int i;
 	ALfloat pos[] = { 0.0, -5.0,  25.0 };
-	
+
 	if( config->debug() ) fprintf(stderr, _("AudioOpenAL::initSound() begin...\n"));
-			
+
 	if( config->debug() ) {
 		fprintf(stderr, _(
 			"-OpenAL-----------------------------------------------------\n"
@@ -282,16 +282,16 @@ void AudioOpenAL::initSound()
 	alutInitWithoutContext(0, NULL);
 
 	checkForExtensions();
-	
+
 	alListenerfv(AL_POSITION, pos);
-	
+
 #if !defined(ALUT_API_MAJOR_VERSION) || ALUT_API_MAJOR_VERSION < 1
 	alGenBuffers(NumSoundTypes, buffer);
 #endif
 	alGenSources(NumSoundTypes, source);
-	
+
 	loadSounds();
-	
+
 	for(i = 0; i < NumSoundTypes; i++)
 	{
 		switch(i)
@@ -305,7 +305,7 @@ void AudioOpenAL::initSound()
 				break;
 		}
 	}
-	
+
 	for(i = 0; i < NumSoundTypes; i++)
 	{
 		warning(_("Audio.cpp - init %s"), fileNames[i]);
@@ -315,7 +315,7 @@ void AudioOpenAL::initSound()
 		alSourcef ( source[i], AL_GAIN, gain[i]);
 		checkError();
 	}
-	
+
 	//-- We want to have overlapped Explosion
 	alGenSources(NUM_EXPLO-1, sourceExplosion);
 	sourceExplosion[NUM_EXPLO-1] = source[Explosion];
@@ -328,7 +328,7 @@ void AudioOpenAL::initSound()
 		alSourcef ( sourceExplosion[i], AL_GAIN, gain[Explosion]*(0.7+0.3*FRAND) );
 		checkError();
 	}
-	
+
 	//-- We want to have overlapped ExploPop
 	alGenSources(NUM_EXPLO_POP-1, sourceExploPop);
 	sourceExploPop[NUM_EXPLO_POP-1] = source[ExploPop];
@@ -341,21 +341,21 @@ void AudioOpenAL::initSound()
 		alSourcef ( sourceExploPop[i], AL_GAIN, 0.0*gain[ExploPop]*(0.1+0.9*FRAND) );
 		checkError();
 	}
-	
-	
+
+
 	setSoundVolume(config->volSound());
 	setMusicVolume(config->volMusic());
-		
+
 	initialized = true;
 	warning(_("Audio.cpp - initSound complete."), i);
 }
-	
+
 //----------------------------------------------------------
 void AudioOpenAL::checkForExtensions()
 {
-#ifndef _WIN32	// Win32 doesn't have any useful extensions yet, and 
+#ifndef _WIN32	// Win32 doesn't have any useful extensions yet, and
 				// the alGetProcAddress prototype is different (sigh).
-				
+
 	//-- check AttenuationScale extension
 	alAttenuationScale = (void (*)(ALfloat param))
 						alGetProcAddress("alAttenuationScale_LOKI");
@@ -363,7 +363,7 @@ void AudioOpenAL::checkForExtensions()
 	alGetError(); // Don't care what the problem is
 	if(alAttenuationScale != NULL)
 		alAttenuationScale(6.0);
-	
+
 	//-- check Audio Channel extension
 	alcGetAudioChannel = (float (*)(ALuint channel))
 						alGetProcAddress("alcGetAudioChannel_LOKI");
@@ -373,7 +373,7 @@ void AudioOpenAL::checkForExtensions()
 	if(alcGetAudioChannel)
 		origCDvolume = alcGetAudioChannel(ALC_CHAN_CD_LOKI);
 #endif //CD_VOLUME
-	
+
 	//-- check MP3 extension
 	alutLoadMP3 = (ALboolean (*)(ALuint, ALvoid *, ALint))
 		alGetProcAddress("alutLoadMP3_LOKI");
@@ -487,7 +487,7 @@ void AudioOpenAL::setSoundVolume(float vol)
 		{
 			alSourcef (  sourceExploPop[i], AL_GAIN, (0.2+(FRAND*0.8))*gain[Explosion]*soundVolume);
 		}
-	}	
+	}
 }
 
 /**
@@ -592,7 +592,7 @@ void AudioOpenAL::update()
 	SoundInfo *sound;
 	SoundInfo *nextSound;
 	SoundInfo *backSound;
-	
+
 	// play any delayed sounds
 	sound = soundQueue->next;
 	while(sound)
@@ -611,7 +611,7 @@ void AudioOpenAL::update()
 		}
 		sound = sound->next;
 	}
-	
+
 	// reset the number of requests to 0
 	for(int i = 0; i < NumSoundTypes; i++)
 	{
@@ -620,7 +620,7 @@ void AudioOpenAL::update()
 }
 
 /**
- * play sound of a given type. 
+ * play sound of a given type.
  * @param type type of sound to play
  * @param pos position of the sound in world coords
  * @param age If age is negative, playback of the sound will
@@ -636,12 +636,12 @@ void AudioOpenAL::playSound(SoundType type, float *pos, int age)
 		p[0] =  pos[0]*audioScale[0];
 		p[1] =  pos[1]*audioScale[1];
 		p[2] =  pos[2]*audioScale[2];
-		
+
 		if(age >= 0)
 		{
 			numReqThisFrame[type]++;
 			// only play one sound of any given type per frame...
-			if(numReqThisFrame[type] < 2) 
+			if(numReqThisFrame[type] < 2)
 			{
 				switch(type)
 				{
@@ -679,7 +679,7 @@ void AudioOpenAL::playSoundExplosion(float p[3])
 {
 	explosionIndex++;
 	explosionIndex = explosionIndex%NUM_EXPLO;
-	
+
 	alSourceStop(sourceExplosion[explosionIndex]);
 	alSourcefv  (sourceExplosion[explosionIndex], AL_POSITION, p );
 	alSourcePlay(sourceExplosion[explosionIndex]);
@@ -691,7 +691,7 @@ void AudioOpenAL::playSoundExploPop(float p[3])
 	p[0] *= 1.5;
 	exploPopIndex++;
 	exploPopIndex = exploPopIndex%NUM_EXPLO_POP;
-	
+
 	alSourceStop(sourceExploPop[exploPopIndex]);
 	alSourcefv  (sourceExploPop[exploPopIndex], AL_POSITION, p );
 	alSourcePlay(sourceExploPop[exploPopIndex]);
@@ -706,11 +706,11 @@ void AudioOpenAL::loadMusicList()
 	char	buffer[1024];
 	char	configFilename[256];
 	FILE	*file;
-	
+
 	const char *homeDir = getenv("HOME");
 	if(!homeDir)
 		homeDir = "./";
-	
+
 	musicMax = 0;
 	musicIndex = 0;
 	sprintf(configFilename, "%s/%s", homeDir, CONFIG_MUSIC_FILE);
@@ -726,12 +726,12 @@ void AudioOpenAL::loadMusicList()
 	}
 
 	if(file)
-	{	
+	{
 		while( fgets(buffer, 1024, file) )
 		{
 			int tmp = strlen(buffer);
 			buffer[tmp-1] = '\0'; //-- get rid of new line
-			
+
 			lineCount++;
 			if(strlen(buffer) > 255)
 			{
@@ -740,7 +740,7 @@ void AudioOpenAL::loadMusicList()
 			else if(strlen(buffer) > 4)
 			{
 				switch(extensionFormat(buffer))
-				{	
+				{
 					case WAV:
 						strcpy(musicFile[musicMax], buffer);
 						musicMax++;
@@ -749,7 +749,7 @@ void AudioOpenAL::loadMusicList()
 						if(alutLoadMP3)
 						{
 							strcpy(musicFile[musicMax], buffer);
-							musicMax++;							
+							musicMax++;
 						}
 						else
 						{
@@ -760,7 +760,7 @@ void AudioOpenAL::loadMusicList()
 						if(alutLoadVorbis)
 						{
 							strcpy(musicFile[musicMax], buffer);
-							musicMax++;							
+							musicMax++;
 						}
 						else
 						{
@@ -782,7 +782,7 @@ void AudioOpenAL::loadMusicList()
 		config->setUsePlayList(false);
 	if(musicMax < 1)
 		config->setUsePlayList(false);
-	
+
 	fprintf(stderr, _("music playlist:\n"));
 	for(i = 0; i < musicMax; i++)
 	{
@@ -793,24 +793,24 @@ void AudioOpenAL::loadMusicList()
 
 /**
  * Set music track to index. If CDROM is enabled, calls Audio::setMusicIndex().
- * If playList is enabled, set to Nth track. 
+ * If playList is enabled, set to Nth track.
  */
 //----------------------------------------------------------
 void AudioOpenAL::setMusicIndex(int index)
 {
 	Config	*config = Config::instance();
 	bool	wasPlaying = false;
-	
+
 	if(musicMax)
 		musicIndex = index%musicMax;
-		
+
 #ifdef USE_SDL_CDROM
 	if(initialized && cdrom)
 #else
 	if(initialized)
 #endif // USE_SDL_CDROM
 	{
-		Audio::	setMusicIndex(index);		
+		Audio::	setMusicIndex(index);
 	}
 	else if(initialized && config->usePlayList())
 	{
@@ -818,7 +818,7 @@ void AudioOpenAL::setMusicIndex(int index)
 		if(config->audioEnabled())
 		{
 			checkError(_("AudioOpenAL::setMusicIndex -- begin"));
-			//-- if music is currently playing, we want to 
+			//-- if music is currently playing, we want to
 			//   re-start playing after loading new song
 			ALint state = AL_INITIAL;
 #ifdef OLD_OPENAL
@@ -826,13 +826,13 @@ void AudioOpenAL::setMusicIndex(int index)
 #else
 			alGetSourceiv(source[MusicGame], AL_SOURCE_STATE, &state);
 #endif
-			if(state == AL_PLAYING) 
+			if(state == AL_PLAYING)
 				wasPlaying = true;
 
 			alSourceStop(source[MusicGame]);
 			checkError(_("AudioOpenAL::setMusicIndex -- before setting source buffer to 0"));
-			alSourcei(source[MusicGame], AL_BUFFER, 0);	
-//			alSourcei(source[MusicGame], AL_BUFFER, AL_NONE);	
+			alSourcei(source[MusicGame], AL_BUFFER, 0);
+//			alSourcei(source[MusicGame], AL_BUFFER, AL_NONE);
 			checkError(_("AudioOpenAL::setMusicIndex -- after setting source buffer to 0"));
 			alDeleteBuffers(1 , &buffer[MusicGame]);
 			alGenBuffers(1, &buffer[MusicGame]);
@@ -878,7 +878,7 @@ void AudioOpenAL::setMusicIndex(int index)
 #else
 		alGetSourceiv(source[MusicGame], AL_SOURCE_STATE, &state);
 #endif
-		if(state == AL_PLAYING) 
+		if(state == AL_PLAYING)
 			wasPlaying = true;
 		alSourceStop(source[MusicGame]);
 		if(wasPlaying)
@@ -909,7 +909,7 @@ AudioOpenAL::AudioFormat AudioOpenAL::extensionFormat(char* filename)
 		else if(strcasecmp(walker, ".ogg") == 0)
 			retVal = OGG;
 	}
-	else 
+	else
 		retVal = Unknown;
 
 	return retVal;
@@ -958,8 +958,8 @@ bool AudioOpenAL::loadMP3(const char *filename)
 	struct	stat sbuf;
 	size_t		size;
 	void	*data;
-	
-	if(stat(filename, &sbuf) == -1) 
+
+	if(stat(filename, &sbuf) == -1)
 	{
 		perror(filename);
 		return false;
@@ -970,14 +970,14 @@ bool AudioOpenAL::loadMP3(const char *filename)
 	{
 		fprintf(stderr, _("ERROR: Could not allocate memory in AudioOpenAL::loadMP3\n"));
 		return false;
-	}	
+	}
 	file = fopen(filename, "rb");
 	if(!file)
 	{
 		fprintf(stderr, _("ERROR: Could not open \"%s\" in AudioOpenAL::loadMP3\n"), filename);
 		free(data);
 		return false;
-	}	
+	}
 	if( fread(data, 1, size, file) != size )
 	{
 		fprintf(stderr, _("ERROR: Could not read from \"%s\" in AudioOpenAL::loadMP3\n"), filename);
@@ -986,7 +986,7 @@ bool AudioOpenAL::loadMP3(const char *filename)
 		return false;
 	}
 	fclose(file);
-	if( !(alutLoadMP3(buffer[MusicGame], data, size)) ) 
+	if( !(alutLoadMP3(buffer[MusicGame], data, size)) )
 	{
 		fprintf(stderr, _("ERROR: alutLoadMP3() failed in AudioOpenAL::loadMP3\n"));
 		free(data);
@@ -1010,8 +1010,8 @@ bool AudioOpenAL::loadVorbis(const char *filename)
 		struct	stat sbuf;
 		size_t		size;
 		void	*data;
-		
-		if(stat(filename, &sbuf) == -1) 
+
+		if(stat(filename, &sbuf) == -1)
 		{
 			perror(filename);
 			return false;
@@ -1022,14 +1022,14 @@ bool AudioOpenAL::loadVorbis(const char *filename)
 		{
 			fprintf(stderr, _("ERROR: Could not allocate memory in AudioOpenAL::loadVorbis\n"));
 			return false;
-		}	
+		}
 		file = fopen(filename, "rb");
 		if(!file)
 		{
 			fprintf(stderr, _("ERROR: Could not open \"%s\" in AudioOpenAL::loadVorbis\n"), filename);
 			free(data);
 			return false;
-		}	
+		}
 		if( fread(data, 1, size, file) != size )
 		{
 			fprintf(stderr, _("ERROR: Could not read from \"%s\" in AudioOpenAL::loadVorbis\n"), filename);
@@ -1038,7 +1038,7 @@ bool AudioOpenAL::loadVorbis(const char *filename)
 			return false;
                 }
 		fclose(file);
-		if( !(alutLoadVorbis(buffer[MusicGame], data, size)) ) 
+		if( !(alutLoadVorbis(buffer[MusicGame], data, size)) )
 		{
 			fprintf(stderr, _("ERROR: alutLoadVorbis() failed in AudioOpenAL::loadVorbis\n"));
 			free(data);

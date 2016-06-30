@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #include "EnemyAircraft_Boss01.h"
@@ -34,7 +34,7 @@ EnemyAircraft_Boss01::~EnemyAircraft_Boss01()
 
 //----------------------------------------------------------
 // this is only here to get rid of the IRIX compiler warning...
-void EnemyAircraft_Boss01::init() 
+void EnemyAircraft_Boss01::init()
 {
 	EnemyAircraft::init();
 }
@@ -61,21 +61,21 @@ void EnemyAircraft_Boss01::update()
 //	float	*hpos = target->getPos();
 	float	*hpos = game->hero->getPos();
 	float	a = hpos[0]-pos[0];
-	
+
 	//-- update age
 	age++;
 	shootInterval--;
-	
+
 	pos[0] += secondaryMove[0]*game->speedAdj;
 	pos[1] += secondaryMove[1]*game->speedAdj;
 	float s = (1.0-game->speedAdj)+(game->speedAdj*0.7);
 	secondaryMove[0] *= s;
 	secondaryMove[1] *= s;
 	move();
-	
+
 	float	p[3] = { pos[0], pos[1], pos[2] };
 	if(fabs(a) < 5.0)
-	{	
+	{
 		shootVec[1] = -0.65;
 		preFire = (age%6)/6.0;
 		if( !(age%6) )
@@ -117,7 +117,7 @@ void EnemyAircraft_Boss01::update()
 		}
 	}
 }
-	
+
 //----------------------------------------------------------
 void EnemyAircraft_Boss01::move()
 {

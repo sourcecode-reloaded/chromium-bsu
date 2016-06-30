@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -62,7 +62,7 @@ Config::Config()
 
 	m_blend_enabled	= true;
 	m_tex_border	= true;
-	
+
 	m_audio_enabled	= true;
 	m_swap_stereo	= false;
 	m_show_fps		= true;
@@ -73,7 +73,7 @@ Config::Config()
 	m_use_cdrom		= false;
 #endif // USE_SDL_CDROM
 	m_debug		= false;
-	
+
 #ifdef USE_SDL_CDROM
 	m_cdromDevice	= 0;
 	m_cdromCount	= 1;
@@ -90,7 +90,7 @@ Config::Config()
 
 	m_audioType		= AudioOpenAL;
 	m_textType		= TextGLC;
-	
+
 	readFile();
 }
 
@@ -220,7 +220,7 @@ void Config::readValues(FILE* file)
 
 /**
  * just a quickie
- */ 
+ */
 //----------------------------------------------------------
 bool Config::readFile()
 {
@@ -252,7 +252,7 @@ bool Config::readFile()
 			retVal = false;
 		}
 	}
-	
+
 	return retVal;
 }
 
@@ -269,7 +269,7 @@ bool Config::saveFile()
 
 	if(!homeDir)
 		homeDir = "./";
-		
+
 	sprintf(configFilename, "%s/%s", homeDir, CONFIG_FILE);
 	alterPathForPlatform(configFilename);
 	file = fopen(configFilename, "w");
@@ -319,8 +319,8 @@ bool Config::saveFile()
 		fprintf(stderr, _("WARNING: could not write config file (%s)\n"), configFilename);
 		retVal = false;
 	}
-	
-	
+
+
 	return retVal;
 }
 

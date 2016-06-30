@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -32,19 +32,19 @@ GroundSea::GroundSea()
 	pos[0] =  0.0;
 	pos[1] =  0.0;
 	pos[2] =  0.0;
-	
+
 	tex[Base] = Image::load(dataLoc("png/gndBaseSea.png"));
 
 	size = 21.0;
 	float s[2] = { size, size };
 	rootSeg = new GroundSeaSegment(pos, s, this);
-	
+
 	GroundSegment	*seg;
 	GroundSegment	*tmp;
 	pos[1] = size*2.0;
 	seg = new GroundSeaSegment(pos, s, this);
 	rootSeg->next = seg;
-	
+
 	pos[1] = 0.0;
 	tmp = new GroundSeaSegment(pos, s, this);
 	seg->next = tmp;
@@ -61,11 +61,11 @@ void GroundSea::drawGL()
 {
 	glClearColor( 0.15, 0.12, 0.10, 1.0 );
 //	glClearColor(0.27451, 0.235294, 0.392157, 1.0); // web page background color
-	
+
 	GroundSegment	*seg;
 	GroundSegment	*tmp;
 	float	s2 = size * 2.0;
-	
+
 	//-- draw ground segments
 	seg = rootSeg->next;
 	while(seg)
@@ -79,7 +79,7 @@ void GroundSea::drawGL()
 	while(seg)
 	{
 		seg->drawGL();
-		
+
 		seg->pos[1] += game->scrollSpeed;
 		if(seg->pos[1] < -s2)
 		{
@@ -97,7 +97,7 @@ void GroundSea::drawGL()
 		}
 		seg = seg->next;
 	}
-	
+
 	return;
 }
 

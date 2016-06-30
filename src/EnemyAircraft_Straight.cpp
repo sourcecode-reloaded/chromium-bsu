@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #include "EnemyAircraft_Straight.h"
@@ -35,7 +35,7 @@ EnemyAircraft_Straight::~EnemyAircraft_Straight()
 
 //----------------------------------------------------------
 // this is only here to get rid of the IRIX compiler warning...
-void EnemyAircraft_Straight::init() 
+void EnemyAircraft_Straight::init()
 {
 	EnemyAircraft::init();
 }
@@ -61,14 +61,14 @@ void EnemyAircraft_Straight::update()
 	//-- update age
 	age++;
 	shootInterval--;
-	
+
 	pos[0] += secondaryMove[0]*game->speedAdj;
 	pos[1] += secondaryMove[1]*game->speedAdj;
 	float s = (1.0-game->speedAdj)+(game->speedAdj*0.7);
 	secondaryMove[0] *= s;
 	secondaryMove[1] *= s;
 	move();
-	
+
 	float	p[3] = { pos[0], pos[1], pos[2] };
 
 	if(shootInterval < 10)
@@ -87,8 +87,8 @@ void EnemyAircraft_Straight::update()
 void EnemyAircraft_Straight::calcShootInterval()
 {
 	shootInterval = (int)((30.0 + FRAND*90.0)/game->speedAdj);
-}	
-	
+}
+
 //----------------------------------------------------------
 void EnemyAircraft_Straight::move()
 {

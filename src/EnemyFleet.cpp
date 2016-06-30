@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #include "EnemyFleet.h"
@@ -37,11 +37,11 @@
 
 //====================================================================
 EnemyFleet::EnemyFleet()
-{	
+{
 	game = Global::getInstance();
-	
+
 	loadTextures();
-	
+
 	currentShip = 0;
 	float pos[3] = { 0.0, 0.0, 0.0 };
 //	squadRoot = new EnemyAircraft(EnemyStraight, pos);
@@ -89,7 +89,7 @@ void	EnemyFleet::clear()
 {
 	EnemyAircraft	*cur;
 	EnemyAircraft *del;
-	
+
 	currentShip = 0;
 	cur = squadRoot->next;
 	while(cur)
@@ -107,9 +107,9 @@ void	EnemyFleet::drawGL()
 	float szx, szy;
 	float *p;
 	EnemyAircraft	*thisEnemy;
-	
+
 	glColor4f(1.0, 1.0, 1.0, 1.0);
-	
+
 	thisEnemy = squadRoot->next;
 	int num = 0;
 	while(thisEnemy)
@@ -120,7 +120,7 @@ void	EnemyFleet::drawGL()
 		szy = thisEnemy->size[1];
 		glBindTexture(GL_TEXTURE_2D, shipTex[(int)thisEnemy->type]);
 		glColor4f(1.0, 1.0, 1.0, 1.0);
-		
+
 		glPushMatrix();
 		glTranslatef( p[0],  p[1],  p[2] );
 		glBegin(GL_TRIANGLE_STRIP);
@@ -130,7 +130,7 @@ void	EnemyFleet::drawGL()
 			glTexCoord2f(0.0, 1.0); glVertex3f(-szx, -szy, 0.0);
 		glEnd();
 		glPopMatrix();
-		
+
 		switch(thisEnemy->type)
 		{
 			case EnemyStraight:
@@ -245,13 +245,13 @@ void	EnemyFleet::drawGL()
 
 //----------------------------------------------------------
 void	EnemyFleet::toFirst()
-{	
-	currentShip = squadRoot->next;	
+{
+	currentShip = squadRoot->next;
 }
 
 //----------------------------------------------------------
-EnemyAircraft	*EnemyFleet::getShip()	
-{	
+EnemyAircraft	*EnemyFleet::getShip()
+{
 	EnemyAircraft *retVal = currentShip;
 	if(currentShip)
 		currentShip = currentShip->next;
@@ -280,13 +280,13 @@ void	EnemyFleet::update()
 	EnemyAircraft	*nextEnemy;
 	//-- clean up enemies
 	thisEnemy = squadRoot->next;
-	
+
 	while(thisEnemy)
 	{
 		thisEnemy->update();
 		float p[3] = { thisEnemy->pos[0], thisEnemy->pos[1], thisEnemy->pos[2] };
-		
-		//-------------- Add some damage explosions to the bosses so 
+
+		//-------------- Add some damage explosions to the bosses so
 		//               we know when they're hurting...
 		if((int)thisEnemy->type >= (int)EnemyBoss00)
 		{
@@ -318,28 +318,28 @@ void	EnemyFleet::update()
 				}
 		}
 		//-------------- Delete enemies that got through...
-		
-//		if( thisEnemy->pos[1] < -12.0 ) 
-		if( thisEnemy->pos[1] < -8.0 && thisEnemy->type != EnemyGnat) 
+
+//		if( thisEnemy->pos[1] < -12.0 )
+		if( thisEnemy->pos[1] < -8.0 && thisEnemy->type != EnemyGnat)
 			game->statusDisplay->enemyWarning( 1.0-((thisEnemy->pos[1]+14.0)/6.0) );
-		if( thisEnemy->pos[1] < -14.0 ) 
+		if( thisEnemy->pos[1] < -14.0 )
 		{
 			thisEnemy->damage = 1;
 			thisEnemy->age = 0;
 			game->hero->loseLife();
 			game->tipShipPast++;
 		}
-		
+
 		//-------------- If enemies are critically damaged, destroy them...
 		if( thisEnemy->damage > 0 )
 		{
-			
+
 			backEnemy = thisEnemy->back;
 			nextEnemy = thisEnemy->next;
 			backEnemy->next = nextEnemy;
 			if(nextEnemy)
 				nextEnemy->back = backEnemy;
-			
+
 			if(	thisEnemy->age ) //-- set age to 0 for silent deletion...
 			{
 				switch(thisEnemy->type)
@@ -349,7 +349,7 @@ void	EnemyFleet::update()
 						//-- now for the BIG one...
 						destroyAll();
 						bossExplosion(thisEnemy);
-						
+
 						if( game->gameMode != Global::HeroDead )
 						{
 							//--*** TRIGGER END OF LEVEL ***--//
@@ -358,7 +358,7 @@ void	EnemyFleet::update()
 							game->heroSuccess = 0;
 						}
 						break;
-					case EnemyOmni:	
+					case EnemyOmni:
 						game->hero->addScore(25.0);
 						game->explosions->addExplo(Explosions::EnemyDamage, thisEnemy->pos);
 						game->explosions->addExplo(Explosions::EnemyDamage, thisEnemy->pos, -3, 0.7);
@@ -400,7 +400,7 @@ void	EnemyFleet::update()
 						game->audio->playSound(Audio::Explosion, thisEnemy->pos);
 						game->audio->playSound(Audio::ExploBig, thisEnemy->pos);
 						break;
-					case EnemyGnat:	
+					case EnemyGnat:
 						game->hero->addScore(10.0);
 						game->explosions->addExplo(Explosions::EnemyAmmo04, thisEnemy->pos);
 						game->audio->playSound(Audio::ExploPop, thisEnemy->pos);
@@ -413,9 +413,9 @@ void	EnemyFleet::update()
 						break;
 				}
 			}
-			
+
 			killEnemy(thisEnemy);
-			
+
 			thisEnemy = backEnemy;
 		}
 		thisEnemy = thisEnemy->next;
@@ -432,29 +432,29 @@ void	EnemyFleet::bossExplosion(EnemyAircraft *thisEnemy)
 	int i;
 	float ii;
        int randval;
-	
+
 	for(i = 4; i > 0; i--)
 	{
 		a = thisEnemy->size[0]*(i*0.2);
 		b = thisEnemy->size[1]*(i*0.2);
 		p[0] = thisEnemy->pos[0]+a*FRAND;
 		p[1] = thisEnemy->pos[1]+b*FRAND;
-               randval = (int)(-FRAND*8.0); 
+               randval = (int)(-FRAND*8.0);
 		game->explosions->addExplo(Explosions::EnemyDestroyed, p, randval, 1.5+FRAND);
 		p[0] = thisEnemy->pos[0]-a*FRAND;
 		p[1] = thisEnemy->pos[1]+b*FRAND;
-               randval = (int)(-FRAND*8.0); 
+               randval = (int)(-FRAND*8.0);
 		game->explosions->addExplo(Explosions::EnemyDestroyed, p, randval, 1.5+FRAND);
 		p[0] = thisEnemy->pos[0]+a*FRAND;
 		p[1] = thisEnemy->pos[1]-b*FRAND;
-               randval = (int)(-FRAND*8.0); 
+               randval = (int)(-FRAND*8.0);
 		game->explosions->addExplo(Explosions::EnemyDestroyed, p, randval, 1.5+FRAND);
 		p[0] = thisEnemy->pos[0]-a*FRAND;
 		p[1] = thisEnemy->pos[1]-b*FRAND;
-               randval = (int)(-FRAND*8.0); 
+               randval = (int)(-FRAND*8.0);
 		game->explosions->addExplo(Explosions::EnemyDestroyed, p, randval, 1.5+FRAND);
 	}
-						
+
 	switch(thisEnemy->type)
 	{
 		case EnemyBoss00:
@@ -478,7 +478,7 @@ void	EnemyFleet::bossExplosion(EnemyAircraft *thisEnemy)
 			scaleX = scaleY = 1.0;
 			break;
 	}
-	
+
 	//-- Boss Visual Explosion
 	for(i = 0; i < 100; i++)
 	{
@@ -508,7 +508,7 @@ void	EnemyFleet::bossExplosion(EnemyAircraft *thisEnemy)
 		if(!(i%3))
 			game->explosions->addExplo(Explosions::EnemyDestroyed, p, (int)-ii, 1.5+FRAND);
 	}
-	
+
 	//-- Boss Audio Explosion
 	p[0] = -10.0; p[1] = -5.0;
 	game->audio->playSound(Audio::Explosion, p);
@@ -531,7 +531,7 @@ void	EnemyFleet::bossExplosion(EnemyAircraft *thisEnemy)
 void	EnemyFleet::destroyAll()
 {
 	EnemyAircraft	*thisEnemy;
-	
+
 	thisEnemy = squadRoot->next;
 	while(thisEnemy)
 	{
@@ -575,7 +575,7 @@ void	EnemyFleet::addEnemy(EnemyAircraft *newEnemy)
 		}
 		squadRoot->next = newEnemy;
 	}
-	
+
 }
 
 //----------------------------------------------------------

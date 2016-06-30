@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #ifndef MainSDL_h
@@ -24,15 +24,15 @@ public:
 
 	bool run();
 	bool checkErrors();
-	
+
 	bool setVideoMode();
-	
+
 	void grabMouse(bool,bool=true);
 
 	bool process(SDL_Event *event);
 	void joystickMove();
 	void keyMove();
-	
+
 private:
 	void activation(bool shown, bool mouse, bool input, bool gain);
 	void keyDown(SDL_Event *event);
@@ -47,7 +47,7 @@ private:
 
 	void		saveEvent(SDL_Event *event);
 	SDL_Event	*getEvent(FILE *infile);
-	
+
 private:
 #if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_Window *window;
@@ -60,7 +60,7 @@ private:
 	int		xMid, yMid;
 	float	xjoy,yjoy;
 	float	xjNow,yjNow;
-	
+
 	int	adjCount;
 	float	key_speed_x, key_speed_y;
 };

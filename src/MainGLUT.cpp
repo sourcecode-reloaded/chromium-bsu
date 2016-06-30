@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -53,14 +53,14 @@ MainGLUT::MainGLUT(int argc, char **argv)
 	glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(config->screenW(), config->screenH());
 	glutCreateWindow("Chromium B.S.U.");
-	
+
 	//-- Initialize OpenGL
 	game->createGame();
-	
+
 	glutDisplayFunc(MainGLUT::nullFunc);
-	glutReshapeFunc(MainGLUT::reshape);	
-	glutKeyboardFunc(MainGLUT::keyboardASCII);	
-	glutSpecialFunc(MainGLUT::keyboardSpecial);	
+	glutReshapeFunc(MainGLUT::reshape);
+	glutKeyboardFunc(MainGLUT::keyboardASCII);
+	glutSpecialFunc(MainGLUT::keyboardSpecial);
 	glutMouseFunc(MainGLUT::mouseEvent);
 //	glutMotionFunc(MainGLUT::mouseMotion);
 
@@ -85,10 +85,10 @@ bool MainGLUT::checkErrors()
 {
 	bool retVal = false;
 	GLenum	gl_error;
-	
+
 	//-- Check for GL errors
 	gl_error = glGetError( );
-	if( gl_error != GL_NO_ERROR ) 
+	if( gl_error != GL_NO_ERROR )
 	{
 		fprintf(stderr, _("ERROR!!! OpenGL error: %s\n"), gluErrorString(gl_error) );
 		retVal = true;
@@ -146,7 +146,7 @@ void MainGLUT::nullFunc()
 	Global	*game = Global::getInstance();
 	game->mainGL->drawGL();
 	glutSwapBuffers();
-	
+
 	game->frame++;
 	if( !(game->gameFrame%10) )
 	{
@@ -157,7 +157,7 @@ void MainGLUT::nullFunc()
 		}
 		last_time = now_time;
 	}
-	
+
 }
 
 //----------------------------------------------------------
@@ -170,7 +170,7 @@ void MainGLUT::drawGame(int)
 	#ifdef CHECK_ERRORS
 	game->toolkit->checkErrors();
 	#endif// CHECK_ERRORS
-	
+
 	glutPostRedisplay();
 }
 
@@ -220,14 +220,14 @@ void MainGLUT::keyboardASCII(unsigned char key, int, int)
 				{
 					// up, down, etc. have to be handled with the 'special' func. Annoying.
 					case 13: // <enter>
-						tkkey = MainToolkit::KeyEnter;	
+						tkkey = MainToolkit::KeyEnter;
 						break;
 					default:	break;
 				}
 				game->menu->keyHit(tkkey);
 			}
 			break;
-		
+
 	}
 	// Emulate a quit key
 	if( game->game_quit )
@@ -250,7 +250,7 @@ void MainGLUT::keyboardSpecial(int special, int, int)
 			case GLUT_KEY_RIGHT:	tkkey = MainToolkit::KeyRight;	break;
 			default: break;
 		}
-		game->menu->keyHit(tkkey);		
+		game->menu->keyHit(tkkey);
 	}
 }
 
@@ -286,7 +286,7 @@ void MainGLUT::mouseEvent(int button, int state, int x, int y)
 				break;
 		}
 	}
-		
+
 	xLast = x;
 	yLast = y;
 }
@@ -299,7 +299,7 @@ void MainGLUT::mouseMotion(int x, int y)
 	int yNow;
 	int xDiff;
 	int yDiff;
-	
+
 	if(mouseToggle)
 	{
 		xNow = x;

@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #include "EnemyAircraft_Tank.h"
@@ -34,7 +34,7 @@ EnemyAircraft_Tank::~EnemyAircraft_Tank()
 
 //----------------------------------------------------------
 // this is only here to get rid of the IRIX compiler warning...
-void EnemyAircraft_Tank::init() 
+void EnemyAircraft_Tank::init()
 {
 	EnemyAircraft::init();
 }
@@ -64,19 +64,19 @@ void EnemyAircraft_Tank::update()
 	float	b = hpos[1]-pos[1];
 	float	dist;
 	float	ammoSpeed = 0.35*game->speedAdj;
-	
+
 	int		tmpInt;
 	//-- update age
 	age++;
 	shootInterval--;
-	
+
 	pos[0] += secondaryMove[0]*game->speedAdj;
 	pos[1] += secondaryMove[1]*game->speedAdj;
 	float s = (1.0-game->speedAdj)+(game->speedAdj*0.7);
 	secondaryMove[0] *= s;
 	secondaryMove[1] *= s;
 	move();
-	
+
 	float	p[3] = { pos[0], pos[1], pos[2] };
 
 	p[1] = pos[1] - 1.7;
@@ -118,7 +118,7 @@ void EnemyAircraft_Tank::update()
 				game->enemyAmmo->addAmmo(2, p, shootVec);
 				preFire -= 0.4;
 				if(preFire < 0.0)
-					preFire = 0.0;	
+					preFire = 0.0;
 			}
 			else
 				preFire += 0.035;
@@ -140,13 +140,13 @@ void EnemyAircraft_Tank::move()
 		hpos = pos;
 	float	diff[2] = { hpos[0]-pos[0], hpos[1]-pos[1] };
 	float	v1;
-	
+
 
 	if(fabs(diff[0]) > 8.0)
 		v1 = 0.04;
 	else
 	{
-		v1 = 0.04*(fabs(diff[0])/8.0); 
+		v1 = 0.04*(fabs(diff[0])/8.0);
 	}
 	vel[1] = 0.99*vel[1] + 0.01*v1;
 

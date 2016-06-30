@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -40,7 +40,7 @@ EnemyAmmo::EnemyAmmo()
 {
 	game = Global::getInstance();
 	int i;
-	
+
 	//-- initialize everything to sane values...
 	for(i = 0; i < NUM_ENEMY_AMMO_TYPES; i++)
 	{
@@ -50,36 +50,36 @@ EnemyAmmo::EnemyAmmo()
 		ammoDamage[i]	= 510.0;
 	}
 	ammoPool = new ActiveAmmo();
-	
+
 	loadTextures();
 
 	ammoDamage[0]	= 75.0;
 	ammoSize[0][0]	= 0.25;
 	ammoSize[0][1]	= 0.55;
-		
+
 	ammoDamage[1]	= 6.0;
 	ammoSize[1][0]	= 0.225;
 	ammoSize[1][1]	= 0.225;
-		
+
 	ammoDamage[2]	= 100.0;
 	ammoSize[2][0]	= 0.45;
 	ammoSize[2][1]	= 0.45;
-		
+
 	ammoDamage[3]	= 20.0;
 	ammoSize[3][0]	= 0.3;
 	ammoSize[3][1]	= 0.5;
-		
+
 	ammoDamage[4]	= 8.5;
 	ammoSize[4][0]	= 0.12;
 	ammoSize[4][1]	= 0.5;
-		
-}	
+
+}
 
 EnemyAmmo::~EnemyAmmo()
 {
 	ActiveAmmo *cur;
 	ActiveAmmo *del;
-	
+
 	clear();
 	cur = ammoPool->next;
 	while(cur)
@@ -88,9 +88,9 @@ EnemyAmmo::~EnemyAmmo()
 		cur = cur->next;
 		delete del;
 	}
-	
+
 	deleteTextures();
-	
+
 	for(int i = 0; i < NUM_ENEMY_AMMO_TYPES; i++)
 	{
 		delete ammoRoot[i];
@@ -107,7 +107,7 @@ void EnemyAmmo::loadTextures()
 		sprintf(filename, "png/enemyAmmo%02d.png", i);
 		ammoTex[i] = Image::load(dataLoc(filename));
 	}
-	
+
 }
 
 //----------------------------------------------------------
@@ -151,7 +151,7 @@ void	EnemyAmmo::clear()
 	int i;
 	ActiveAmmo *cur;
 	ActiveAmmo *del;
-	
+
 	for(i = 0; i < NUM_ENEMY_AMMO_TYPES; i++)
 	{
 		cur = ammoRoot[i]->next;
@@ -170,10 +170,10 @@ void EnemyAmmo::addAmmo(int type, float pos[3], float vel[3])
 {
 	ActiveAmmo *newAmmo = 0;
 	ActiveAmmo *first = 0;
-	
+
 	if(type >= 0 && type < NUM_ENEMY_AMMO_TYPES)
 	{
-		float v[3] = { 
+		float v[3] = {
 			vel[0]*game->speedAdj,
 			vel[1]*game->speedAdj,
 			vel[2]*game->speedAdj, };
@@ -196,7 +196,7 @@ void EnemyAmmo::updateAmmo()
 	Config *config = Config::instance();
 	int i;
 	ActiveAmmo *thisAmmo;
-	
+
 	for(i = 0; i < NUM_ENEMY_AMMO_TYPES; i++)
 	{
 		thisAmmo = ammoRoot[i]->next;
@@ -235,9 +235,9 @@ void EnemyAmmo::checkForHits(HeroAircraft *hero)
 	float	minDist;
 	float	dist;
 	float	*p;
-	
+
 	minDist = (hero->getSize(0)+hero->getSize(1))*0.5;
-	
+
 	if(!hero->isVisible())
 		return;
 	//-- Go through all the ammunition and check for hits
@@ -247,7 +247,7 @@ void EnemyAmmo::checkForHits(HeroAircraft *hero)
 		while(thisAmmo)
 		{
 			p = thisAmmo->pos;
-			dist = fabs(p[0]-hero->pos[0]) + fabs(p[1]-hero->pos[1]);	
+			dist = fabs(p[0]-hero->pos[0]) + fabs(p[1]-hero->pos[1]);
 			if(dist < minDist)
 			{
 				Explo *explo;
@@ -256,12 +256,12 @@ void EnemyAmmo::checkForHits(HeroAircraft *hero)
 				hero->ammoDamage(ammoDamage[i], thisAmmo->vel);
 				//add explosion
 				explo = game->explosions->addExplo((Explosions::ExploType)(Explosions::EnemyAmmo00+i), thisAmmo->pos);
-				if(i > 1)	// add second explosion for the bug guns...		
+				if(i > 1)	// add second explosion for the bug guns...
 					explo = game->explosions->addExplo((Explosions::ExploType)(Explosions::EnemyAmmo00+i), thisAmmo->pos, -5);
 				else
-					if(explo) 
+					if(explo)
 						explo->vel[1] = -0.1;
-				
+
 
 				backAmmo = thisAmmo->back;
 				nextAmmo = thisAmmo->next;
@@ -282,7 +282,7 @@ void EnemyAmmo::drawGL()
 	int i;
 	float	*pos;
 	ActiveAmmo 	*thisAmmo;
-	
+
 	for(i = 0; i < NUM_ENEMY_AMMO_TYPES; i++)
 	{
 		glColor4f(1.0, 1.0, 1.0, 1.0);
@@ -326,4 +326,4 @@ void EnemyAmmo::drawGL()
 }
 
 
-	
+

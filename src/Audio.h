@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #ifndef Audio_h
@@ -33,22 +33,22 @@ class Audio
 {
 public:
 	/** available sound effects types */
-	enum SoundType	{	
-						HeroAmmo00, 	/**< unused */			
-						PowerUp,		/**< power up sound */ 	
-						Explosion,		/**< standard explosion */ 
-						ExploPop,		/**< 'light' explosion */ 
+	enum SoundType	{
+						HeroAmmo00, 	/**< unused */
+						PowerUp,		/**< power up sound */
+						Explosion,		/**< standard explosion */
+						ExploPop,		/**< 'light' explosion */
 						ExploBig,		/**< deep, long explosion */
-						AddLife,		/**< new ship earned */  
-						LoseLife,		/**< ship lost */		
-						MusicGame,		/**< gameplay music */ 	
-						MusicMenu, 		/**< menu music */ 		
+						AddLife,		/**< new ship earned */
+						LoseLife,		/**< ship lost */
+						MusicGame,		/**< gameplay music */
+						MusicMenu, 		/**< menu music */
 						NumSoundTypes 	/**< total number of sounds available */
 					};
-	
+
 	Audio();
 	virtual ~Audio();
-	
+
 	virtual void	update();
 	virtual void	playSound(SoundType type, float *pos, int age = 0);
 	virtual void	stopMusic();
@@ -58,7 +58,7 @@ public:
 	virtual void	setSoundVolume(float);
 	virtual void	setMusicIndex(int);
 	virtual void	nextMusicIndex();
-	
+
 protected:
 	virtual void	initSound();
 #ifdef USE_SDL_CDROM
@@ -77,18 +77,18 @@ protected:
 
 /**
  * node class used for 'audio queue'
- */ 
+ */
 //======================================
 class SoundInfo
 {
 public:
 	SoundInfo();
 	SoundInfo(Audio::SoundType t, float p[3], int a);
-	
+
 	Audio::SoundType	type;
 	float		pos[3];
 	int			age;
-	
+
 	SoundInfo	*next;
 	SoundInfo	*back;
 };

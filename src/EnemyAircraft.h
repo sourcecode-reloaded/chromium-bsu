@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #ifndef EnemyAircraft_h
@@ -26,12 +26,12 @@ class ActiveAmmo;
 class Global;
 class EnemyAircraft_Boss01;
 
-enum EnemyType{	
-	EnemyStraight, 
-	EnemyOmni, 
-	EnemyRayGun, 
+enum EnemyType{
+	EnemyStraight,
+	EnemyOmni,
+	EnemyRayGun,
 	EnemyTank,
-	EnemyGnat, 
+	EnemyGnat,
 	EnemyBoss00,
 	EnemyBoss01,
 	NumEnemyTypes
@@ -44,14 +44,14 @@ class EnemyAircraft : public ScreenItem
 public:
 	EnemyAircraft(EnemyType et, float p[3], float randFact = 1.0);
 	virtual ~EnemyAircraft();
-	
+
 	virtual void	update() = 0;
 	virtual void	init();
 	virtual void	init(float *p, float randFact = 1.0);
-	
+
 	bool	checkHit(ActiveAmmo *ammo);
 	void	setTarget(ScreenItem *t) { target = t; }
-	
+
 	void	drawGL(GLuint tex, GLuint xtraTex);
 
 	EnemyType	type;
@@ -67,12 +67,12 @@ public:
 protected:
 	virtual void	calcShootInterval();
 	virtual void	move() = 0;
-	
+
 protected:
 	EnemyAircraft	*next;
 	EnemyAircraft	*back;
 	EnemyAircraft	*over;
-	
+
 	float	shootVec[3];
 	int		shootPause;
 	int		shootInterval;
@@ -81,9 +81,9 @@ protected:
 	float	randMoveX;
 	float	lastMoveX;
 	float	lastMoveY;
-	
+
 	float	speedAdj;
-	
+
 	ScreenItem	*target;
 
 protected:

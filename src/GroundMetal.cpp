@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -27,20 +27,20 @@ GroundMetal::GroundMetal()
 	pos[0] =  0.0;
 	pos[1] =  0.0;
 	pos[2] =  0.0;
-	
+
 	variation = 0;
 	loadTextures();
-	
+
 	size = 21.0;
 	float s[2] = { size, size };
 	rootSeg = new GroundMetalSegment(pos, s, this);
-	
+
 	GroundSegment	*seg;
 	GroundSegment	*tmp;
 	pos[1] = size*2.0;
 	seg = new GroundMetalSegment(pos, s, this);
 	rootSeg->next = seg;
-	
+
 	pos[1] = 0.0;
 	tmp = new GroundMetalSegment(pos, s, this);
 	seg->next = tmp;
@@ -90,7 +90,7 @@ void GroundMetal::loadTextures()
 //----------------------------------------------------------
 void GroundMetal::deleteTextures()
 {
-	glDeleteTextures(1, &tex[Base]);	
+	glDeleteTextures(1, &tex[Base]);
 	glDeleteTextures(1, &tex[Blip]);
 	tex[Base] = 0;
 	tex[Blip] = 0;
@@ -110,13 +110,13 @@ void GroundMetal::drawGL()
 	GroundSegment	*seg;
 	GroundSegment	*tmp;
 	float	s2 = size * 2.0;
-	
+
 	//-- Set background color for low and med gfx
 	float	pulse = sin(game->gameFrame*0.03);
-	if(pulse < 0.0) 
+	if(pulse < 0.0)
 		pulse = 0.0;
 	glClearColor( 0.2+pulse, 0.2, 0.25, 1.0 );
-	
+
 	//-- draw ground segments
 	if( !game->game_pause || game->gameMode == Global::Menu)
 	{
@@ -132,7 +132,7 @@ void GroundMetal::drawGL()
 	while(seg)
 	{
 		seg->drawGL();
-		
+
 		if(seg->pos[1] < -s2)
 		{
 			float pos1 = seg->pos[1]+s2+s2;

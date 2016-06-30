@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -47,7 +47,7 @@ bool MainSDL::process(SDL_Event *event)
 #if 0
 	static int cnt = 0;
 	cnt++;
-	switch( event->type ) 
+	switch( event->type )
 	{
 	    case SDL_ACTIVEEVENT:		fprintf(stderr, _("%-5d SDL_ACTIVEEVENT  \n")		, cnt); break;
 	    case SDL_KEYDOWN:			fprintf(stderr, _("%-5d SDL_KEYDOWN  \n")			, cnt); break;
@@ -62,7 +62,7 @@ bool MainSDL::process(SDL_Event *event)
 	}
 #endif
 	bool shown, mouse, input, gain = false;
-	switch(event->type) 
+	switch(event->type)
 	{
 #if SDL_VERSION_ATLEAST(2,0,0)
 	    case SDL_WINDOWEVENT:
@@ -131,7 +131,7 @@ void MainSDL::saveEvent(SDL_Event *event)
 		SDL_KeyboardEvent 		*evK = 0;
 		SDL_MouseMotionEvent 	*evM = 0;
 		SDL_MouseButtonEvent 	*evB = 0;
-		switch(event->type) 
+		switch(event->type)
 		{
 //	    	case SDL_ACTIVEEVENT:
 //				evA = (SDL_ActiveEvent*)event;
@@ -142,7 +142,7 @@ void MainSDL::saveEvent(SDL_Event *event)
 //	    	case SDL_KEYUP:
 //				evK = (SDL_KeyboardEvent*)event;
 //				fprintf(game->eventFile, "%9d :%s: %5d %5d %5d %5d %5d %5d\n", game->gameFrame, "K",
-//					(int)evK->type, (int)evK->state, 
+//					(int)evK->type, (int)evK->state,
 //					(int)evK->keysym.scancode, (int)evK->keysym.sym, (int)evK->keysym.mod, (int)evK->keysym.unicode);
 //				break;
 //	    	case SDL_MOUSEMOTION:
@@ -168,7 +168,7 @@ void MainSDL::saveEvent(SDL_Event *event)
 	    	case SDL_KEYUP:
 				evK = (SDL_KeyboardEvent*)event;
 				fprintf(game->eventFile, "%9d :%s: %5d %5d %5d %5d %5d\n", game->gameFrame, "K",
-					evK->type, evK->state, 
+					evK->type, evK->state,
 					evK->keysym.scancode, evK->keysym.sym, evK->keysym.mod);
 				break;
 #else
@@ -181,7 +181,7 @@ void MainSDL::saveEvent(SDL_Event *event)
 	    	case SDL_KEYUP:
 				evK = (SDL_KeyboardEvent*)event;
 				fprintf(game->eventFile, "%9d :%s: %5d %5d %5d %5d %5d %5d\n", game->gameFrame, "K",
-					evK->type, evK->state, 
+					evK->type, evK->state,
 					evK->keysym.scancode, evK->keysym.sym, evK->keysym.mod, evK->keysym.unicode);
 				break;
 #endif
@@ -210,7 +210,7 @@ SDL_Event *MainSDL::getEvent(FILE *infile)
 	static	SDL_Event ev;
 	static	char buffer[256] = { "-1 :K: 2 0 0 0 0 0"};
 	SDL_Event	*retVal = 0;
-	
+
 	if(infile)
 	{
 #if SDL_VERSION_ATLEAST(2,0,0)
@@ -224,7 +224,7 @@ SDL_Event *MainSDL::getEvent(FILE *infile)
 		int		frame;
 		int		a,b,c,d,e,f;
 		char	t;
-		
+
 		sscanf(buffer, "%d :%c: %d %d %d %d %d %d", &frame, &t, &a, &b, &c, &d, &e, &f);
 		if(frame == game->gameFrame)
 		{
@@ -260,7 +260,7 @@ SDL_Event *MainSDL::getEvent(FILE *infile)
 					evK->keysym.mod		 = (SDLMod)e;
 					evK->keysym.unicode	 = (Uint16)f;
 #endif
-					retVal = &ev;	
+					retVal = &ev;
 					break;
 				case 'M':
 					evM->type	= (Uint8)a;
@@ -308,12 +308,12 @@ void MainSDL::activation(bool shown, bool mouse, bool input, bool gain)
 	{
 		grabMouse( grab_mouse, grab_mouse );
 		if( config->debug() ) fprintf(stderr, "app active " );
-	} 
+	}
 	else if ( mouse )
 	{
 		if( config->debug() ) fprintf(stderr, "mouse active" );
 		SDL_GetMouseState(&xLast, &yLast);
-	} 
+	}
 	else if ( input )
 	{
 		grabMouse( grab_mouse, grab_mouse );
@@ -592,7 +592,7 @@ void MainSDL::mouseButtonDown(SDL_Event *ev)
 	{
 		game->menu->keyHit(MainToolkit::KeyEnter);
 	}
-	
+
 }
 
 //----------------------------------------------------------
@@ -637,7 +637,7 @@ void MainSDL::grabMouse(bool status, bool warpmouse)
 {
 	Config *config = Config::instance();
 	if( config->debug() ) fprintf(stderr, _("MainSDL::grabMouse(%d)\n"), status);
-	
+
 	mouseToggle = status;
 	if(status)
 		SDL_ShowCursor(0);

@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #ifndef Config_h
@@ -20,19 +20,19 @@ class Config
 {
 public:
 	~Config();
-	
+
 	static Config	*init();
 	static Config	*instance();
 	static void		destroy();
-	
-        
+
+
 	const char	*getFileName();
 	const char	*getOldFileName();
 	void	readValues(FILE* file);
 	bool	readFile();
 	bool	saveFile();
-	
-	
+
+
 	void	setScreenSize(int m);
 	void	setScreenSize(int w, int h);
 	int	approxScreenSize();
@@ -46,7 +46,7 @@ public:
 	float	screenBoundX()		{	return m_screenBound[0];}
 	float	screenBoundY()		{	return m_screenBound[1];}
 	float	zTrans()			{	return m_zTrans;		}
-	
+
 	bool	fullScreen()		{	return	m_full_screen;	}
 	bool	blend()				{	return	m_blend_enabled;}
 	bool	texBorder()			{	return	m_tex_border;	}
@@ -73,19 +73,19 @@ public:
 	void	setUseCDROM(bool s)			{	m_use_cdrom = s;	}
 #endif // USE_SDL_CDROM
 	void	setDebug(bool s)			{	m_debug = s;	}
-	
+
 #ifdef USE_SDL_CDROM
 	int		CDROMDevice()			{   return m_cdromDevice;	}
 	int		CDROMCount()			{   return m_cdromCount;	}
 	void	setCDROMDevice(int i)	{	m_cdromDevice = i;		}
 	void	setCDROMCount(int c)	{	m_cdromCount  = c;		}
 #endif // USE_SDL_CDROM
-	
+
 	int 	gfxLevel()		{	return m_gfxLevel;	}
 	int 	maxLevel()		{	return m_maxLevel;	}
 	void	setGfxLevel(int a)	{	m_gfxLevel = a; if(m_gfxLevel < 0) m_gfxLevel = 0; if(m_gfxLevel > 2) m_gfxLevel = 2; }
 	void	setMaxLevel(int a)	{	m_maxLevel = a; if(m_maxLevel > 10) m_maxLevel = 10;	}
-	
+
 	float	movementSpeed()		{	return m_movementSpeed;		}
 	float	gameSkillBase()		{	return m_gameSkillBase;	}
 	float	viewGamma()			{	return m_viewGamma;		}
@@ -96,7 +96,7 @@ public:
 	void	setViewGamma(float f)		{	m_viewGamma = f;		}
 	void	setVolSound(float f)		{	m_volSound = f;	if(m_volSound < 0.0) m_volSound = 0.0; if(m_volSound > 1.0) m_volSound = 1.0;	}
 	void	setVolMusic(float f)		{	m_volMusic = f;	if(m_volMusic < 0.0) m_volMusic = 0.0; if(m_volMusic > 1.0) m_volMusic = 1.0;	}
-	
+
 	int		intSkill()	{ return (int)((m_gameSkillBase+0.05)*10.0); }
 
 	enum AudioType { AudioOpenAL, AudioSDL_Mixer, NumAudioTypes };
@@ -104,7 +104,7 @@ public:
 
 	enum TextType { TextGLC, TextFTGL, NumTextTypes };
 	TextType	textType()	{ return m_textType; };
-	
+
 private:
 	int 	 m_screenW;
 	int 	 m_screenH;
@@ -115,7 +115,7 @@ private:
 	bool	 m_full_screen;
 	float	 m_screenBound[2];
 	float	 m_zTrans;
-	
+
 	bool	 m_blend_enabled;
 	bool	 m_tex_border;
 	bool	 m_audio_enabled;
@@ -128,7 +128,7 @@ private:
 	bool	 m_use_cdrom;
 #endif // USE_SDL_CDROM
 	bool	 m_debug;
-	
+
 	int 	 m_gfxLevel;
 	int 	 m_maxLevel;
 #ifdef USE_SDL_CDROM
@@ -141,14 +141,14 @@ private:
 	float	 m_viewGamma;
 	float	 m_volSound;
 	float	 m_volMusic;
-	
+
 	AudioType	m_audioType;
 
 	TextType	m_textType;
 
 private:
 	static Config	*m_instance;
-	
+
 	Config();
 };
 

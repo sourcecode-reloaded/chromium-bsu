@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #ifndef GroundSea_h
@@ -36,7 +36,7 @@ public:
 
 protected:
 	float size;
-	
+
 	static float	vert[4][3];
 };
 #endif // GroundSea_h

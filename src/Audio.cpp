@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -35,7 +35,7 @@ int		SDL_CDStatus(void*)	{ return 0; }
 Audio::Audio()
 {
 	Config	*config = Config::instance();
-	
+
     fileNames[HeroAmmo00]	= "wav/boom.wav";
 	fileNames[PowerUp]		= "wav/power.wav";
 	fileNames[Explosion]	= "wav/exploStd.wav";
@@ -45,13 +45,13 @@ Audio::Audio()
 	fileNames[AddLife]		= "wav/life_add.wav";
 	fileNames[MusicGame]	= "wav/music_game.wav";
 	fileNames[MusicMenu]	= "wav/music_menu.wav";
-	
+
 #ifdef USE_SDL_CDROM
 	cdrom = NULL;
 #endif // USE_SDL_CDROM
 	musicMax = 1;
 	musicIndex = 0;
-	
+
 	if(config->audioEnabled() == true)
 	{
 #ifdef USE_SDL_CDROM
@@ -138,14 +138,14 @@ void Audio::initCDROM()
 					for(int i = 0; i < cdrom->numtracks; i++)
 					{
 						if( config->debug() ) fprintf(stderr, _("track %2d: %s\n"), i, trackType(cdrom->track[i].type));
-						// SDL BUG? 'type' should only be SDL_DATA_TRACK(0x04)or SDL_AUDIO_TRACK(0x00), but 
+						// SDL BUG? 'type' should only be SDL_DATA_TRACK(0x04)or SDL_AUDIO_TRACK(0x00), but
 						// this is returning SDL_AUDIO_TRACK=0x02 and SDL_DATA_TRACK=0x06 on some copied CDRs!
 						// Original CDs return correct values, but CDR duplications are off by 2!
 						if(cdrom->track[i].type < SDL_DATA_TRACK)
 							music++;
 					}
 					if(!music)
-					{		
+					{
 						if( config->debug() ) fprintf(stderr, _("\n Data track(s) only. CD audio not available.\n\n"));
 						SDL_CDStop(cdrom);
 						cdrom = 0;
@@ -154,7 +154,7 @@ void Audio::initCDROM()
 					{
 						fprintf(stderr, _("\n use_cdrom enabled. Set to '0' in the configuration file to disable.\n"));
 						fprintf(stderr, _(" Press the \'N\' key to skip to next CD track during a game.\n\n"));
-					}	
+					}
 				}
 				else
 				{
@@ -166,7 +166,7 @@ void Audio::initCDROM()
 			{
 				if( config->debug() ) fprintf(stderr, _("ERROR! Could not access CDROM device %d : %s\n"), config->CDROMDevice(), SDL_GetError());
 				SDL_ClearError();
-				config->setCDROMDevice(0); 
+				config->setCDROMDevice(0);
 			}
 		}
 	}
@@ -218,7 +218,7 @@ void	Audio::pauseGameMusic(bool status)
 	}
 }
 
-/** 
+/**
  * switch between menu and game music modes
  */
 //----------------------------------------------------------
@@ -308,7 +308,7 @@ void	Audio::setMusicIndex(int index)
 		if(musicMax)
 			musicIndex = index%musicMax;
 		if( config->debug() ) fprintf(stderr, _("Audio::setMusicIndex(%d)\n"), musicIndex);
-		
+
 #ifdef USE_SDL_CDROM
 		if(cdrom)
 		{

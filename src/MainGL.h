@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #ifndef MainGL_h
@@ -16,7 +16,7 @@ class MainGL
 public:
 	MainGL();
 	~MainGL();
-	
+
 	int		initGL();
 	void	drawGL();
 	void	drawGameGL();
@@ -24,7 +24,7 @@ public:
 	void	drawSuccessGL();
 	void	drawTextGL(const char *string, float pulse, float scale);
 	void	reshapeGL( int w, int h );
-	
+
 	const char* findFont();
 	void	loadTextures();
 	void	deleteTextures();

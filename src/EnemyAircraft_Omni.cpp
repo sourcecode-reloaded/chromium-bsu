@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #include "EnemyAircraft_Omni.h"
@@ -34,7 +34,7 @@ EnemyAircraft_Omni::~EnemyAircraft_Omni()
 
 //----------------------------------------------------------
 // this is only here to get rid of the IRIX compiler warning...
-void EnemyAircraft_Omni::init() 
+void EnemyAircraft_Omni::init()
 {
 	EnemyAircraft::init();
 }
@@ -44,13 +44,13 @@ void EnemyAircraft_Omni::init(float *p, float randFact)
 {
 	EnemyAircraft::init(p, randFact);
 	float frand = FRAND*randFact;
-	
+
 	damage = baseDamage = -45.0;
 	size[0] = 0.7;
 	size[1] = 0.7;
 	collisionMove = 0.7;
 	vel[1] = -0.071-frand*0.04;
-	
+
 }
 
 //-- NOTE: Many of the firing rates are not adjusted by game->speedAdj
@@ -66,19 +66,19 @@ void EnemyAircraft_Omni::update()
 	float	b = hpos[1]-pos[1];
 	float	dist;
 	float	ammoSpeed = 0.35*game->speedAdj;
-	
+
 	int 	omniSwap = 108;
 	//-- update age
 	age++;
 	shootInterval--;
-	
+
 	pos[0] += secondaryMove[0]*game->speedAdj;
 	pos[1] += secondaryMove[1]*game->speedAdj;
 	float s = (1.0-game->speedAdj)+(game->speedAdj*0.7);
 	secondaryMove[0] *= s;
 	secondaryMove[1] *= s;
 	move();
-	
+
 	float	p[3] = { pos[0], pos[1], pos[2] };
 
 		shootSwap = shootSwap%omniSwap;

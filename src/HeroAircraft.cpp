@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -43,28 +43,28 @@ HeroAircraft::HeroAircraft()
 	: ScreenItem(ItemHero)
 {
 	game = Global::getInstance();
-	
+
 	size[0] = 0.7;
 	size[1] = 0.85;
-	
+
 	superBomb	= 0;
 	dontShow	= 0;
 	lives		= 4;
 	score		= 0.0;
-	
+
 	bound[0][0] = -10.0;
 	bound[0][1] =  10.0;
 	bound[1][0] = -7.5;
 	bound[1][1] =  7.5;
-	
+
 	scoreStep = 50000.0;
 	scoreTarget = scoreStep;
-	
+
 	currentItemIndex = 0;
 	useItemArmed	= 0.0;
-	
+
 	loadTextures();
-	
+
 	reset();
 }
 
@@ -83,8 +83,8 @@ void HeroAircraft::loadTextures()
 //----------------------------------------------------------
 void HeroAircraft::deleteTextures()
 {
-	glDeleteTextures(1, &heroTex);	
-	glDeleteTextures(1, &bombTex);	
+	glDeleteTextures(1, &heroTex);
+	glDeleteTextures(1, &bombTex);
 	heroTex = 0;
 	bombTex = 0;
 }
@@ -95,7 +95,7 @@ float *HeroAircraft::getPos()
 	epos[0] =  pos[0];
 	epos[1] =  pos[1];
 	epos[2] =  pos[2];
-	return epos; 
+	return epos;
 }
 
 //----------------------------------------------------------
@@ -112,15 +112,15 @@ void HeroAircraft::reset()
 	pos[0] =  0.0;
 	pos[1] = -3.0f;
 	pos[2] = HERO_Z;
-	
+
 	dontShow	= 0;
 	damage = HERO_DAMAGE;
 	shields = HERO_SHIELDS;
-	
+
 	currentItemIndex = 0;
-	
+
 	secondaryMove[0] = secondaryMove[1] = 0.0;
-	
+
 	for(int i = 0; i < NUM_HERO_AMMO_TYPES; i++)
 	{
 		gunPause[i]	= -1;
@@ -139,7 +139,7 @@ void HeroAircraft::fullHealth()
 {
 	damage = HERO_DAMAGE;
 	shields = HERO_SHIELDS;
-	
+
 	float p0[3] = {10.4,-8.30, 25.0 };
 	float v0[3] = { 0.0, 0.08, 0.0 };
 	float clr[4] = { 1.0, 1.0, 1.0, 1.0 };
@@ -155,9 +155,9 @@ void HeroAircraft::fullHealth()
 	game->explosions->addElectric(p0, v0, clr, -1);
 	game->explosions->addElectric(p0, v0, clr, -3);
 	game->explosions->addElectric(p0, v0, clr, -4);
-	
+
 	secondaryMove[0] = secondaryMove[1] = 0.0;
-	
+
 	gunTrigger = false;
 	gunSwap = false;
 }
@@ -202,7 +202,7 @@ void HeroAircraft::loseLife()
 	//-- this has to be in sync w/ StatusDisplay positions...
 	lives--;
 	p[1] = 7.4-lives*game->hero->size[1];
-	
+
 	if(lives > -2)
 	{
 		game->audio->playSound(Audio::LoseLife, p);
@@ -270,7 +270,7 @@ void HeroAircraft::useItem()
 						{
 							v[0] = SRAND*0.15;
 							v[1] = 0.1+FRAND*0.1;
-							pwrUp = new PowerUp( (PowerUps::Type)(i+(int)PowerUps::HeroAmmo00), 
+							pwrUp = new PowerUp( (PowerUps::Type)(i+(int)PowerUps::HeroAmmo00),
 								pos, (ammoStock[i]/AMMO_REFILL), v);
 							game->powerUps->addPowerUp(pwrUp);
 						}
@@ -316,7 +316,7 @@ void HeroAircraft::ammoDamage(float d, float vec[3])
 	pos[0] += vec[0]*f*a;
 	pos[1] += vec[1]*f*a;
 	pos[2] += vec[2]*f*a;
-	
+
 	doDamage(d);
 }
 
@@ -325,7 +325,7 @@ void HeroAircraft::doDamage(float d)
 {
 	if(superBomb)
 		return;
-	
+
 	if(shields > HERO_SHIELDS)
 	{
 		shields	-= d*0.25;
@@ -383,11 +383,11 @@ void HeroAircraft::fireGun(bool status)
 void HeroAircraft::shootGun()
 {
 	float p[3] = { 0.0, 0.0, pos[2] };
-	
-	if( gunPause[0] <= 0) 
+
+	if( gunPause[0] <= 0)
 	{
 		gunPause[0] = 5;
-		
+
 		p[0] = pos[0]+0.3;
 		p[1] = pos[1]+0.8;
 		game->heroAmmo->addAmmo(0, p);
@@ -402,7 +402,7 @@ void HeroAircraft::shootGun()
 			game->heroAmmo->addAmmo(0, p);
 			ammoStock[0] -= 0.5;
 		}
-		
+
 		if(currentItemIndex == 1 && useItemArmed) // double fire
 		{
 			p[0] = pos[0]+0.37;
@@ -415,7 +415,7 @@ void HeroAircraft::shootGun()
 				p[0]  = pos[0]+0.52;
 				p[1]  = pos[1];
 				game->heroAmmo->addAmmo(0, p);
-				p[0]  = pos[0]-0.52; 
+				p[0]  = pos[0]-0.52;
 				game->heroAmmo->addAmmo(0, p);
 				ammoStock[0] -= 0.75;
 			}
@@ -454,7 +454,7 @@ void HeroAircraft::shootGun()
 			game->heroAmmo->addAmmo(2, p);
 		}
 		ammoStock[2] -= 1.5;
-		
+
 		if(currentItemIndex == 1 && useItemArmed) // double fire
 		{
 			if(gunSwap)
@@ -472,14 +472,14 @@ void HeroAircraft::shootGun()
 			ammoStock[2] -= 3.5;
 		}
 	}
-	
+
 	//-- clean up gun active
 	for(int i = 0; i < NUM_HERO_AMMO_TYPES; i++)
 		if(ammoStock[i] < 0.0)
 		{
 			ammoStock[i] = 0.0;
 			gunActive[i] = false;
-		} 
+		}
 }
 
 //----------------------------------------------------------
@@ -508,7 +508,7 @@ void HeroAircraft::checkForCollisions(EnemyFleet *fleet)
 	float	dist;
 	float	power;
 	EnemyAircraft *enemy;
-	
+
 	fleet->toFirst();
 	while( (enemy = fleet->getShip()) )
 	{
@@ -529,7 +529,7 @@ void HeroAircraft::checkForCollisions(EnemyFleet *fleet)
 			}
 			else
 				enemy->damage += 40.0; // normal collision
-				
+
 			//-- explosions
 			r1 = SRAND*0.3;
 			r2 = SRAND*0.4;
@@ -544,19 +544,19 @@ void HeroAircraft::checkForCollisions(EnemyFleet *fleet)
 				game->explosions->addExplo(Explosions::HeroShields, p);
 			else
 				game->explosions->addExplo(Explosions::HeroDamage, p);
-			
+
 			secondaryMove[0] =  diffX*power*0.03;
 			secondaryMove[1] =  diffY*power*0.03;
 			enemy->secondaryMove[0] -= diffX* enemy->collisionMove;
 			enemy->secondaryMove[1] -= diffY*(enemy->collisionMove*0.5);
-			
+
 		}
 		if(superBomb)
 		{
 			diffX = -enemy->pos[0];
 			diffY = -15.0-enemy->pos[1];
 			float dist = sqrt(diffX*diffX + diffY*diffY);
-			if( (dist < superBomb*0.1 && enemy->type < EnemyBoss00) || 
+			if( (dist < superBomb*0.1 && enemy->type < EnemyBoss00) ||
 				(enemy->pos[1] < -11.0) )
 			{
 				enemy->damage += 5000.0;
@@ -578,13 +578,13 @@ void HeroAircraft::checkForPowerUps(PowerUps *powerUps)
 	float	stock;
 	PowerUp *pwrUp;
 	PowerUp *delUp;
-	
+
 	if(score > scoreTarget)
 	{
 		scoreTarget += scoreStep;
 		addLife(true);
 	}
-	
+
 	float p0[3] = {10.4,-8.30, 25.0 };
 	float v0[3] = { 0.0, 0.08, 0.0 };
 	float clr[4] = { 1.0, 1.0, 1.0, 1.0 };
@@ -695,7 +695,7 @@ void HeroAircraft::update()
 		pos[0] =  0.0f;
 		pos[1] = -3.0f;
 	}
-	
+
 	//-- Gun flashes are drawn in StatusDisplay
 	if(gunTrigger)
 		shootGun();
@@ -757,12 +757,12 @@ void HeroAircraft::update()
 		{
 			if(gunFlash0[i] > 0.0)	gunFlash0[i] -= 0.075*game->speedAdj;
 			else	gunFlash0[i] = 0.0;
-			
+
 			if(gunFlash1[i] > 0.0)	gunFlash1[i] -= 0.075*game->speedAdj;
 			else	gunFlash1[i] = 0.0;
 		}
 	}
-	
+
 	//-- decrement item activation
 	switch(currentItemIndex)
 	{
@@ -776,21 +776,21 @@ void HeroAircraft::update()
 	}
 	if(useItemArmed < 0.0)
 		useItemArmed = 0.0;
-	
+
 	//-- decrement supershields
 	if(shields >= HERO_SHIELDS)
 	{
 		shields -= 0.15*game->speedAdj;
-		
+
 	}
-	
+
 	float s = (1.0-game->speedAdj)+(game->speedAdj*0.8);
 	secondaryMove[0] *= s;
 	secondaryMove[1] *= s;
 	pos[0] += secondaryMove[0]*game->speedAdj;
 	pos[1] += secondaryMove[1]*game->speedAdj;
 	moveEvent(0,0);
-	
+
 }
 
 //----------------------------------------------------------
@@ -809,7 +809,7 @@ void HeroAircraft::drawGL()
 	{
 		dontShow--;
 	}
-	//-- draw super shields in StatusDisplay to get better blend mode...	
+	//-- draw super shields in StatusDisplay to get better blend mode...
 	glPopMatrix();
 
 	if(superBomb)
@@ -852,7 +852,7 @@ void HeroAircraft::deathExplosions()
 	float	r;
 	float	p[3] = { 0.0, -0.5, pos[2] };
 	int		w, skip;
-	
+
 	deathStereo = 5.0;
 	p[0] = -deathStereo;
 	game->audio->playSound(Audio::Explosion, p);
@@ -863,7 +863,7 @@ void HeroAircraft::deathExplosions()
 	p[0] =  0.0;
 	game->audio->playSound(Audio::ExploBig, p);
 	game->audio->playSound(Audio::ExploPop, p);
-	
+
 	//-- Caclulate radius
 	for(i = 0; i < DEATH_SPIKES; i++)
 	{
@@ -877,13 +877,13 @@ void HeroAircraft::deathExplosions()
 		p[2] = pos[2];
 		game->explosions->addExplo(Explosions::EnemyDestroyed, p);
 	}
-	
+
 	//-- Set up explosions
 	for(i = 0; i < DEATH_TIME; i++)
 	{
-		w = i%DEATH_SPIKES; 
+		w = i%DEATH_SPIKES;
 		skip = 1+(int)(3.0f*FRAND);
-		
+
 		p[2] = pos[2];
 		if(i < DEATH_TIME-DEATH_SPIKES)
 		{

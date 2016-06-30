@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -26,9 +26,9 @@
 ScreenItemAdd::ScreenItemAdd()
 {
 	game = Global::getInstance();
-	
+
 	root = new ItemThing();
-	
+
 	float p[3] = { 0.0, 0.0, 0.0 };
 	for(int i = 0; i < NumEnemyTypes; i++)
 	{
@@ -49,12 +49,12 @@ ScreenItemAdd::~ScreenItemAdd()
 	delete root;
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::clear()
 {
 	ItemThing	*cur;
 	ItemThing *del;
-	
+
 	cur = root->next;
 	while(cur)
 	{
@@ -66,8 +66,8 @@ void ScreenItemAdd::clear()
 	root->next = 0;
 	clearDeadPool();
 }
-	
-//----------------------------------------------------------	
+
+//----------------------------------------------------------
 void ScreenItemAdd::clearDeadPool()
 {
 	EnemyAircraft *cur;
@@ -84,13 +84,13 @@ void ScreenItemAdd::clearDeadPool()
 		deadPool[i]->next = 0;
 	}
 }
-	
-//----------------------------------------------------------	
+
+//----------------------------------------------------------
 void ScreenItemAdd::putScreenItems()
 {
 //	ItemThing *delItem = 0;
 	ItemThing *curItem = root->next;
-	
+
 	while(curItem)
 	{
 		if(curItem->releaseTime <= game->gameFrame)
@@ -116,7 +116,7 @@ void ScreenItemAdd::putScreenItems()
 	}
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::killScreenItem(ScreenItem *del)
 {
 	EnemyAircraft *enemy;
@@ -134,7 +134,7 @@ void ScreenItemAdd::killScreenItem(ScreenItem *del)
 	}
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 bool ScreenItemAdd::loadScreenItems(const char*)
 {
 	switch((game->gameLevel-1)%3)
@@ -158,12 +158,12 @@ bool ScreenItemAdd::loadScreenItems(const char*)
 	return true;
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::addItem(int relTime, ScreenItem *newScreenItem)
 {
 	ItemThing *curItem = root;
 	ItemThing *newItem = new ItemThing(relTime, newScreenItem);
-	
+
 	while(curItem)
 	{
 		if(curItem->next == 0)
@@ -182,7 +182,7 @@ void ScreenItemAdd::addItem(int relTime, ScreenItem *newScreenItem)
 }
 
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::addWave(EnemyWave &ew)
 {
 	int		i;
@@ -191,7 +191,7 @@ void ScreenItemAdd::addWave(EnemyWave &ew)
 	float	p[3] = { ew.pos[0], ew.pos[1], ew.pos[2] };
 	int	jitter = (int)(ew.jitter * (2.0-game->gameSkill));
 	int	period = (int)(ew.period * (2.0-game->gameSkill));
-	
+
 	if(jitter >= period)
 		jitter = period - 1;
 	for(i = ew.begin; i < ew.end; i++)
@@ -203,8 +203,8 @@ void ScreenItemAdd::addWave(EnemyWave &ew)
 			{
 				case EnemyWave::None:
 					p[0] = ew.pos[0] + ew.xJitter*SRAND;
-//					addItem(i, new EnemyAircraft(ew.type, p) );	
-					addItem(i, EnemyAircraft::makeNewEnemy(ew.type, p) );	
+//					addItem(i, new EnemyAircraft(ew.type, p) );
+					addItem(i, EnemyAircraft::makeNewEnemy(ew.type, p) );
 					interval = period + (int)(SRAND*jitter);
 					break;
 				case EnemyWave::Arrow:
@@ -231,11 +231,11 @@ void ScreenItemAdd::addWave(EnemyWave &ew)
 	}
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 EnemyAircraft *ScreenItemAdd::dynamicEnemyAdd(EnemyType et, float *pos, int relTime)
 {
 	EnemyAircraft *addEnemy;
-	
+
 	if(deadPool[et]->next)
 	{
 		addEnemy = deadPool[et]->next;
@@ -247,25 +247,25 @@ EnemyAircraft *ScreenItemAdd::dynamicEnemyAdd(EnemyType et, float *pos, int relT
 //		addEnemy = new EnemyAircraft(et, pos);
 		addEnemy = EnemyAircraft::makeNewEnemy(et, pos);
 	}
-	
+
 	addItem(relTime, addEnemy);
-	
+
 	return 	addEnemy;
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::loadLevelXXX()
 {
 	int i;
 	int	numIterations = 12000;
 //	int	numIterations = (int)(11100 * game->gameSkill);
 //	int	numIterations = (int)(1100 * game->gameSkill);
-	
+
 	clearDeadPool();
 	//-- Enemies
 	float	r;
 	float	d;
-	int		waveDuration = 500;	
+	int		waveDuration = 500;
 	i = 600;
 	addStraightWave(1, i, 0.4);
 	while(i < numIterations-1000)
@@ -284,39 +284,39 @@ void ScreenItemAdd::loadLevelXXX()
 		waveDuration = (int)(600.0*game->gameSkill) + (int)(100*SRAND);
 		i += 50 + (int)(50*FRAND);
 	}
-	
+
 	//-- ray gun enemy starts halfway through...
 	EnemyWave	rayWave(EnemyRayGun);
 	rayWave.setXRand(8.0);
-	rayWave.setFrequency(60, 5);	
+	rayWave.setFrequency(60, 5);
 	rayWave.setFrequency(2000, 1000);
 	rayWave.setInOut(numIterations/2, i-1000);
 //	rayWave.setInOut(100, i-1000);
 	addWave(rayWave);
-	
+
 	//-- Boss
 	EnemyWave	bossWave(EnemyBoss00);
-	bossWave.setInOut(i+75, i+1000);	
+	bossWave.setInOut(i+75, i+1000);
 	bossWave.setPos(0.0, 15.0);
 	bossWave.setXRand(4.0);
 	bossWave.setFrequency(5000, 0);
 	addWave(bossWave);
-		
+
 	//-- Ammunition and PowerUps
 	addAmmunition(0, numIterations+9000);
 	addPowerUps(0, numIterations+9000);
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::loadLevel1()
 {
 	loadLevelXXX();
-	
+
 //	addStraightArrowWave(051, 800);
 //	addOmniArrowWave(800, 1400);
 //	addStraightArrowWave(1400, 2000);
 //	addOmniArrowWave(2000, 2600);
-//	
+//
 //
 //	addAmmunition(0, 10000);
 //	addAmmunition(0, 10000);
@@ -324,57 +324,57 @@ void ScreenItemAdd::loadLevel1()
 //
 //	//-- Boss
 //	EnemyWave	bossWave(EnemyBoss00);
-//	bossWave.setInOut(100, 1000);	
+//	bossWave.setInOut(100, 1000);
 //	bossWave.setPos(0.0, 15.0);
 //	bossWave.setXRand(4.0);
 //	bossWave.setFrequency(5000, 0);
 //	addWave(bossWave);
-//	
+//
 //	EnemyWave	tankWave(EnemyTank);
 //	tankWave.setPos(9.0, 11.0);
 //	tankWave.setXRand(0.0);
 //	tankWave.setFrequency(4000, 50);
 //	tankWave.setInOut(1, 10000);
 //	addWave(tankWave);
-//	
+//
 //	tankWave.setPos(-9.0, 11.0);
 //	tankWave.setXRand(0.0);
 //	tankWave.setFrequency(4000, 50);
 //	tankWave.setInOut(2001, 10000);
 //	addWave(tankWave);
-//	
-//	
+//
+//
 //	EnemyWave	gnatWave(EnemyGnat);
 //	gnatWave.setInOut(1, 500);
 //	gnatWave.setPos(FRAND*4.0, 10.0);
 //	gnatWave.setFrequency(50, 40);
 //	gnatWave.setXRand(5.0);
 //	addWave(gnatWave);
-//	
+//
 //	addAmmunition(5000);
 //	addPowerUps(5000);
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::loadLevel2()
 {
 	int i;
 	int	numIterations = 14000;
 //	int	numIterations = 1400;
-	
+
 	clearDeadPool();
 	//-- Enemies
 	int		waves = 0;
 	float	r;
-	int		waveDuration = 500;	
+	int		waveDuration = 500;
 	i = 500;
 	addStraightWave(100, i, 0.4);
 	while(i < numIterations)
 	{
 		r = FRAND;
 		waves++;
-		
-		if( waves == 5  || waves == 6  || 
+
+		if( waves == 5  || waves == 6  ||
 			waves == 11 || waves == 12 ||
 			waves == 15 || waves == 16 )
 		{
@@ -405,43 +405,43 @@ void ScreenItemAdd::loadLevel2()
 	gnatWave.setFrequency(150, 140);
 	gnatWave.setXRand(5.0);
 	addWave(gnatWave);
-	
+
 //	gnatWave.setInOut(8000, 11000);
-		
+
 	//-- Boss
 	EnemyWave	bossWave(EnemyBoss01);
 	bossWave.setPos(0.0, 15.0);
 	bossWave.setXRand(4.0);
 	bossWave.setFrequency(5000, 0);
-	bossWave.setInOut(numIterations+700, numIterations+710);	
+	bossWave.setInOut(numIterations+700, numIterations+710);
 	addWave(bossWave);
-	
+
 	//-- Ammunition and PowerUps
 	addAmmunition(0, numIterations+9000);
 	addPowerUps(0, numIterations+9000);
-	
+
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::loadLevel3()
 {
 	int i;
 	int	numIterations = 14000;
 //	int	numIterations = 1400;
-	
+
 	clearDeadPool();
 	//-- Enemies
 	int		waves = 0;
 	float	r;
-	int		waveDuration = 500;	
+	int		waveDuration = 500;
 	i = 500;
 	addStraightWave(100, i, 0.5);
 	while(i < numIterations)
 	{
 		r = FRAND;
 		waves++;
-		
-		if( waves ==  5 || 
+
+		if( waves ==  5 ||
 			waves == 12 )
 		{
 			addGnatWave(i, waveDuration, 0.9, false);
@@ -456,7 +456,7 @@ void ScreenItemAdd::loadLevel3()
 			tankWave.setFrequency(700, 100);
 			tankWave.setInOut(i+50, waveDuration-50);
 			addWave(tankWave);
-			
+
 			addStraightWave		(i, 300);
 		}
 		else if (waves < 5)
@@ -484,49 +484,49 @@ void ScreenItemAdd::loadLevel3()
 	gnatWave.setFrequency(150, 140);
 	gnatWave.setXRand(5.0);
 	addWave(gnatWave);
-	
+
 	gnatWave.setInOut(8000, 11000);
 	addWave(gnatWave);
-	
+
 	//-- give some extra power ups...
 	addAmmunition(0, 2000, 500, 700, 0);
 	addAmmunition(10000, 2000, 500, 700, 0);
 	addPowerUps(3000, 2000, 2500, 2500, 0);
 	addPowerUps(9500, 2000, 2500, 2500, 0);
 	addPowerUps(numIterations, 2000, 2500, 2500, 1);
-	
+
 	//-- Boss
 	EnemyWave	bossWave(EnemyBoss01);
 	bossWave.setPos(0.0, 15.0);
 	bossWave.setXRand(4.0);
 	bossWave.setFrequency(5000, 0);
-	bossWave.setInOut(numIterations+700, numIterations+710);	
+	bossWave.setInOut(numIterations+700, numIterations+710);
 	addWave(bossWave);
-	
+
 	EnemyWave	tankWave(EnemyTank);
 	tankWave.setPos(0.0, 11.0);
 	tankWave.setXRand(10.0);
 	tankWave.setFrequency(2000, 200);
 	tankWave.setInOut(numIterations+400, numIterations+3000);
 	addWave(tankWave);
-			
+
 	//-- Ammunition and PowerUps
 	addAmmunition(0, numIterations+9000);
 	addPowerUps(0, numIterations+9000);
-	
+
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::loadLevel4()
 {
 	int i;
 	int	numIterations = 12000;
-	
+
 	clearDeadPool();
 	//-- Enemies
 	float	r;
 	float	d;
-	int		waveDuration = 500;	
+	int		waveDuration = 500;
 	i = 600;
 	addStraightWave(1, i, 0.4);
 	while(i < numIterations-1000)
@@ -559,26 +559,26 @@ void ScreenItemAdd::loadLevel4()
 	gnatWave.setFrequency(150, 140);
 	gnatWave.setXRand(5.0);
 	addWave(gnatWave);
-	
+
 	gnatWave.setInOut(8000, 11000);
 	addWave(gnatWave);
 
 	//-- ray gun enemy starts halfway through...
 	EnemyWave	rayWave(EnemyRayGun);
 	rayWave.setXRand(8.0);
-	rayWave.setFrequency(60, 5);	
+	rayWave.setFrequency(60, 5);
 	rayWave.setFrequency(2000, 1000);
 	rayWave.setInOut(numIterations/2, i-1000);
 	addWave(rayWave);
-	
+
 	//-- Boss
 	EnemyWave	bossWave(EnemyBoss00);
-	bossWave.setInOut(i+75, i+1000);	
+	bossWave.setInOut(i+75, i+1000);
 	bossWave.setPos(0.0, 15.0);
 	bossWave.setXRand(4.0);
 	bossWave.setFrequency(5000, 0);
 	addWave(bossWave);
-		
+
 	//-- Ammunition and PowerUps
 	addAmmunition(0, numIterations+9000);
 	addPowerUps(0, numIterations+9000);
@@ -595,7 +595,7 @@ void ScreenItemAdd::addStraightWave(int o, int duration, float density)
 	addWave(straightWave);
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::addOmniWave(int o, int duration, float density)
 {
 	float freq = 1.0/density;
@@ -616,7 +616,7 @@ void ScreenItemAdd::addOmniWave(int o, int duration, float density)
 	addWave(straightWave);
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::addStraightArrowWave(int o, int /*duration*/, float density)
 {
 	float freq = 1.0/density;
@@ -643,7 +643,7 @@ void ScreenItemAdd::addStraightArrowWave(int o, int /*duration*/, float density)
 	addWave(omniWave);
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::addOmniArrowWave(int o, int /*duration*/, float density)
 {
 	float freq = 1.0/density;
@@ -663,15 +663,15 @@ void ScreenItemAdd::addOmniArrowWave(int o, int /*duration*/, float density)
 	addWave(omniArrow);
 	omniArrow.setInOut(o+350, o+470);
 	addWave(omniArrow);
-	
+
 	omniArrow.setFrequency(5, 0);
 	omniArrow.setXRand(1.8);
 	omniArrow.setInOut(o+550, o+555);
 	addWave(omniArrow);
-	
+
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::addGnatWave(int o, int duration, float density, bool mixed)
 {
 	float freq = 1.0/density;
@@ -703,7 +703,7 @@ void ScreenItemAdd::addGnatWave(int o, int duration, float density, bool mixed)
 			straightArrow.setInOut(o+200, o+250);
 			addWave(straightArrow);
 		}
-		
+
 		EnemyWave	gnatWave(EnemyGnat);
 	//	gnatWave.setInOut(o, o+(17*game->gameSkill)*(1.0+FRAND*0.2));
 		gnatWave.setInOut(o, o+(int)((25*game->gameSkill)*(1.0+FRAND*0.2)));
@@ -727,10 +727,10 @@ void ScreenItemAdd::addGnatWave(int o, int duration, float density, bool mixed)
 		gnatWave.setFrequency((int)(30*freq), 0);
 		gnatWave.setInOut(o+300, o+400);
 		addWave(gnatWave);
-	}	
+	}
 }
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::addAmmunition(int o, int duration, int a, int b, int c)
 {
 	//-- Ammunition
@@ -756,23 +756,23 @@ void ScreenItemAdd::addAmmunition(int o, int duration, int a, int b, int c)
 		if(ammoPause00 < 1)
 		{
 			ammoPause00 = (int)(skill * 2000+(int)(SRAND*500));
-			addItem(i, new PowerUp(PowerUps::HeroAmmo00, p) );	
+			addItem(i, new PowerUp(PowerUps::HeroAmmo00, p) );
 		}
 		else if(ammoPause01 < 1)
 		{
 			ammoPause01 = (int)(skill * 2500+(int)(SRAND*1000));
-			addItem(i, new PowerUp(PowerUps::HeroAmmo01, p) );	
+			addItem(i, new PowerUp(PowerUps::HeroAmmo01, p) );
 		}
 		else if(ammoPause02 < 1)
 		{
 			ammoPause02 = (int)(skill*skill * 4000+(int)(SRAND*1000));
-			addItem(i, new PowerUp(PowerUps::HeroAmmo02, p) );	
+			addItem(i, new PowerUp(PowerUps::HeroAmmo02, p) );
 		}
 	}
 }
 
 
-//----------------------------------------------------------	
+//----------------------------------------------------------
 void ScreenItemAdd::addPowerUps(int o, int duration, int a, int b, int c)
 {
 	//-- PowerUps
@@ -797,18 +797,18 @@ void ScreenItemAdd::addPowerUps(int o, int duration, int a, int b, int c)
 		if(pwrPause00 < 1)
 		{
 			pwrPause00 = 2500+(int)(SRAND*700);
-			addItem(i, new PowerUp(PowerUps::Shields, p) );	
+			addItem(i, new PowerUp(PowerUps::Shields, p) );
 		}
 		else if(pwrPause01 < 1)
 		{
 			pwrPause01 = 4000+(int)(SRAND*900);
-			addItem(i, new PowerUp(PowerUps::Repair, p) );	
+			addItem(i, new PowerUp(PowerUps::Repair, p) );
 		}
 		else if(pwrPause02 < 1)
 		{
 			pwrPause02 = 5000+(int)(SRAND*3000);
 //			pwrPause02 = 500;
-			addItem(i, new PowerUp(PowerUps::SuperShields, p) );	
+			addItem(i, new PowerUp(PowerUps::SuperShields, p) );
 		}
 	}
 }
@@ -837,7 +837,7 @@ EnemyWave::EnemyWave(EnemyType t)
 	period	= 60;
 	jitter	= 10;
 	formation = None;
-	
+
 	pos[0]	= 0.0;
 	pos[1]	= 10.0;
 	pos[2]	= 25.0;

@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #ifndef AudioSDLMixer_h
@@ -34,7 +34,7 @@ public:
 	virtual void	setMusicMode(SoundType);
 	virtual void	setMusicVolume(float);
 	virtual void	setSoundVolume(float);
-	
+
 protected:
 	virtual void	initSound();
 

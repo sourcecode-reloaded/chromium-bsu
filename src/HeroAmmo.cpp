@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 
@@ -39,7 +39,7 @@ HeroAmmo::HeroAmmo()
 {
 	game = Global::getInstance();
 	int i;
-	
+
 	//-- initialize everything to sane values...
 	for(i = 0; i < NUM_HERO_AMMO_TYPES; i++)
 	{
@@ -51,21 +51,21 @@ HeroAmmo::HeroAmmo()
 	ammoPool  = new ActiveAmmo();
 
 	loadTextures();
-	
+
 	ammoSize[0][0] = 0.05;	ammoSize[0][1] = 0.65;
 	ammoSize[1][0] = 0.11;	ammoSize[1][1] = 1.5;
 	ammoSize[2][0] = 0.3;	ammoSize[2][1] = 1.5;
-	
+
 	ammoDamage[0] =  3.5;
 	ammoDamage[1] =  6.0;
 	ammoDamage[2] = 40.0;
-}	
+}
 
 HeroAmmo::~HeroAmmo()
 {
 	ActiveAmmo *cur;
 	ActiveAmmo *del;
-	
+
 	clear();
 	cur = ammoPool->next;
 	while(cur)
@@ -74,11 +74,11 @@ HeroAmmo::~HeroAmmo()
 		cur = cur->next;
 		delete del;
 	}
-	
+
 	for(int i = 0; i < NUM_HERO_AMMO_TYPES; i++)
 		delete 	ammoRoot[i];
 	delete ammoPool;
-	
+
 	deleteTextures();
 }
 
@@ -133,7 +133,7 @@ void	HeroAmmo::clear()
 	int i;
 	ActiveAmmo *cur;
 	ActiveAmmo *del;
-	
+
 	for(i = 0; i < NUM_HERO_AMMO_TYPES; i++)
 	{
 		cur = ammoRoot[i]->next;
@@ -153,7 +153,7 @@ void HeroAmmo::addAmmo(int type, float pos[3])
 	float	vel[3] = { 0.0, 0.0, 0.0 };
 	ActiveAmmo *newAmmo = 0;
 	ActiveAmmo *first = 0;
-	
+
 	switch(type)
 	{
 		case 0:	vel[1] = 0.5*game->speedAdj;	break;
@@ -199,7 +199,7 @@ void HeroAmmo::updateAmmo()
 	Config *config = Config::instance();
 	int i;
 	ActiveAmmo *thisAmmo;
-	
+
 	for(i = 0; i < NUM_HERO_AMMO_TYPES; i++)
 	{
 		thisAmmo = ammoRoot[i]->next;
@@ -234,7 +234,7 @@ void HeroAmmo::checkForHits(EnemyFleet *fleet)
 	ActiveAmmo		*backAmmo;
 	ActiveAmmo		*nextAmmo;
 	EnemyAircraft	*enemy;
-	
+
 	//-- Get minimum ship Y location so we can ignore some of the ammunition
 	fleet->toFirst();
 	enemy = fleet->getShip();
@@ -246,7 +246,7 @@ void HeroAmmo::checkForHits(EnemyFleet *fleet)
 			minShipY = enemy->pos[1]-3.0;
 		enemy = fleet->getShip();
 	}
-	
+
 	//-- Go through all the ammunition and check for hits
 	for(i = 0; i < NUM_HERO_AMMO_TYPES; i++)
 	{
@@ -269,9 +269,9 @@ void HeroAmmo::checkForHits(EnemyFleet *fleet)
 						enemy->damage += ammoDamage[i]*game->speedAdj;
 					else
 						enemy->damage += ammoDamage[i];
-					
+
 					//add explosion
-					game->explosions->addExplo((Explosions::ExploType)(Explosions::HeroAmmo00+i), thisAmmo->pos);					
+					game->explosions->addExplo((Explosions::ExploType)(Explosions::HeroAmmo00+i), thisAmmo->pos);
 
 					if(i != 1) // ammo type 1 doesn't get killed
 					{
@@ -301,7 +301,7 @@ void HeroAmmo::drawGL()
 	int i;
 	float	*pos;
 	ActiveAmmo 	*thisAmmo;
-	
+
 	for(i = 0; i < NUM_HERO_AMMO_TYPES; i++)
 	{
 		glColor4f(1.0, 1.0, 1.0, 1.0);
@@ -322,4 +322,4 @@ void HeroAmmo::drawGL()
 }
 
 
-	
+

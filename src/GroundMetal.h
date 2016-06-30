@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2000 Mark B. Allan. All rights reserved.
  *
- * "Chromium B.S.U." is free software; you can redistribute 
- * it and/or use it and/or modify it under the terms of the 
+ * "Chromium B.S.U." is free software; you can redistribute
+ * it and/or use it and/or modify it under the terms of the
  * "Clarified Artistic License"
  */
 #ifndef GroundMetal_h
@@ -30,10 +30,10 @@ class GroundMetal : public Ground
 public:
 	GroundMetal();
 	~GroundMetal();
-	
+
 	void	drawGL();
 	void	setVariation(int index);
-	
+
 	void	loadTextures();
 	void	deleteTextures();
 
