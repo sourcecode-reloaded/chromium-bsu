@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Chromium B.S.U.\n"
 "Report-Msgid-Bugs-To: https://sf.net/p/chromium-bsu/bugs\n"
-"POT-Creation-Date: 2013-11-17 10:13+0800\n"
+"POT-Creation-Date: 2016-06-30 16:18+0200\n"
 "PO-Revision-Date: 2011-05-17 00:20+0000\n"
 "Last-Translator: Niklas Åkerström <nille.kungen@gmail.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -688,52 +688,52 @@ msgstr "grafikläge inställt "
 msgid "(bpp=%d RGB=%d%d%d depth=%d)\n"
 msgstr "(bpp=%d RGB=%d%d%d djup=%d)\n"
 
-#: src/MainSDL_Event.cpp:52
+#: src/MainSDL_Event.cpp:53
 #, c-format
 msgid "%-5d SDL_ACTIVEEVENT  \n"
 msgstr "%-5d SDL_ACTIVEEVENT  \n"
 
-#: src/MainSDL_Event.cpp:53
+#: src/MainSDL_Event.cpp:54
 #, c-format
 msgid "%-5d SDL_KEYDOWN  \n"
 msgstr "%-5d SDL_KEYDOWN  \n"
 
-#: src/MainSDL_Event.cpp:54
+#: src/MainSDL_Event.cpp:55
 #, c-format
 msgid "%-5d SDL_KEYUP  \n"
 msgstr "%-5d SDL_KEYUP  \n"
 
-#: src/MainSDL_Event.cpp:55
+#: src/MainSDL_Event.cpp:56
 #, c-format
 msgid "%-5d SDL_MOUSEMOTION  \n"
 msgstr "%-5d SDL_MOUSEMOTION  \n"
 
-#: src/MainSDL_Event.cpp:56
+#: src/MainSDL_Event.cpp:57
 #, c-format
 msgid "%-5d SDL_MOUSEBUTTONDOWN  \n"
 msgstr "%-5d SDL_MOUSEBUTTONDOWN  \n"
 
-#: src/MainSDL_Event.cpp:57
+#: src/MainSDL_Event.cpp:58
 #, c-format
 msgid "%-5d SDL_MOUSEBUTTONUP  \n"
 msgstr "%-5d SDL_MOUSEBUTTONUP  \n"
 
-#: src/MainSDL_Event.cpp:58
+#: src/MainSDL_Event.cpp:59
 #, c-format
 msgid "%-5d SDL_JOYBUTTONDOWN  \n"
 msgstr "%-5d SDL_JOYBUTTONDOWN  \n"
 
-#: src/MainSDL_Event.cpp:59
+#: src/MainSDL_Event.cpp:60
 #, c-format
 msgid "%-5d SDL_JOYBUTTONUP  \n"
 msgstr "%-5d SDL_JOYBUTTONUP  \n"
 
-#: src/MainSDL_Event.cpp:283
+#: src/MainSDL_Event.cpp:284
 #, c-format
 msgid "MainSDL::getEvent HUH?\n"
 msgstr "MainSDL::getEvent HUH?\n"
 
-#: src/MainSDL_Event.cpp:293
+#: src/MainSDL_Event.cpp:294
 #, c-format
 msgid ""
 "buffer = \"%s\n"
@@ -742,17 +742,17 @@ msgstr ""
 "buffert = \"%s\n"
 "\""
 
-#: src/MainSDL_Event.cpp:474
+#: src/MainSDL_Event.cpp:475
 #, c-format
 msgid "key '%s' pressed\n"
 msgstr "tangent \"%s\" nedtryckt\n"
 
-#: src/MainSDL_Event.cpp:475
+#: src/MainSDL_Event.cpp:476
 #, c-format
 msgid "game->gameFrame = %d\n"
 msgstr "game->gameFrame = %d\n"
 
-#: src/MainSDL_Event.cpp:639
+#: src/MainSDL_Event.cpp:640
 #, c-format
 msgid "MainSDL::grabMouse(%d)\n"
 msgstr "MainSDL::grabMouse(%d)\n"
