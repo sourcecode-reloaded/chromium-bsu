@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Chromium B.S.U.\n"
-"Report-Msgid-Bugs-To: https://sf.net/projects/chromium-bsu/bugs\n"
+"Report-Msgid-Bugs-To: https://sf.net/p/chromium-bsu/bugs\n"
 "POT-Creation-Date: 2013-11-17 10:13+0800\n"
 "PO-Revision-Date: 2011-03-22 15:18+0000\n"
 "Last-Translator: Jordi Ferré Nos <jordiferren@gmail.com>\n"
