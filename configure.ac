@@ -15,19 +15,21 @@ PKG_PROG_PKG_CONFIG
 
 # Headers
 AC_HEADER_STDC
-AC_CHECK_HEADERS([fcntl.h stdlib.h string.h unistd.h locale.h])
+AC_CHECK_HEADERS([fcntl.h stdlib.h string.h unistd.h locale.h libintl.h])
 
 # Types and compiler bits
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
 AC_STRUCT_TM
+AC_TYPE_SIZE_T
 
 # Functions
 AC_FUNC_MALLOC
 AC_FUNC_STAT
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([atexit floor setenv sqrt strcasecmp strchr strerror strrchr])
+AC_FUNC_MKTIME
+AC_CHECK_FUNCS([atexit floor setenv sqrt strcasecmp strchr strerror strrchr memset setlocale strdup tzset])
 
 # Enable some special macintosh path handling
 AC_ARG_WITH(macintosh,
