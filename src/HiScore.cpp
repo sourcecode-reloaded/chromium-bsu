@@ -187,7 +187,7 @@ const char *HiScore::getOldFileName()
 	const char *homeDir = getenv("HOME");
 	if(!homeDir)
 		homeDir = "./";
-	sprintf(configFilename, "%s/.chromium-score"CONFIG_EXT, homeDir);
+	sprintf(configFilename, "%s/.chromium-score" CONFIG_EXT, homeDir);
 	alterPathForPlatform(configFilename);
 	return configFilename;
 }

@@ -719,7 +719,7 @@ void AudioOpenAL::loadMusicList()
 	if(!file)
 	{
 		char	configOldFilename[256];
-		sprintf(configOldFilename, "%s/.chromium-music"CONFIG_EXT, homeDir);
+		sprintf(configOldFilename, "%s/.chromium-music" CONFIG_EXT, homeDir);
 		alterPathForPlatform(configOldFilename);
 		rename(configOldFilename,configFilename);
 		file = fopen(configFilename, "r");

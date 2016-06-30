@@ -165,7 +165,7 @@ const char* Config::getOldFileName()
 	if(!homeDir)
 		homeDir = "./";
 
-	sprintf(configFilename, "%s/.chromium"CONFIG_EXT, homeDir);
+	sprintf(configFilename, "%s/.chromium" CONFIG_EXT, homeDir);
 	alterPathForPlatform(configFilename);
 	return configFilename;
 }
