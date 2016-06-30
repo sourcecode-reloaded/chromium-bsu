@@ -19,6 +19,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
+#include <cmath>
 
 #include "Config.h"
 
