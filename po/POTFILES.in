@@ -1,3 +1,4 @@
+misc/chromium-bsu.desktop.in
 src/Ammo.cpp
 src/Audio.cpp
 src/AudioOpenAL.cpp

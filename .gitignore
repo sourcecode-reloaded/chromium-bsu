@@ -26,4 +26,4 @@ po/*.sin
 stamp-*
 po/Makevars.template
 po/Rules-quot
-
+misc/*.desktop

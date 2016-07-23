@@ -18,6 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: misc/chromium-bsu.desktop.in:4
+msgid "Shoot'em up space shooter"
+msgstr "Rymdskjutspel (Shoot'em up)"
+
+#: misc/chromium-bsu.desktop.in:5
+msgid "Scrolling space shooter"
+msgstr "Vertikalrullande skjutspel i rymdmiljö (Shoot'em up)"
+
 #: src/Audio.cpp:111
 msgid "audio"
 msgstr "ljud"
