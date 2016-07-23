@@ -27,3 +27,4 @@ stamp-*
 po/Makevars.template
 po/Rules-quot
 misc/*.desktop
+misc/*.png
