@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Chromium B.S.U.\n"
 "Report-Msgid-Bugs-To: https://sf.net/p/chromium-bsu/bugs\n"
-"POT-Creation-Date: 2016-06-30 16:18+0200\n"
+"POT-Creation-Date: 2016-07-23 13:55+0800\n"
 "PO-Revision-Date: 2011-08-16 12:04+0000\n"
 "Last-Translator: Евгений Лежнин <z_lezhnin@mail2000.ru>\n"
 "Language-Team: Russian (https://www.transifex.com/projects/p/chromium-bsu/language/ru/\n"
@@ -16,6 +16,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: misc/chromium-bsu.desktop.in:3
+msgid "Chromium B.S.U."
+msgstr ""
+
+#: misc/chromium-bsu.desktop.in:4
+msgid "Shoot'em up space shooter"
+msgstr ""
+
+#: misc/chromium-bsu.desktop.in:5
+msgid "Scrolling space shooter"
+msgstr ""
+
+#: misc/chromium-bsu.desktop.in:7
+msgid "chromium-bsu"
+msgstr ""
+
+#: misc/chromium-bsu.desktop.in:12
+msgid "Shooter;Space;"
+msgstr ""
 
 #: src/Audio.cpp:111
 msgid "audio"
