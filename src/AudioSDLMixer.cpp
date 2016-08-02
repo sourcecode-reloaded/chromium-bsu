@@ -101,11 +101,13 @@ void AudioSDLMixer::pauseGameMusic(bool status)
 	Config	*config = Config::instance();
 	if (config->audioEnabled())
 	{
+#ifdef USE_SDL_CDROM
 		if(cdrom)
 		{
 			Audio::pauseGameMusic(status);
 		}
 		else
+#endif // USE_SDL_CDROM
 		{
 	    	if (status)
 				Mix_PauseMusic();
@@ -140,9 +142,11 @@ void	AudioSDLMixer::setMusicMode(SoundType mode)
 		{
 			default:
 			case MusicGame:
+#ifdef USE_SDL_CDROM
 				if(cdrom)
 					Mix_HaltChannel (0);
 				else
+#endif // USE_SDL_CDROM
 					Mix_PlayChannel (0, sounds[mode], -1);
 				break;
 			case MusicMenu:
