@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.58])
 
-AC_INIT([Chromium B.S.U.],[0.9.16],[https://sf.net/p/chromium-bsu/bugs],[chromium-bsu])
+AC_INIT([Chromium B.S.U.],[0.9.16.1],[https://sf.net/p/chromium-bsu/bugs],[chromium-bsu])
 AM_INIT_AUTOMAKE([foreign])
 
 AC_CONFIG_SRCDIR([src/main.cpp])

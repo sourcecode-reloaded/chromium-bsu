@@ -1,3 +1,7 @@
+Chromium B.S.U. 0.9.16.1
+ - Allow translations of Linux menu file
+ - Compile fixes
+
 Chromium B.S.U. 0.9.16
  - Add SDL2 support
  - Add version option
