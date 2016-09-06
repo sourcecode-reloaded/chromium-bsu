@@ -95,7 +95,7 @@ if test "x$enable_sdl" != xno ; then
 fi
 
 if test "x$enable_glut" != xno ; then
-	AX_CHECK_GLUT
+	AX_CHECK_GLUT([no_glut=no], [no_glut=yes])
 fi
 
 # Need OpenAL or SDL Mixer for sound
