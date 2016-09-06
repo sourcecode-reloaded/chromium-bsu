@@ -21,6 +21,13 @@
 #include <string>
 #include <cstdlib>
 #include <cmath>
+#ifdef __linux__
+#ifdef USE_SDL_CDROM
+#ifdef HAVE_POSIX_SPAWNP
+#include <spawn.h>
+#endif
+#endif
+#endif
 using namespace std;
 
 #if !defined(USE_SDL_CDROM) && defined(SDL_CD_STUBS)
@@ -274,14 +281,20 @@ void	Audio::setMusicVolume(float value)
 		volume << desiredVolume;
 
 		// set the desired volume
+		stringarray command =
 		string command = "amixer set CD ";
 		command += volume.str();
 		command += "% unmute";
+#ifdef HAVE_POSIX_SPAWNP
+		posix_spawnp()
+#else
+		string commandstr = " ".join(command);
 		int status = system(command.c_str());
 		if( status == -1 || !(WIFEXITED(status) && WEXITSTATUS(status) == 0) )
 		{
 			fprintf(stderr, _("Could not set CD volume, amixer returned status %d\n"), status);
 		}
+#endif
 	}
 #endif // USE_SDL_CDROM
 #endif // __linux__
