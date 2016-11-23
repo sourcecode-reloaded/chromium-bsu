@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Chromium B.S.U.\n"
 "Report-Msgid-Bugs-To: https://sf.net/p/chromium-bsu/bugs\n"
-"POT-Creation-Date: 2016-07-23 13:55+0800\n"
+"POT-Creation-Date: 2016-11-23 17:33+0100\n"
 "PO-Revision-Date: 2011-09-24 15:47+0000\n"
 "Last-Translator: Emmanuel Trillaud <etrillaud@gmail.com>\n"
 "Language-Team: French (https://www.transifex.com/projects/p/chromium-bsu/language/fr/)\n"
@@ -348,22 +348,22 @@ msgstr "ERREUR: echec de alutLoadVorbis() dans AudioOpenAL::loadVorbis\n"
 msgid "ERROR initializing audio - AudioSDLMixer::initSound()\n"
 msgstr "ERREUR lors de l'initialisation de l'audio - AudioSDLMixer::initSound()\n"
 
-#: src/Config.cpp:118
+#: src/Config.cpp:135
 #, c-format
 msgid "WARNING: Config::init() has already been called.\n"
 msgstr "AVERTISSEMENT : Config::init() a déjà été appelé.\n"
 
-#: src/Config.cpp:251
+#: src/Config.cpp:268
 #, c-format
 msgid "WARNING: could not read config file (%s)\n"
 msgstr "AVERTISSEMENT : impossible de lire le fichier de configuration (%s)\n"
 
-#: src/Config.cpp:314
+#: src/Config.cpp:331
 #, c-format
 msgid "wrote config file (%s)\n"
 msgstr "écriture du fichier de configuration (%s)\n"
 
-#: src/Config.cpp:319
+#: src/Config.cpp:336
 #, c-format
 msgid "WARNING: could not write config file (%s)\n"
 msgstr "AVERTISSEMENT : impossible d'écrire le fichier de configuration (%s)\n"
@@ -493,6 +493,15 @@ msgid ""
 "                       :      2 =  800 x  600\n"
 "                       :      3 = 1024 x  768\n"
 "                       :      4 = 1280 x  960\n"
+"                       :      5 = 1440 x  900\n"
+"                       :      6 = 1600 x  900\n"
+"                       :      7 = 1680 x 1050\n"
+"                       :      8 = 1920 x 1080\n"
+"                       :      9 = 1920 x 1200\n"
+"                       :     10 = 2560 x 1440\n"
+"                       :     11 = 3840 x 2160\n"
+"                       :     12 = 5120 x 2880\n"
+"                       :     13 = 7680 x 4320\n"
 "  -na/--noaudio        : do not initialize audio\n"
 "  -nb/--noblend        : disable blending (OpenGL)\n"
 "  -nt/--notexborder    : do not set tex border color (OpenGL)\n"
@@ -511,6 +520,15 @@ msgstr ""
 "                       :      2 =  800 x  600\n"
 "                       :      3 = 1024 x  768\n"
 "                       :      4 = 1280 x  960\n"
+"                       :      5 = 1440 x  900\n"
+"                       :      6 = 1600 x  900\n"
+"                       :      7 = 1680 x 1050\n"
+"                       :      8 = 1920 x 1080\n"
+"                       :      9 = 1920 x 1200\n"
+"                       :     10 = 2560 x 1440\n"
+"                       :     11 = 3840 x 2160\n"
+"                       :     12 = 5120 x 2880\n"
+"                       :     13 = 7680 x 4320\n"
 "  -na/--noaudio        : ne pas démarrer l'audio\n"
 "  -nb/--noblend        : désactiver blending (OpenGL)\n"
 "  -nt/--notexborder    : ne pas initialiser tex border color (OpenGL)\n"
@@ -518,12 +536,12 @@ msgstr ""
 "--------------------------------------------------\n"
 "\n"
 
-#: src/main.cpp:237
+#: src/main.cpp:246
 #, c-format
 msgid "!! ERROR !! - "
 msgstr "!! ERREUR !! - "
 
-#: src/main.cpp:261
+#: src/main.cpp:270
 #, c-format
 msgid "Extensions :"
 msgstr "Extensions :"
