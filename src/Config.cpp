@@ -40,6 +40,14 @@
 
 #include "GroundMetal.h"
 
+static const unsigned int screenSizes[MAX_SCREEN_SIZE + 1][2] = {
+	{512, 384},
+	{640, 480},
+	{800, 600},
+	{1024, 768},
+	{1280, 960},
+};
+
 Config	*Config::m_instance = 0;
 
 /**
@@ -334,45 +342,19 @@ void Config::setScreenSize(int m)
 		m = MAX_SCREEN_SIZE;
 	if(m < MIN_SCREEN_SIZE)
 		m = MIN_SCREEN_SIZE;
-	switch(m)
-	{
-		case 0:
-			m_screenW = 512;
-			m_screenH = 384;
-			break;
-		case 1:
-			m_screenW = 640;
-			m_screenH = 480;
-			break;
-		case 2:
-			m_screenW = 800;
-			m_screenH = 600;
-			break;
-		case 3:
-			m_screenW = 1024;
-			m_screenH = 768;
-			break;
-		case 4:
-			m_screenW = 1280;
-			m_screenH = 960;
-			break;
-		default:
-			m_screenW = 640;
-			m_screenH = 480;
-			break;
-	}
+
+	m_screenW = screenSizes[m][0];
+	m_screenH = screenSizes[m][1];
+
 	m_screenA = (float)m_screenW/(float)m_screenH;
 }
 
 int Config::approxScreenSize()
 {
-	if( m_screenW >= 1280 && m_screenH >= 960 )
-		return 4;
-	if( m_screenW >= 1024 && m_screenH >= 768 )
-		return 3;
-	if( m_screenW >= 800 && m_screenH >= 600 )
-		return 2;
-	if( m_screenW >= 640 && m_screenH >= 480 )
-		return 1;
+	for (int m = MAX_SCREEN_SIZE; m >= MIN_SCREEN_SIZE; --m) {
+		if (m_screenW >= screenSizes[m][0] &&  m_screenH >= screenSizes[m][1]) {
+			return m;
+		}
+	}
 	return 0;
 }
